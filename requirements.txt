@@ -1,0 +1,54 @@
+# CHEAP RAG - Python Dependencies
+# Phase 1: Core RAG + Embeddings + Vector Search
+
+# Core dependencies
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+pydantic>=2.5.0
+
+# Embeddings
+sentence-transformers>=2.2.2
+torch>=2.1.0
+transformers>=4.35.0
+
+# Vector store
+chromadb>=0.4.18
+
+# LLM providers
+anthropic>=0.39.0  # Claude API
+
+# API framework
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Metadata extraction
+# Java
+javaparser>=0.1.0  # Note: May need custom solution or JavaParser via subprocess
+
+# TypeScript
+# Will use subprocess to call tsc or ts-node with TypeScript Compiler API
+
+# Python (stdlib)
+# ast module is built-in
+
+# Utilities
+httpx>=0.25.1
+aiohttp>=3.9.0
+tenacity>=8.2.3  # Retry logic
+tqdm>=4.66.1  # Progress bars
+
+# Logging and monitoring
+loguru>=0.7.2
+
+# Testing
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# Development
+black>=23.11.0
+ruff>=0.1.6
+mypy>=1.7.0
+ipython>=8.17.2

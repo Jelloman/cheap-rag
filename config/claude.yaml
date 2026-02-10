@@ -1,0 +1,127 @@
+# Claude API Configuration
+# Uses Claude Sonnet/Haiku for answer generation
+# Embeddings and vector search remain local
+
+embedding:
+  model_name: "sentence-transformers/all-mpnet-base-v2"
+  device: "cuda"  # Use "cpu" if no GPU available
+  batch_size: 32
+  cache_dir: "./models/embeddings"
+  dimension: 768
+
+vectorstore:
+  type: "chroma"
+  persist_directory: "./data/vector_db"
+  collection_name: "cheap_metadata_v1"
+  distance_metric: "cosine"
+
+  metadata_fields:
+    - "language"
+    - "type"
+    - "module"
+    - "tags"
+
+  index_config:
+    hnsw_space: "cosine"
+    hnsw_construction_ef: 100
+    hnsw_search_ef: 100
+
+llm:
+  provider: "anthropic"
+
+  # Anthropic Claude configuration
+  anthropic:
+    # API key from environment variable ANTHROPIC_API_KEY
+    api_key_env: "ANTHROPIC_API_KEY"
+
+    # Model selection
+    model: "claude-sonnet-4-5-20250929"  # or claude-haiku-4-5-20251001 for faster/cheaper
+
+    # Generation parameters
+    temperature: 0.1  # Low for factual, grounded answers
+    max_tokens: 2048
+
+    # Timeout settings
+    timeout_seconds: 30
+
+    # Cost tracking
+    track_costs: true
+
+  # Prompt configuration
+  prompts:
+    system_message: |
+      You are a metadata assistant that helps developers understand the CHEAP metadata framework.
+      Answer questions using ONLY the provided metadata artifacts as context.
+      Always cite your sources by referring to artifact names and IDs.
+      If the provided context doesn't contain enough information to answer the question, say "I don't have enough information to answer that based on the available metadata."
+      Be concise and technical. Focus on facts from the metadata, not general programming knowledge.
+
+    citation_format: |
+      Provide citations in the format: [ArtifactName] (ID: artifact_id)
+      Example: The User class [User.java] (ID: java_User_abc123) has three required fields.
+
+retrieval:
+  # Semantic search parameters
+  top_k: 8  # Retrieve more with Claude (better at handling larger context)
+  similarity_threshold: 0.25  # Slightly lower threshold (Claude is better at filtering)
+
+  rerank: false
+
+  hybrid_search:
+    enabled: false
+    keyword_weight: 0.3
+    semantic_weight: 0.7
+
+indexing:
+  source_paths:
+    - "../cheap-core/src/main/java"
+    - "../cheap-ts/src"
+    - "../cheap-py/src"
+    - "../cheap-rust/src"
+
+  extractors:
+    java:
+      enabled: true
+      file_patterns: ["**/*.java"]
+      exclude_patterns: ["**/test/**", "**/build/**"]
+
+    typescript:
+      enabled: true
+      file_patterns: ["**/*.ts", "**/*.tsx"]
+      exclude_patterns: ["**/node_modules/**", "**/dist/**", "**/*.test.ts"]
+
+    python:
+      enabled: true
+      file_patterns: ["**/*.py"]
+      exclude_patterns: ["**/venv/**", "**/__pycache__/**", "**/test_*.py"]
+
+    rust:
+      enabled: true
+      file_patterns: ["**/*.rs"]
+      exclude_patterns: ["**/target/**", "**/tests/**"]
+
+  batch_size: 100
+  max_workers: 4
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "./logs/cheap-rag.log"
+
+  # Log Claude API calls for debugging
+  log_api_calls: true
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins: ["http://localhost:3000", "http://localhost:5173"]
+
+  rate_limit:
+    enabled: false
+    requests_per_minute: 60
+
+# Cost estimation (for monitoring)
+cost_tracking:
+  enabled: true
+  alert_threshold_usd: 10.0  # Alert if daily cost exceeds this
+  log_file: "./logs/costs.log"

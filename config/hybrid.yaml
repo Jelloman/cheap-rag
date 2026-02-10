@@ -1,0 +1,165 @@
+# Hybrid Configuration
+# Uses local model for simple queries, Claude for complex ones
+# Embeddings and vector search remain local
+
+embedding:
+  model_name: "sentence-transformers/all-mpnet-base-v2"
+  device: "cuda"
+  batch_size: 32
+  cache_dir: "./models/embeddings"
+  dimension: 768
+
+vectorstore:
+  type: "chroma"
+  persist_directory: "./data/vector_db"
+  collection_name: "cheap_metadata_v1"
+  distance_metric: "cosine"
+
+  metadata_fields:
+    - "language"
+    - "type"
+    - "module"
+    - "tags"
+
+  index_config:
+    hnsw_space: "cosine"
+    hnsw_construction_ef: 100
+    hnsw_search_ef: 100
+
+llm:
+  provider: "hybrid"
+
+  # Hybrid routing configuration
+  hybrid:
+    # Default to local for most queries
+    default_provider: "ollama"
+
+    # Complexity threshold for routing to Claude
+    complexity_threshold:
+      # Use Claude if query matches these patterns
+      complex_patterns:
+        - "compare"
+        - "analyze"
+        - "explain the difference"
+        - "how does .* relate to"
+        - "what are all the"
+
+      # Use Claude if retrieved context is large
+      context_size_threshold: 5000  # characters
+
+      # Use Claude if low similarity scores (difficult query)
+      low_similarity_threshold: 0.4
+
+    # Fallback strategy
+    fallback:
+      # If local model fails, try Claude
+      on_local_failure: "claude"
+      # If Claude fails, try local
+      on_claude_failure: "local"
+
+  # Local model configuration
+  ollama:
+    base_url: "http://localhost:11434"
+    model: "qwen2.5-coder:7b-instruct-q4_K_M"
+    temperature: 0.1
+    top_p: 0.9
+    top_k: 40
+    max_tokens: 1024
+    context_length: 8192
+    timeout_seconds: 60
+
+  # Claude configuration
+  anthropic:
+    api_key_env: "ANTHROPIC_API_KEY"
+    model: "claude-haiku-4-5-20251001"  # Haiku for cost efficiency
+    temperature: 0.1
+    max_tokens: 2048
+    timeout_seconds: 30
+    track_costs: true
+
+  # Shared prompt configuration
+  prompts:
+    system_message: |
+      You are a metadata assistant that helps developers understand the CHEAP metadata framework.
+      Answer questions using ONLY the provided metadata artifacts as context.
+      Always cite your sources by referring to artifact names and IDs.
+      If the provided context doesn't contain enough information to answer the question, say "I don't have enough information to answer that based on the available metadata."
+      Be concise and technical. Focus on facts from the metadata, not general programming knowledge.
+
+    citation_format: |
+      Provide citations in the format: [ArtifactName] (ID: artifact_id)
+      Example: The User class [User.java] (ID: java_User_abc123) has three required fields.
+
+retrieval:
+  # Retrieve more to handle both simple and complex queries
+  top_k: 6
+  similarity_threshold: 0.3
+
+  rerank: false
+
+  hybrid_search:
+    enabled: false
+    keyword_weight: 0.3
+    semantic_weight: 0.7
+
+indexing:
+  source_paths:
+    - "../cheap-core/src/main/java"
+    - "../cheap-ts/src"
+    - "../cheap-py/src"
+    - "../cheap-rust/src"
+
+  extractors:
+    java:
+      enabled: true
+      file_patterns: ["**/*.java"]
+      exclude_patterns: ["**/test/**", "**/build/**"]
+
+    typescript:
+      enabled: true
+      file_patterns: ["**/*.ts", "**/*.tsx"]
+      exclude_patterns: ["**/node_modules/**", "**/dist/**", "**/*.test.ts"]
+
+    python:
+      enabled: true
+      file_patterns: ["**/*.py"]
+      exclude_patterns: ["**/venv/**", "**/__pycache__/**", "**/test_*.py"]
+
+    rust:
+      enabled: true
+      file_patterns: ["**/*.rs"]
+      exclude_patterns: ["**/target/**", "**/tests/**"]
+
+  batch_size: 100
+  max_workers: 4
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "./logs/cheap-rag.log"
+
+  # Log routing decisions
+  log_routing: true
+  log_api_calls: true
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins: ["http://localhost:3000", "http://localhost:5173"]
+
+  rate_limit:
+    enabled: false
+    requests_per_minute: 60
+
+# Cost tracking (Claude usage only)
+cost_tracking:
+  enabled: true
+  alert_threshold_usd: 5.0
+  log_file: "./logs/costs.log"
+
+# Routing metrics
+routing_metrics:
+  enabled: true
+  log_file: "./logs/routing.log"
+  track_provider_usage: true
+  track_complexity_scores: true
