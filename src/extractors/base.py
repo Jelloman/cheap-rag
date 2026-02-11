@@ -148,7 +148,10 @@ class MetadataArtifact:
                 f"Type: {'UNIQUE' if unique else 'NON-UNIQUE'}",
             ]
             if columns:
-                parts.append(f"Columns: {', '.join(columns)}")
+                # Filter out None values before joining
+                column_names = [str(c) for c in columns if c is not None]
+                if column_names:
+                    parts.append(f"Columns: {', '.join(column_names)}")
             if self.description:
                 parts.append(f"Description: {self.description}")
             return "\n".join(parts)

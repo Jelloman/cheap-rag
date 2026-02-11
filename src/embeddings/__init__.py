@@ -1,1 +1,5 @@
-"""Embedding generation service."""
+"""Embedding generation services."""
+
+from src.embeddings.service import EmbeddingService
+
+__all__ = ["EmbeddingService"]

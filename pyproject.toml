@@ -5,7 +5,7 @@ description = "CHEAP Metadata RAG System - Phase 1: Core RAG + Embeddings + Vect
 authors = [
     {name = "CHEAP Project"}
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "python-dotenv>=1.0.0",
     "pyyaml>=6.0.1",
@@ -23,6 +23,9 @@ dependencies = [
     "tenacity>=8.2.3",
     "tqdm>=4.66.1",
     "loguru>=0.7.2",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.9",
+    "javalang>=0.13.0",
 ]
 
 [project.optional-dependencies]
@@ -43,15 +46,15 @@ build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 100
-target-version = ['py314']
+target-version = ['py313']
 
 [tool.ruff]
 line-length = 100
-target-version = "py314"
+target-version = "py313"
 select = ["E", "F", "I", "N", "W", "UP"]
 
 [tool.mypy]
-python_version = "3.14"
+python_version = "3.13"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
