@@ -23,8 +23,12 @@ uvicorn[standard]>=0.24.0
 python-multipart>=0.0.6
 
 # Metadata extraction
+# Databases
+sqlalchemy>=2.0.0  # Database schema extraction
+psycopg2-binary>=2.9.9  # PostgreSQL adapter
+
 # Java
-javaparser>=0.1.0  # Note: May need custom solution or JavaParser via subprocess
+javalang>=0.13.0  # Pure Python Java parser
 
 # TypeScript
 # Will use subprocess to call tsc or ts-node with TypeScript Compiler API

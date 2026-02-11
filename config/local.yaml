@@ -74,15 +74,57 @@ retrieval:
     semantic_weight: 0.7
 
 indexing:
-  # Source directories to scan
+  # Source directories to scan (for code metadata)
   source_paths:
     - "../cheap-core/src/main/java"
     - "../cheap-ts/src"
     - "../cheap-py/src"
     - "../cheap-rust/src"
 
+  # Database connections (for database metadata)
+  databases:
+    # Example Odoo eCommerce database
+    odoo_ecommerce:
+      enabled: true  # Odoo is now running in Docker
+      type: "postgresql"
+      connection:
+        host: "localhost"
+        port: 5432
+        database: "odoo"  # Odoo creates its own database
+        user: "odoo"
+        password: "${ODOO_DB_PASSWORD}"  # From environment variable
+      schema: "public"
+      # Optional: Limit to specific tables (omit to extract all tables)
+      include_tables:
+        - "sale_order"
+        - "sale_order_line"
+        - "product_product"
+        - "product_template"
+        - "product_category"
+        - "res_partner"
+        - "res_partner_category"
+        - "account_move"
+        - "account_move_line"
+      tags: ["odoo", "ecommerce", "sales"]
+
+    # Example SQLite test database
+    test_sqlite:
+      enabled: false  # Set to true to extract from SQLite
+      type: "sqlite"
+      connection:
+        path: "./data/test.db"
+      tags: ["test", "sqlite"]
+
   # Extraction configuration
   extractors:
+    # Database extractors
+    postgresql:
+      enabled: true  # Enabled for Odoo database
+
+    sqlite:
+      enabled: false  # Enable when databases are configured
+
+    # Code extractors
     java:
       enabled: true
       file_patterns: ["**/*.java"]
