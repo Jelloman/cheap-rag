@@ -1,15 +1,21 @@
-# CHEAP RAG - Metadata Semantic Search
+# CHEAP RAG - Database & Code Metadata Semantic Search
 
-Phase 1 implementation of the CHEAP AI Enhancement project: Core RAG pipeline with embeddings and vector search over multi-language metadata.
+Phase 1 implementation of the CHEAP AI Enhancement project: Core RAG pipeline with embeddings and vector search over **database schemas** and **multi-language code metadata**.
 
 ## Overview
 
-This system provides semantic question-answering over CHEAP metadata definitions across Java, TypeScript, Python, and Rust. It combines:
+This system provides semantic question-answering over database schemas (PostgreSQL, SQLite, MariaDB) and code metadata (Java, TypeScript, Python, Rust). It combines:
 
-- **Metadata extraction** from source code annotations and types
+- **Database metadata extraction** from PostgreSQL, SQLite, MariaDB (tables, columns, relationships, indexes)
+- **Code metadata extraction** from Java, TypeScript, Python, Rust source files
+- **Unified metadata model** representing both databases and code
 - **Semantic embeddings** using sentence-transformers
 - **Vector search** with ChromaDB
 - **LLM-powered generation** with citations using local models or Claude API
+
+**Primary Use Case:** Enable semantic search over database schemas (e.g., Odoo ERP) with natural language queries like "What tables are related to sales orders?" or "How is the product table connected to inventory?"
+
+**Secondary Use Case:** Unified search across database metadata AND code metadata (e.g., "Compare the Catalog interface in Java to the database table structure")
 
 ## Project Status
 
@@ -69,33 +75,104 @@ ANTHROPIC_API_KEY=your_api_key_here
 
 # Configuration profile
 CONFIG_PROFILE=local  # or claude, or hybrid
+
+# Database credentials (for database metadata extraction)
+ODOO_DB_PASSWORD=your_odoo_password_here
+```
+
+Edit `config/local.yaml` to configure database connections:
+
+```yaml
+indexing:
+  # Database connections (for database metadata)
+  databases:
+    odoo_ecommerce:
+      enabled: true  # Set to true when Odoo is installed
+      type: "postgresql"
+      connection:
+        host: "localhost"
+        port: 5432
+        database: "odoo"
+        user: "odoo"
+        password: "${ODOO_DB_PASSWORD}"
+      schema: "public"
+      include_tables:  # Optional: limit to specific tables
+        - "sale_order"
+        - "product_product"
+        # ... other tables
+      tags: ["odoo", "ecommerce"]
 ```
 
 ### Usage
 
-#### 1. Index Metadata
+#### Demo: SQLite Database Extraction
+
+Run the SQLite demo to see database metadata extraction in action:
 
 ```bash
-# Extract and index metadata from CHEAP projects
-python scripts/index_metadata.py \
-  --source ../cheap-core/src/main/java \
-  --source ../cheap-ts/src \
-  --source ../cheap-py/src
+# Create demo database and extract metadata
+python scripts/demo_sqlite_extraction.py
+
+# Review extracted metadata
+cat data/metadata/demo_sqlite_metadata.json
 ```
 
-#### 2. Query the System
+This creates a simple eCommerce database (customers, products, orders) and extracts:
+- Tables (4)
+- Columns (20+)
+- Relationships (foreign keys)
+- Indexes
+
+#### Demo: Java Code Extraction
+
+Run the Java demo to see code metadata extraction:
+
+```bash
+# Extract metadata from CHEAP core Java interfaces
+python scripts/demo_java_extraction.py
+
+# Review extracted metadata
+cat data/metadata/demo_java_metadata.json
+```
+
+This extracts metadata from CHEAP core Java source files:
+- Interfaces (Catalog, Hierarchy, Entity, Aspect, Property)
+- Classes and implementations
+- Fields with types and constraints
+
+#### 1. Index Database Metadata (When Odoo is installed)
+
+```bash
+# Extract from Odoo PostgreSQL database
+python scripts/index_metadata.py --databases odoo_ecommerce
+
+# Or extract from all configured databases
+python scripts/index_metadata.py --databases all
+```
+
+#### 2. Index Code Metadata
+
+```bash
+# Extract from CHEAP Java source
+python scripts/index_metadata.py --source ../cheap/cheap-core/src/main/java
+
+# Or extract from multiple sources
+python scripts/index_metadata.py \
+  --source ../cheap/cheap-core/src/main/java \
+  --source ../cheap-ts/src
+```
+
+#### 3. Query the System
 
 ```bash
 # Interactive query
 python scripts/query_example.py
 
-# Or programmatically
-from src.generation.generator import MetadataRAG
-
-rag = MetadataRAG(config_path="config/local.yaml")
-answer = rag.answer_question("What is the Catalog interface in Java?")
-print(answer.answer_text)
-print(answer.sources)
+# Example queries:
+# - "What tables are related to sales orders?"
+# - "Show me columns in the product_product table"
+# - "How is sale_order connected to res_partner?"
+# - "What is the Catalog interface in Java?"
 ```
 
 #### 3. Start API Server

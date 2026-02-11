@@ -6,9 +6,9 @@ from typing import Any
 METADATA_ARTIFACT_SCHEMA: dict[str, Any] = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "MetadataArtifact",
-    "description": "Normalized metadata artifact from CHEAP schema definitions",
+    "description": "Normalized metadata artifact from databases and code",
     "type": "object",
-    "required": ["id", "name", "type", "language", "module", "description"],
+    "required": ["id", "name", "type", "source_type", "language", "module", "description"],
     "properties": {
         "id": {
             "type": "string",
@@ -16,17 +16,34 @@ METADATA_ARTIFACT_SCHEMA: dict[str, Any] = {
         },
         "name": {
             "type": "string",
-            "description": "Class/interface/type/field/method name",
+            "description": "Table/column/class/interface/method name",
         },
         "type": {
             "type": "string",
-            "enum": ["class", "interface", "field", "method", "constraint", "type", "function"],
+            "enum": [
+                # Database types
+                "table", "column", "index", "constraint", "relationship", "view", "trigger",
+                # Code types
+                "class", "interface", "field", "method", "function", "type",
+            ],
             "description": "Type of metadata artifact",
+        },
+        "source_type": {
+            "type": "string",
+            "enum": ["database", "code", "csv", "key_value"],
+            "description": "Source type of the artifact",
         },
         "language": {
             "type": "string",
-            "enum": ["java", "typescript", "python", "rust"],
-            "description": "Source language",
+            "enum": [
+                # Database languages
+                "postgresql", "sqlite", "mariadb", "mysql",
+                # Code languages
+                "java", "typescript", "python", "rust",
+                # File formats
+                "csv", "json", "parquet",
+            ],
+            "description": "Source language or technology",
         },
         "module": {
             "type": "string",
@@ -104,7 +121,7 @@ class MetadataSchema:
             return True
         except ImportError:
             # If jsonschema not installed, just check required fields
-            required = ["id", "name", "type", "language", "module", "description"]
+            required = ["id", "name", "type", "source_type", "language", "module", "description"]
             for field in required:
                 if field not in artifact_dict:
                     raise ValueError(f"Missing required field: {field}")
