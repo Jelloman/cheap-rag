@@ -85,12 +85,12 @@ indexing:
   databases:
     # Example Odoo eCommerce database
     odoo_ecommerce:
-      enabled: false  # Set to true when Odoo is installed
+      enabled: true  # Odoo is now running in Docker
       type: "postgresql"
       connection:
         host: "localhost"
         port: 5432
-        database: "odoo"
+        database: "odoo"  # Odoo creates its own database
         user: "odoo"
         password: "${ODOO_DB_PASSWORD}"  # From environment variable
       schema: "public"
@@ -101,9 +101,8 @@ indexing:
         - "product_product"
         - "product_template"
         - "product_category"
-        - "stock_picking"
-        - "stock_move"
         - "res_partner"
+        - "res_partner_category"
         - "account_move"
         - "account_move_line"
       tags: ["odoo", "ecommerce", "sales"]
@@ -120,7 +119,7 @@ indexing:
   extractors:
     # Database extractors
     postgresql:
-      enabled: false  # Enable when databases are configured
+      enabled: true  # Enabled for Odoo database
 
     sqlite:
       enabled: false  # Enable when databases are configured
