@@ -7,15 +7,17 @@ This file provides guidance to Claude Code when working on the CHEAP RAG system.
 This is the Phase 1 implementation of the CHEAP AI Enhancement project: a RAG (Retrieval-Augmented Generation) system that enables semantic search over multi-language metadata definitions.
 
 **Current Phase:** Phase 1 - Core RAG + Embeddings + Vector Search
-**Timeline:** Weeks 1-2
-**Status:** Initial setup complete, implementation in progress
+**Status:** Extraction and vector indexing complete, retrieval and generation in progress
+
+See [../cheap-planning/PROJECT_STATUS.md](../cheap-planning/PROJECT_STATUS.md) for overall project status.
+See [../cheap-planning/TODO_PHASE_1.md](../cheap-planning/TODO_PHASE_1.md) for remaining tasks.
 
 ## Technology Stack
 
-See [../cheap-planning/TECH_STACK_DECISIONS.md](../cheap-planning/TECH_STACK_DECISIONS.md) for complete rationale.
+See [../cheap-planning/attic/TECH_STACK_DECISIONS.md](../cheap-planning/attic/TECH_STACK_DECISIONS.md) for complete rationale.
 
 **Core Stack:**
-- Python 3.14
+- Python 3.13 (ChromaDB incompatible with 3.14)
 - Embeddings: sentence-transformers/all-mpnet-base-v2 (local GPU)
 - Vector Store: ChromaDB (local persistence)
 - LLM (Default): Qwen2.5-Coder-7B-Instruct via Ollama
@@ -111,13 +113,13 @@ Use `MetadataArtifact.to_embedding_text()` for consistency.
 
 ## Phase 1 Implementation Order
 
-Follow the detailed plan in [../cheap-planning/PHASE_1_DETAILED_PLAN.md](../cheap-planning/PHASE_1_DETAILED_PLAN.md):
+See [../cheap-planning/TODO_PHASE_1.md](../cheap-planning/TODO_PHASE_1.md) for remaining tasks.
 
 1. ✅ Technology stack decisions
 2. ✅ Project structure setup
-3. [ ] Metadata extraction (Java, TypeScript, Python)
-4. [ ] Embedding service
-5. [ ] Vector store integration
+3. ✅ Metadata extraction (Java, PostgreSQL, SQLite)
+4. ✅ Embedding service
+5. ✅ Vector store integration
 6. [ ] Semantic search
 7. [ ] Answer generation with citations
 8. [ ] API endpoints
