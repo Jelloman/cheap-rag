@@ -89,11 +89,11 @@ def init_logging(
 
     # Add console handler
     if enable_console:
-        logger.add(
+        logger.add(  # type: ignore[reportCallIssue]  # loguru
             sys.stderr,
             format=log_format,
             level=level,
-            filter=correlation_id_filter,
+            filter=correlation_id_filter,  # type: ignore[reportArgumentType]  # loguru
             colorize=(format_type == "text"),
         )
 
@@ -117,7 +117,7 @@ def init_logging(
             log_file,
             format=json_format,
             level=level,
-            filter=correlation_id_filter,
+            filter=correlation_id_filter,  # type: ignore[reportArgumentType]  # loguru
             rotation="100 MB",
             retention="30 days",
             compression="zip",

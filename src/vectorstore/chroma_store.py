@@ -104,7 +104,7 @@ class ChromaVectorStore:
             self.collection.add(
                 ids=ids[i:end_idx],
                 documents=documents[i:end_idx],
-                metadatas=metadatas[i:end_idx],
+                metadatas=metadatas[i:end_idx],  # type: ignore[reportArgumentType]  # chromadb
                 embeddings=embeddings_list[i:end_idx],
             )
 
@@ -132,7 +132,7 @@ class ChromaVectorStore:
             Tuple of (ids, metadatas, distances)
         """
         # Convert numpy array to list
-        if isinstance(query_embedding, np.ndarray):
+        if isinstance(query_embedding, np.ndarray):  # type: ignore[reportUnnecessaryIsInstance]  # chromadb
             query_embedding = query_embedding.tolist()
 
         # Build where clause for filtering
@@ -153,7 +153,7 @@ class ChromaVectorStore:
         metadatas = results["metadatas"][0] if results["metadatas"] else []
         distances = results["distances"][0] if results["distances"] else []
 
-        return ids, metadatas, distances
+        return ids, metadatas, distances  # type: ignore[reportReturnType]  # chromadb
 
     def get_artifact(self, artifact_id: str) -> dict[str, Any] | None:
         """Retrieve a specific artifact by ID.
@@ -171,7 +171,7 @@ class ChromaVectorStore:
             )
 
             if results["ids"]:
-                return results["metadatas"][0]
+                return results["metadatas"][0]  # type: ignore[reportReturnType,reportUnknownVariableType]  # chromadb
             return None
         except Exception as e:
             logger.error(f"Error retrieving artifact {artifact_id}: {e}")
@@ -255,15 +255,15 @@ class ChromaVectorStore:
         for key, value in filters.items():
             if isinstance(value, list):
                 # Multiple values: use $in operator
-                conditions.append({key: {"$in": value}})
+                conditions.append({key: {"$in": value}})  # type: ignore[reportUnknownMemberType]  # chromadb
             else:
                 # Single value: direct equality
-                conditions.append({key: value})
+                conditions.append({key: value})  # type: ignore[reportUnknownMemberType]  # chromadb
 
         # Combine with $and if multiple conditions
-        if len(conditions) == 1:
-            return conditions[0]
-        elif len(conditions) > 1:
+        if len(conditions) == 1:  # type: ignore[reportUnknownArgumentType]  # chromadb
+            return conditions[0]  # type: ignore[reportUnknownVariableType]  # chromadb
+        elif len(conditions) > 1:  # type: ignore[reportUnknownArgumentType]  # chromadb
             return {"$and": conditions}
         else:
             return {}

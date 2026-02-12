@@ -69,7 +69,7 @@ class EmbeddingService:
         Returns:
             Embedding vector as numpy array
         """
-        return self.model.encode(text, convert_to_numpy=True)
+        return self.model.encode(text, convert_to_numpy=True)  # type: ignore[reportUnknownMemberType]  # sentence-transformers
 
     def embed_texts(self, texts: list[str]) -> np.ndarray:
         """Generate embeddings for multiple texts in batch.
@@ -83,7 +83,7 @@ class EmbeddingService:
         if not texts:
             return np.array([])
 
-        return self.model.encode(
+        return self.model.encode(  # type: ignore[reportUnknownMemberType]  # sentence-transformers
             texts,
             batch_size=self.batch_size,
             show_progress_bar=len(texts) > 10,

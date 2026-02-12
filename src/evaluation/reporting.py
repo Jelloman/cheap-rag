@@ -125,9 +125,9 @@ class EvaluationReport:
             if isinstance(value, dict):
                 lines.append(f"{'#' * level} {key.replace('_', ' ').title()}")
                 lines.append("")
-                lines.extend(self._format_metrics_markdown(value, level + 1))
+                lines.extend(self._format_metrics_markdown(value, level + 1))  # type: ignore[reportUnknownArgumentType]
             elif isinstance(value, (list, tuple)):
-                lines.append(f"- **{key}:** {', '.join(str(v) for v in value)}")
+                lines.append(f"- **{key}:** {', '.join(str(v) for v in value)}")  # type: ignore[reportUnknownArgumentType,reportUnknownVariableType]
             else:
                 # Format numbers nicely
                 formatted_value = f"{value:.4f}" if isinstance(value, float) else str(value)
@@ -267,7 +267,7 @@ class ABTestReportGenerator:
             metrics={"variants": variant_metrics},
             metadata={
                 "experiment_name": experiment_name,
-                "num_variants": len(variant_metrics),
+                "num_variants": len(variant_metrics),  # type: ignore[reportUnknownArgumentType]
             },
         )
 

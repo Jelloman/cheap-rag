@@ -115,6 +115,9 @@ addopts = [
 ]
 pythonpath = ["."]
 asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning:pydantic",
+]
 
 [tool.coverage.run]
 source = ["src"]

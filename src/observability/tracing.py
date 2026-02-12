@@ -137,7 +137,7 @@ def trace_operation(
             for key, value in attributes.items():
                 # Convert value to string if needed for span attributes
                 if isinstance(value, (list, dict)):
-                    span.set_attribute(key, str(value))
+                    span.set_attribute(key, str(value))  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
                 else:
                     span.set_attribute(key, value)
 
@@ -199,26 +199,26 @@ def trace_function(
                 if kwargs:
                     attributes["kwargs_keys"] = list(kwargs.keys())
 
-            with trace_operation(operation_name, tracer=tracer, attributes=attributes) as span:
+            with trace_operation(operation_name, tracer=tracer, attributes=attributes) as span:  # type: ignore[reportArgumentType]  # opentelemetry-api
                 result = func(*args, **kwargs)
 
                 # Add result info if requested (careful with large results)
                 if include_result and result is not None:
                     if isinstance(result, (list, dict)):
-                        span.set_attribute("result_type", type(result).__name__)
+                        span.set_attribute("result_type", type(result).__name__)  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
                         if isinstance(result, list):
-                            span.set_attribute("result_length", len(result))
+                            span.set_attribute("result_length", len(result))  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
                     else:
                         span.set_attribute("result_type", type(result).__name__)
 
-                return result
+                return result  # type: ignore[reportUnknownVariableType]  # opentelemetry-api
 
         return wrapper
 
     return decorator
 
 
-def trace_async_function(
+def trace_async_function(  # type: ignore[reportUnknownParameterType]  # opentelemetry-api
     operation_name: str | None = None,
     *,
     tracer: trace.Tracer | None = None,
@@ -242,38 +242,38 @@ def trace_async_function(
         Decorated async function
     """
 
-    def decorator(func):
+    def decorator(func):  # type: ignore[reportUnknownParameterType]
         nonlocal operation_name
         if operation_name is None:
-            operation_name = func.__name__
+            operation_name = func.__name__  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # opentelemetry-api
 
-        @functools.wraps(func)
-        async def wrapper(*args, **kwargs):
+        @functools.wraps(func)  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
+        async def wrapper(*args, **kwargs):  # type: ignore[reportMissingParameterType,reportUnknownParameterType]  # opentelemetry-api
             attributes: dict[str, Any] = {}
 
             if include_args:
-                attributes["function"] = func.__name__
+                attributes["function"] = func.__name__  # type: ignore[reportUnknownMemberType]  # opentelemetry-api
                 if args:
-                    attributes["args_count"] = len(args)
+                    attributes["args_count"] = len(args)  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
                 if kwargs:
-                    attributes["kwargs_keys"] = list(kwargs.keys())
+                    attributes["kwargs_keys"] = list(kwargs.keys())  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
 
-            with trace_operation(operation_name, tracer=tracer, attributes=attributes) as span:
-                result = await func(*args, **kwargs)
+            with trace_operation(operation_name, tracer=tracer, attributes=attributes) as span:  # type: ignore[reportArgumentType]  # opentelemetry-api
+                result = await func(*args, **kwargs)  # type: ignore[reportUnknownVariableType]  # opentelemetry-api
 
                 if include_result and result is not None:
                     if isinstance(result, (list, dict)):
-                        span.set_attribute("result_type", type(result).__name__)
+                        span.set_attribute("result_type", type(result).__name__)  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
                         if isinstance(result, list):
-                            span.set_attribute("result_length", len(result))
+                            span.set_attribute("result_length", len(result))  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
                     else:
-                        span.set_attribute("result_type", type(result).__name__)
+                        span.set_attribute("result_type", type(result).__name__)  # type: ignore[reportUnknownArgumentType]  # opentelemetry-api
 
-                return result
+                return result  # type: ignore[reportUnknownVariableType]  # opentelemetry-api
 
-        return wrapper
+        return wrapper  # type: ignore[reportUnknownVariableType]  # opentelemetry-api
 
-    return decorator
+    return decorator  # type: ignore[reportUnknownVariableType,reportUnknownParameterType]  # opentelemetry-api
 
 
 class TracingConfig:

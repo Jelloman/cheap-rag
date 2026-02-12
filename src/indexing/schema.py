@@ -168,7 +168,7 @@ def validate_artifact(artifact: MetadataArtifact) -> tuple[bool, list[str]]:
     for field in required_fields:
         value = getattr(artifact, field, None)
         if not value:
-            errors.append(f"Missing or empty required field: {field}")
+            errors.append(f"Missing or empty required field: {field}")  # type: ignore[reportUnknownMemberType]
 
     # Check type enums
     valid_types = [
@@ -187,11 +187,11 @@ def validate_artifact(artifact: MetadataArtifact) -> tuple[bool, list[str]]:
         "type",
     ]
     if artifact.type and artifact.type not in valid_types:
-        errors.append(f"Invalid artifact type: {artifact.type}")
+        errors.append(f"Invalid artifact type: {artifact.type}")  # type: ignore[reportUnknownMemberType]
 
     valid_source_types = ["database", "code", "csv", "key_value"]
     if artifact.source_type and artifact.source_type not in valid_source_types:
-        errors.append(f"Invalid source_type: {artifact.source_type}")
+        errors.append(f"Invalid source_type: {artifact.source_type}")  # type: ignore[reportUnknownMemberType]
 
     valid_languages = [
         "postgresql",
@@ -207,6 +207,6 @@ def validate_artifact(artifact: MetadataArtifact) -> tuple[bool, list[str]]:
         "parquet",
     ]
     if artifact.language and artifact.language not in valid_languages:
-        errors.append(f"Invalid language: {artifact.language}")
+        errors.append(f"Invalid language: {artifact.language}")  # type: ignore[reportUnknownMemberType]
 
-    return len(errors) == 0, errors
+    return len(errors) == 0, errors  # type: ignore[reportUnknownVariableType,reportUnknownArgumentType]

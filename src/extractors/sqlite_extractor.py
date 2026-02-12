@@ -197,7 +197,7 @@ class SqliteExtractor(DatabaseExtractor):
                         "nullable": nullable,
                         "default_value": str(default) if default else "",
                         "primary_key": col_name in pk_columns,
-                        "foreign_key": fk_map.get(col_name, ""),
+                        "foreign_key": fk_map.get(col_name, ""),  # type: ignore[reportUnknownMemberType]  # sqlalchemy
                         "database_path": self.database_path,
                     },
                 )

@@ -69,7 +69,7 @@ class JavaExtractor:
             # Extract from type declarations (classes, interfaces, enums)
             for _path, node in tree.filter(javalang.tree.TypeDeclaration):  # type: ignore[attr-defined]
                 artifacts.extend(
-                    self._extract_type_declaration(node, package_name, file_path, source_code)
+                    self._extract_type_declaration(node, package_name, file_path, source_code)  # type: ignore[reportUnknownArgumentType]  # javalang
                 )
 
         except Exception as e:
@@ -99,11 +99,11 @@ class JavaExtractor:
         artifacts: list[MetadataArtifact] = []
 
         # Determine type
-        if isinstance(node, javalang.tree.ClassDeclaration):
+        if isinstance(node, javalang.tree.ClassDeclaration):  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]  # javalang
             artifact_type = "class"
-        elif isinstance(node, javalang.tree.InterfaceDeclaration):
+        elif isinstance(node, javalang.tree.InterfaceDeclaration):  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]  # javalang
             artifact_type = "interface"
-        elif isinstance(node, javalang.tree.EnumDeclaration):
+        elif isinstance(node, javalang.tree.EnumDeclaration):  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]  # javalang
             artifact_type = "enum"
         else:
             return artifacts  # Skip other types
