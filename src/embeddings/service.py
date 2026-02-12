@@ -54,7 +54,10 @@ class EmbeddingService:
             cache_folder=str(self.cache_dir) if self.cache_dir else None,
         )
 
-        self.dimension = self.model.get_sentence_embedding_dimension()
+        dimension = self.model.get_sentence_embedding_dimension()
+        if dimension is None:
+            raise ValueError(f"Could not determine embedding dimension for model {model_name}")
+        self.dimension: int = dimension
         logger.info(f"Model loaded successfully (dimension: {self.dimension})")
 
     def embed_text(self, text: str) -> np.ndarray:

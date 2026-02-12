@@ -94,7 +94,7 @@ class OllamaProvider:
             max_tokens = self.config.max_tokens
 
         # Build messages
-        messages = []
+        messages: list[dict[str, str]] = []
         if system_message:
             messages.append({"role": "system", "content": system_message})
         messages.append({"role": "user", "content": prompt})
@@ -200,7 +200,7 @@ class AnthropicProvider:
 
         try:
             # Build message request
-            kwargs = {
+            kwargs: dict[str, Any] = {
                 "model": self.model,
                 "max_tokens": max_tokens,
                 "temperature": temperature,

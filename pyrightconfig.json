@@ -1,6 +1,6 @@
 {
-  "include": ["src", "noxfile.py"],
-  "exclude": ["**/__pycache__", "**/.venv", "**/venv", "data", "models"],
+  "include": ["src"],
+  "exclude": ["**/__pycache__", "**/.venv", "**/venv", "data", "models", "noxfile.py"],
   "pythonVersion": "3.13",
   "pythonPlatform": "All",
   "typeCheckingMode": "strict",

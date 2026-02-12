@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import logging
 import time
+from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import Any
+from typing import Any, AsyncIterator
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -96,8 +97,12 @@ def get_generator() -> Generator:
         provider_type = config.llm.provider
 
         if provider_type == "ollama":
+            if config.llm.ollama is None:
+                raise ValueError("Ollama config is required when provider is 'ollama'")
             provider = OllamaProvider(config.llm.ollama)
         elif provider_type == "anthropic":
+            if config.llm.anthropic is None:
+                raise ValueError("Anthropic config is required when provider is 'anthropic'")
             api_key = get_anthropic_api_key()
             provider = AnthropicProvider(config.llm.anthropic, api_key)
         else:
@@ -149,12 +154,37 @@ class MetadataBrowseRequest(BaseModel):
     offset: int = Field(0, ge=0)
 
 
+# Lifespan context manager for startup/shutdown
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Manage application lifespan events."""
+    # Startup
+    logger.info("Starting CHEAP RAG API...")
+    logger.info(f"Configuration profile: {config.llm.provider}")
+
+    # Initialize services
+    get_embedding_service()
+    get_vector_store()
+    get_semantic_search()
+    get_generator()
+
+    logger.info("All services initialized successfully")
+
+    yield
+
+    # Shutdown
+    logger.info("Shutting down CHEAP RAG API...")
+
+
 # Create FastAPI app
 
 app = FastAPI(
     title="CHEAP RAG API",
     description="Semantic search and Q&A over multi-language metadata",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 # Configure CORS
@@ -292,11 +322,22 @@ async def query(request: QueryRequest) -> QueryResponse:
             generation_metadata=GenerationMetadata(
                 provider=config.llm.provider,
                 model=generator.provider.provider_name(),
-                temperature=request.temperature or config.llm.ollama.temperature,
-                max_tokens=request.max_tokens or config.llm.ollama.max_tokens,
+                temperature=request.temperature or (
+                    config.llm.ollama.temperature if config.llm.ollama else 0.1
+                ),
+                max_tokens=request.max_tokens or (
+                    config.llm.ollama.max_tokens if config.llm.ollama else 1024
+                ),
                 generation_time_ms=generation_time,
             ),
-            citation_metrics=CitationMetrics(**citation_quality),
+            citation_metrics=CitationMetrics(
+                total_citations=int(citation_quality["total_citations"]),
+                valid_citations=int(citation_quality["valid_citations"]),
+                invalid_citations=int(citation_quality["invalid_citations"]),
+                citation_accuracy=float(citation_quality["citation_accuracy"]),
+                citation_coverage=float(citation_quality["citation_coverage"]),
+                has_hallucinations=bool(citation_quality["has_hallucinations"]),
+            ),
             total_time_ms=(time.time() - start_time) * 1000,
         )
 
@@ -402,30 +443,6 @@ async def browse_metadata(
     except Exception as e:
         logger.error(f"Metadata browse failed: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
-
-
-# Startup/shutdown events
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize services on startup."""
-    logger.info("Starting CHEAP RAG API...")
-    logger.info(f"Configuration profile: {config.llm.provider}")
-
-    # Initialize services
-    get_embedding_service()
-    get_vector_store()
-    get_semantic_search()
-    get_generator()
-
-    logger.info("All services initialized successfully")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on shutdown."""
-    logger.info("Shutting down CHEAP RAG API...")
 
 
 # Error handlers

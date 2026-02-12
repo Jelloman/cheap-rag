@@ -52,7 +52,7 @@ class CitationExtractor:
         Returns:
             List of parsed citations.
         """
-        citations = []
+        citations: list[Citation] = []
 
         for match in self.pattern.finditer(answer):
             artifact_name = match.group(1).strip()
@@ -87,7 +87,7 @@ class CitationExtractor:
         # Build ID to artifact mapping
         artifact_map = {r.artifact.id: r.artifact for r in search_results}
 
-        validated_citations = []
+        validated_citations: list[Citation] = []
         for citation in citations:
             # Check if artifact ID exists in results
             if citation.artifact_id in artifact_map:
@@ -154,7 +154,7 @@ class CitationExtractor:
             List of uncited artifacts.
         """
         cited_ids = self.get_cited_artifact_ids(citations)
-        uncited = []
+        uncited: list[MetadataArtifact] = []
 
         for result in search_results:
             if result.artifact.id not in cited_ids:
@@ -214,7 +214,7 @@ class CitationExtractor:
         self,
         answer: str,
         search_results: list[SearchResult],
-    ) -> dict:
+    ) -> dict[str, int | float | bool]:
         """Calculate citation quality metrics.
 
         Args:
@@ -262,7 +262,7 @@ def format_sources_list(citations: list[Citation]) -> str:
         return "No sources cited."
 
     lines = ["## Sources"]
-    seen_ids = set()
+    seen_ids: set[str] = set()
 
     for citation in citations:
         if citation.is_valid and citation.artifact_id not in seen_ids:

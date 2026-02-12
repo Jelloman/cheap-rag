@@ -6,8 +6,9 @@ Uses javalang library for pure Python AST parsing.
 
 import hashlib
 from pathlib import Path
+from typing import Any
 
-import javalang
+import javalang  # type: ignore[import-untyped]
 
 from .base import MetadataArtifact
 
@@ -28,7 +29,7 @@ class JavaExtractor:
         Returns:
             List of extracted metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         if source_path.is_file():
             if source_path.suffix == ".java":
@@ -53,20 +54,20 @@ class JavaExtractor:
         Returns:
             List of metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         try:
             # Read source code
             source_code = file_path.read_text(encoding="utf-8")
 
             # Parse with javalang
-            tree = javalang.parse.parse(source_code)
+            tree = javalang.parse.parse(source_code)  # type: ignore[attr-defined]
 
             # Get package name
-            package_name = tree.package.name if tree.package else ""
+            package_name: str = tree.package.name if tree.package else ""  # type: ignore[attr-defined]
 
             # Extract from type declarations (classes, interfaces, enums)
-            for _path, node in tree.filter(javalang.tree.TypeDeclaration):
+            for _path, node in tree.filter(javalang.tree.TypeDeclaration):  # type: ignore[attr-defined]
                 artifacts.extend(
                     self._extract_type_declaration(node, package_name, file_path, source_code)
                 )
@@ -79,7 +80,7 @@ class JavaExtractor:
 
     def _extract_type_declaration(
         self,
-        node: javalang.tree.TypeDeclaration,
+        node: Any,  # javalang.tree.TypeDeclaration
         package_name: str,
         file_path: Path,
         _source_code: str,
@@ -95,7 +96,7 @@ class JavaExtractor:
         Returns:
             List of metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Determine type
         if isinstance(node, javalang.tree.ClassDeclaration):
@@ -156,7 +157,7 @@ class JavaExtractor:
 
     def _extract_fields(
         self,
-        type_node: javalang.tree.TypeDeclaration,
+        type_node: Any,  # javalang.tree.TypeDeclaration
         qualified_type_name: str,
         file_path: Path,
     ) -> list[MetadataArtifact]:
@@ -170,7 +171,7 @@ class JavaExtractor:
         Returns:
             List of field metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Get all field declarations
         for field_decl in type_node.fields:
