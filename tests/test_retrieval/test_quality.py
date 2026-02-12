@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Dict, List, Set
 
 import pytest
+import torch
 
 from src.config import load_config
 from src.embeddings.service import EmbeddingService
@@ -103,9 +104,15 @@ def semantic_search():
     """Initialize semantic search for testing."""
     config = load_config()
 
+    # Override device to CPU if CUDA is not available
+    device = config.embedding.device
+    if device == "cuda" and not torch.cuda.is_available():
+        logger.warning("CUDA not available, falling back to CPU for tests")
+        device = "cpu"
+
     embedding_service = EmbeddingService(
         model_name=config.embedding.model_name,
-        device=config.embedding.device,
+        device=device,
         cache_dir=config.embedding.cache_dir,
     )
 
