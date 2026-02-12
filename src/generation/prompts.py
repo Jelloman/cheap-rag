@@ -1,6 +1,6 @@
 """Prompt templates for LLM-powered answer generation."""
 
-from typing import List
+from __future__ import annotations
 
 from src.extractors.base import MetadataArtifact
 from src.retrieval.semantic_search import SearchResult
@@ -75,6 +75,7 @@ def get_system_message(provider: str = "ollama") -> str:
 
 
 # Context formatting
+
 
 def format_artifact_context(artifact: MetadataArtifact) -> str:
     """Format a single artifact as context for the LLM.
@@ -168,7 +169,7 @@ def format_artifact_context(artifact: MetadataArtifact) -> str:
     return "\n".join(lines)
 
 
-def format_search_results_context(results: List[SearchResult]) -> str:
+def format_search_results_context(results: list[SearchResult]) -> str:
     """Format search results as context for the LLM.
 
     Args:
@@ -190,7 +191,7 @@ def format_search_results_context(results: List[SearchResult]) -> str:
     return "\n".join(lines)
 
 
-def build_qa_prompt(query: str, search_results: List[SearchResult]) -> str:
+def build_qa_prompt(query: str, search_results: list[SearchResult]) -> str:
     """Build complete prompt for question answering.
 
     Args:

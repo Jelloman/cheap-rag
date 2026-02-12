@@ -1,8 +1,9 @@
 """Embedding service for generating vector representations of metadata artifacts."""
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import List, Optional
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -23,7 +24,7 @@ class EmbeddingService:
         self,
         model_name: str = "sentence-transformers/all-mpnet-base-v2",
         device: str = "cpu",
-        cache_dir: Optional[str] = None,
+        cache_dir: str | None = None,
         batch_size: int = 32,
     ):
         """Initialize the embedding service.
@@ -67,7 +68,7 @@ class EmbeddingService:
         """
         return self.model.encode(text, convert_to_numpy=True)
 
-    def embed_texts(self, texts: List[str]) -> np.ndarray:
+    def embed_texts(self, texts: list[str]) -> np.ndarray:
         """Generate embeddings for multiple texts in batch.
 
         Args:
@@ -98,7 +99,7 @@ class EmbeddingService:
         text = artifact.to_embedding_text()
         return self.embed_text(text)
 
-    def embed_artifacts(self, artifacts: List[MetadataArtifact]) -> np.ndarray:
+    def embed_artifacts(self, artifacts: list[MetadataArtifact]) -> np.ndarray:
         """Generate embeddings for multiple artifacts in batch.
 
         Args:

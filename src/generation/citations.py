@@ -1,9 +1,10 @@
 """Citation extraction and validation from LLM-generated answers."""
 
+from __future__ import annotations
+
 import logging
 import re
 from dataclasses import dataclass
-from typing import List, Optional, Set
 
 from src.extractors.base import MetadataArtifact
 from src.retrieval.semantic_search import SearchResult
@@ -19,7 +20,7 @@ class Citation:
     artifact_id: str
     is_valid: bool
     position: int  # Character position in answer
-    matched_artifact: Optional[MetadataArtifact] = None
+    matched_artifact: MetadataArtifact | None = None
 
     def to_dict(self):
         """Convert to dictionary for JSON serialization."""
@@ -36,13 +37,13 @@ class CitationExtractor:
     """Extracts and validates citations from LLM-generated answers."""
 
     # Citation pattern: [ArtifactName] (ID: artifact_id)
-    CITATION_PATTERN = r'\[([^\]]+)\]\s*\(ID:\s*([^\)]+)\)'
+    CITATION_PATTERN = r"\[([^\]]+)\]\s*\(ID:\s*([^\)]+)\)"
 
     def __init__(self):
         """Initialize citation extractor."""
         self.pattern = re.compile(self.CITATION_PATTERN)
 
-    def extract_citations(self, answer: str) -> List[Citation]:
+    def extract_citations(self, answer: str) -> list[Citation]:
         """Extract all citations from answer text.
 
         Args:
@@ -71,9 +72,9 @@ class CitationExtractor:
 
     def validate_citations(
         self,
-        citations: List[Citation],
-        search_results: List[SearchResult],
-    ) -> List[Citation]:
+        citations: list[Citation],
+        search_results: list[SearchResult],
+    ) -> list[Citation]:
         """Validate that citations reference artifacts from search results.
 
         Args:
@@ -103,16 +104,18 @@ class CitationExtractor:
             validated_citations.append(citation)
 
         valid_count = sum(1 for c in validated_citations if c.is_valid)
-        logger.info(f"Validated {len(citations)} citations: {valid_count} valid, "
-                   f"{len(citations) - valid_count} invalid")
+        logger.info(
+            f"Validated {len(citations)} citations: {valid_count} valid, "
+            f"{len(citations) - valid_count} invalid"
+        )
 
         return validated_citations
 
     def extract_and_validate(
         self,
         answer: str,
-        search_results: List[SearchResult],
-    ) -> List[Citation]:
+        search_results: list[SearchResult],
+    ) -> list[Citation]:
         """Extract and validate citations in one step.
 
         Args:
@@ -125,7 +128,7 @@ class CitationExtractor:
         citations = self.extract_citations(answer)
         return self.validate_citations(citations, search_results)
 
-    def get_cited_artifact_ids(self, citations: List[Citation]) -> Set[str]:
+    def get_cited_artifact_ids(self, citations: list[Citation]) -> set[str]:
         """Get set of all artifact IDs that were cited.
 
         Args:
@@ -138,9 +141,9 @@ class CitationExtractor:
 
     def get_uncited_artifacts(
         self,
-        citations: List[Citation],
-        search_results: List[SearchResult],
-    ) -> List[MetadataArtifact]:
+        citations: list[Citation],
+        search_results: list[SearchResult],
+    ) -> list[MetadataArtifact]:
         """Get artifacts that were retrieved but not cited.
 
         Args:
@@ -158,15 +161,16 @@ class CitationExtractor:
                 uncited.append(result.artifact)
 
         if uncited:
-            logger.info(f"Found {len(uncited)} uncited artifacts out of "
-                       f"{len(search_results)} retrieved")
+            logger.info(
+                f"Found {len(uncited)} uncited artifacts out of {len(search_results)} retrieved"
+            )
 
         return uncited
 
     def check_citation_coverage(
         self,
-        citations: List[Citation],
-        search_results: List[SearchResult],
+        citations: list[Citation],
+        search_results: list[SearchResult],
     ) -> float:
         """Calculate percentage of retrieved artifacts that were cited.
 
@@ -183,12 +187,13 @@ class CitationExtractor:
         cited_ids = self.get_cited_artifact_ids(citations)
         coverage = len(cited_ids) / len(search_results)
 
-        logger.debug(f"Citation coverage: {coverage:.2%} "
-                    f"({len(cited_ids)}/{len(search_results)} artifacts)")
+        logger.debug(
+            f"Citation coverage: {coverage:.2%} ({len(cited_ids)}/{len(search_results)} artifacts)"
+        )
 
         return coverage
 
-    def has_hallucinated_citations(self, citations: List[Citation]) -> bool:
+    def has_hallucinated_citations(self, citations: list[Citation]) -> bool:
         """Check if answer contains invalid citations (hallucinations).
 
         Args:
@@ -208,7 +213,7 @@ class CitationExtractor:
     def get_citation_quality_metrics(
         self,
         answer: str,
-        search_results: List[SearchResult],
+        search_results: list[SearchResult],
     ) -> dict:
         """Calculate citation quality metrics.
 
@@ -236,13 +241,15 @@ class CitationExtractor:
             "has_hallucinations": has_hallucinations,
         }
 
-        logger.info(f"Citation quality: {metrics['citation_accuracy']:.2%} accuracy, "
-                   f"{metrics['citation_coverage']:.2%} coverage")
+        logger.info(
+            f"Citation quality: {metrics['citation_accuracy']:.2%} accuracy, "
+            f"{metrics['citation_coverage']:.2%} coverage"
+        )
 
         return metrics
 
 
-def format_sources_list(citations: List[Citation]) -> str:
+def format_sources_list(citations: list[Citation]) -> str:
     """Format citations as a sources list.
 
     Args:

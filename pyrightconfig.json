@@ -1,0 +1,23 @@
+{
+  "include": ["src", "noxfile.py"],
+  "exclude": ["**/__pycache__", "**/.venv", "**/venv", "data", "models"],
+  "pythonVersion": "3.13",
+  "pythonPlatform": "All",
+  "typeCheckingMode": "strict",
+  "strictListInference": true,
+  "strictDictionaryInference": true,
+  "strictSetInference": true,
+  "strictParameterNoneValue": true,
+  "reportMissingImports": "error",
+  "reportMissingTypeStubs": "warning",
+  "reportMissingParameterType": "error",
+  "reportMissingTypeArgument": "error",
+  "reportUntypedFunctionDecorator": "error",
+  "reportOptionalMemberAccess": "error",
+  "reportOptionalSubscript": "error",
+  "reportOptionalCall": "error",
+  "reportUnknownParameterType": "warning",
+  "reportUnknownVariableType": "warning",
+  "venvPath": ".",
+  "venv": ".venv"
+}

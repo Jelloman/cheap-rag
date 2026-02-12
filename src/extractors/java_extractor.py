@@ -6,14 +6,13 @@ Uses javalang library for pure Python AST parsing.
 
 import hashlib
 from pathlib import Path
-from typing import Any
 
 import javalang
 
-from .base import MetadataArtifact, MetadataExtractor
+from .base import MetadataArtifact
 
 
-class JavaExtractor(MetadataExtractor):
+class JavaExtractor:
     """Extract metadata from Java source files.
 
     Phase 1 scope: Extract class-level and field-level metadata only.
@@ -67,7 +66,7 @@ class JavaExtractor(MetadataExtractor):
             package_name = tree.package.name if tree.package else ""
 
             # Extract from type declarations (classes, interfaces, enums)
-            for path, node in tree.filter(javalang.tree.TypeDeclaration):
+            for _path, node in tree.filter(javalang.tree.TypeDeclaration):
                 artifacts.extend(
                     self._extract_type_declaration(node, package_name, file_path, source_code)
                 )
@@ -83,7 +82,7 @@ class JavaExtractor(MetadataExtractor):
         node: javalang.tree.TypeDeclaration,
         package_name: str,
         file_path: Path,
-        source_code: str,
+        _source_code: str,
     ) -> list[MetadataArtifact]:
         """Extract metadata from a type declaration (class/interface).
 
@@ -127,7 +126,10 @@ class JavaExtractor(MetadataExtractor):
         tags = ["java", "code", artifact_type]
         if "cheap" in package_name.lower():
             tags.append("cheap")
-        if any(keyword in type_name.lower() for keyword in ["catalog", "hierarchy", "entity", "aspect", "property"]):
+        if any(
+            keyword in type_name.lower()
+            for keyword in ["catalog", "hierarchy", "entity", "aspect", "property"]
+        ):
             tags.append("core")
 
         # Create artifact for type
@@ -174,7 +176,11 @@ class JavaExtractor(MetadataExtractor):
         for field_decl in type_node.fields:
             for declarator in field_decl.declarators:
                 field_name = declarator.name
-                field_type = field_decl.type.name if hasattr(field_decl.type, "name") else str(field_decl.type)
+                field_type = (
+                    field_decl.type.name
+                    if hasattr(field_decl.type, "name")
+                    else str(field_decl.type)
+                )
 
                 # Extract javadoc
                 javadoc = self._extract_javadoc(field_decl.documentation)

@@ -1,9 +1,10 @@
 """LLM-powered answer generation with multiple provider support."""
 
+from __future__ import annotations
+
 import logging
 import time
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any, Protocol, runtime_checkable
 
 import anthropic
 import requests
@@ -15,16 +16,16 @@ from src.retrieval.semantic_search import SearchResult
 logger = logging.getLogger(__name__)
 
 
-class LLMProvider(ABC):
-    """Abstract base class for LLM providers."""
+@runtime_checkable
+class LLMProvider(Protocol):
+    """Protocol for LLM providers (structural typing)."""
 
-    @abstractmethod
     def generate(
         self,
         prompt: str,
-        system_message: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        system_message: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate text from prompt.
 
@@ -37,15 +38,14 @@ class LLMProvider(ABC):
         Returns:
             Generated text.
         """
-        pass
+        ...
 
-    @abstractmethod
     def provider_name(self) -> str:
         """Get provider name for logging."""
-        pass
+        ...
 
 
-class OllamaProvider(LLMProvider):
+class OllamaProvider:
     """Ollama LLM provider for local inference."""
 
     def __init__(self, config: OllamaConfig):
@@ -72,9 +72,9 @@ class OllamaProvider(LLMProvider):
     def generate(
         self,
         prompt: str,
-        system_message: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        system_message: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate text using Ollama API.
 
@@ -147,7 +147,7 @@ class OllamaProvider(LLMProvider):
         return f"ollama:{self.model}"
 
 
-class AnthropicProvider(LLMProvider):
+class AnthropicProvider:
     """Anthropic Claude provider for API-based inference."""
 
     def __init__(self, config: AnthropicConfig, api_key: str):
@@ -173,9 +173,9 @@ class AnthropicProvider(LLMProvider):
     def generate(
         self,
         prompt: str,
-        system_message: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        system_message: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate text using Anthropic API.
 
@@ -268,12 +268,13 @@ class AnthropicProvider(LLMProvider):
             input_cost_per_1m = 3.00
             output_cost_per_1m = 15.00
 
-        cost = (input_tokens / 1_000_000) * input_cost_per_1m + \
-               (output_tokens / 1_000_000) * output_cost_per_1m
+        cost = (input_tokens / 1_000_000) * input_cost_per_1m + (
+            output_tokens / 1_000_000
+        ) * output_cost_per_1m
 
         return cost
 
-    def get_usage_stats(self) -> Dict[str, Any]:
+    def get_usage_stats(self) -> dict[str, Any]:
         """Get usage statistics.
 
         Returns:
@@ -305,9 +306,9 @@ class Generator:
     def generate_answer(
         self,
         query: str,
-        search_results: List[SearchResult],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        search_results: list[SearchResult],
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate answer to query using retrieved context.
 
@@ -350,7 +351,7 @@ class Generator:
             logger.error(f"Answer generation failed: {e}")
             raise
 
-    def get_provider_stats(self) -> Dict[str, Any]:
+    def get_provider_stats(self) -> dict[str, Any]:
         """Get provider statistics (if available).
 
         Returns:

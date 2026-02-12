@@ -1,12 +1,13 @@
 """Base classes for metadata extraction."""
 
-from abc import ABC, abstractmethod
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 
-@dataclass
+@dataclass(slots=True)
 class MetadataArtifact:
     """Normalized metadata artifact from databases and code.
 
@@ -21,7 +22,7 @@ class MetadataArtifact:
     id: str  # Unique identifier (hash of qualified name + language)
     name: str  # Table/column/class/interface/method name
     type: str  # "table", "column", "index", "constraint", "relationship", "view",
-               # "class", "interface", "field", "method", "function"
+    # "class", "interface", "field", "method", "function"
     source_type: str  # "database", "code", "csv", "key_value"
 
     # Language/technology identifier
@@ -36,9 +37,13 @@ class MetadataArtifact:
 
     # Metadata details
     constraints: list[str] = field(default_factory=list)  # Validation rules, check constraints
-    relations: list[str] = field(default_factory=list)  # Foreign keys, references to other artifacts
+    relations: list[str] = field(
+        default_factory=list
+    )  # Foreign keys, references to other artifacts
     examples: list[str] = field(default_factory=list)  # Usage examples
-    tags: list[str] = field(default_factory=list)  # Categorization (e.g., "database", "table", "core")
+    tags: list[str] = field(
+        default_factory=list
+    )  # Categorization (e.g., "database", "table", "core")
 
     # Source location (for code; empty for databases)
     source_file: str = ""  # Path to original definition
@@ -71,7 +76,7 @@ class MetadataArtifact:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "MetadataArtifact":
+    def from_dict(cls, data: dict[str, Any]) -> MetadataArtifact:
         """Create from dictionary."""
         return cls(**data)
 
@@ -178,10 +183,10 @@ class MetadataArtifact:
             return "\n".join(parts)
 
 
-class MetadataExtractor(ABC):
-    """Base class for language-specific metadata extractors."""
+@runtime_checkable
+class MetadataExtractor(Protocol):
+    """Protocol for language-specific metadata extractors."""
 
-    @abstractmethod
     def extract_metadata(self, source_path: Path) -> list[MetadataArtifact]:
         """Extract metadata from source files.
 
@@ -191,9 +196,8 @@ class MetadataExtractor(ABC):
         Returns:
             List of extracted metadata artifacts.
         """
-        pass
+        ...
 
-    @abstractmethod
     def language(self) -> str:
         """Return the language identifier for this extractor."""
-        pass
+        ...

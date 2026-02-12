@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nox -s typecheck:*)"
+    ]
+  }
+}

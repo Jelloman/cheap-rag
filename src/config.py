@@ -1,8 +1,10 @@
 """Configuration management for CHEAP RAG system."""
 
+from __future__ import annotations
+
 import os
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 from dotenv import load_dotenv
@@ -31,7 +33,7 @@ class VectorStoreConfig(BaseModel):
     collection_name: str = "cheap_metadata_v1"
     distance_metric: str = "cosine"
     metadata_fields: list[str] = Field(default_factory=list)
-    index_config: Dict[str, Any] = Field(default_factory=dict)
+    index_config: dict[str, Any] = Field(default_factory=dict)
 
 
 class OllamaConfig(BaseModel):
@@ -72,7 +74,7 @@ class LLMConfig(BaseModel):
     ollama: OllamaConfig | None = None
     anthropic: AnthropicConfig | None = None
     prompts: PromptConfig
-    hybrid: Dict[str, Any] | None = None
+    hybrid: dict[str, Any] | None = None
 
 
 class RetrievalConfig(BaseModel):
@@ -81,7 +83,7 @@ class RetrievalConfig(BaseModel):
     top_k: int = 5
     similarity_threshold: float = 0.3
     rerank: bool = False
-    hybrid_search: Dict[str, Any] = Field(default_factory=dict)
+    hybrid_search: dict[str, Any] = Field(default_factory=dict)
 
 
 class ExtractorConfig(BaseModel):
@@ -96,7 +98,7 @@ class IndexingConfig(BaseModel):
     """Indexing pipeline configuration."""
 
     source_paths: list[str] = Field(default_factory=list)
-    extractors: Dict[str, ExtractorConfig] = Field(default_factory=dict)
+    extractors: dict[str, ExtractorConfig] = Field(default_factory=dict)
     batch_size: int = 100
     max_workers: int = 4
 
@@ -117,7 +119,7 @@ class APIConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
     cors_origins: list[str] = Field(default_factory=list)
-    rate_limit: Dict[str, Any] = Field(default_factory=dict)
+    rate_limit: dict[str, Any] = Field(default_factory=dict)
 
 
 class CostTrackingConfig(BaseModel):
@@ -139,7 +141,7 @@ class Config(BaseModel):
     logging: LoggingConfig
     api: APIConfig
     cost_tracking: CostTrackingConfig | None = None
-    routing_metrics: Dict[str, Any] | None = None
+    routing_metrics: dict[str, Any] | None = None
 
 
 def load_config(config_path: str | Path | None = None) -> Config:
@@ -160,7 +162,7 @@ def load_config(config_path: str | Path | None = None) -> Config:
     if not config_path.exists():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-    with open(config_path, "r") as f:
+    with open(config_path) as f:
         config_dict = yaml.safe_load(f)
 
     return Config(**config_dict)

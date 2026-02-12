@@ -1,13 +1,14 @@
 """Structured response formatting for query answers."""
 
+from __future__ import annotations
+
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 from src.extractors.base import MetadataArtifact
 from src.generation.citations import Citation
-from src.retrieval.filters import MetadataFilter
 from src.retrieval.semantic_search import SearchResult
 
 
@@ -20,16 +21,16 @@ class ArtifactSummary(BaseModel):
     language: str
     module: str
     description: str
-    similarity: Optional[float] = None
-    rank: Optional[int] = None
+    similarity: float | None = None
+    rank: int | None = None
 
     @classmethod
     def from_artifact(
         cls,
         artifact: MetadataArtifact,
-        similarity: Optional[float] = None,
-        rank: Optional[int] = None,
-    ) -> "ArtifactSummary":
+        similarity: float | None = None,
+        rank: int | None = None,
+    ) -> ArtifactSummary:
         """Create summary from MetadataArtifact.
 
         Args:
@@ -52,7 +53,7 @@ class ArtifactSummary(BaseModel):
         )
 
     @classmethod
-    def from_search_result(cls, result: SearchResult) -> "ArtifactSummary":
+    def from_search_result(cls, result: SearchResult) -> ArtifactSummary:
         """Create summary from SearchResult.
 
         Args:
@@ -74,10 +75,10 @@ class CitationInfo(BaseModel):
     artifact_name: str
     artifact_id: str
     is_valid: bool
-    artifact_summary: Optional[ArtifactSummary] = None
+    artifact_summary: ArtifactSummary | None = None
 
     @classmethod
-    def from_citation(cls, citation: Citation) -> "CitationInfo":
+    def from_citation(cls, citation: Citation) -> CitationInfo:
         """Create from Citation object.
 
         Args:
@@ -105,8 +106,8 @@ class SearchMetadata(BaseModel):
     top_k: int
     similarity_threshold: float
     num_results: int
-    filters: Optional[Dict[str, Any]] = None
-    retrieval_time_ms: Optional[float] = None
+    filters: dict[str, Any] | None = None
+    retrieval_time_ms: float | None = None
 
 
 class GenerationMetadata(BaseModel):
@@ -116,10 +117,10 @@ class GenerationMetadata(BaseModel):
     model: str
     temperature: float
     max_tokens: int
-    generation_time_ms: Optional[float] = None
-    input_tokens: Optional[int] = None
-    output_tokens: Optional[int] = None
-    cost_usd: Optional[float] = None
+    generation_time_ms: float | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    cost_usd: float | None = None
 
 
 class CitationMetrics(BaseModel):
@@ -141,27 +142,26 @@ class QueryResponse(BaseModel):
     query: str
 
     # Sources and citations
-    citations: List[CitationInfo] = Field(default_factory=list)
-    sources: List[ArtifactSummary] = Field(default_factory=list)
+    citations: list[CitationInfo] = Field(default_factory=list)
+    sources: list[ArtifactSummary] = Field(default_factory=list)
 
     # Metadata
     search_metadata: SearchMetadata
-    generation_metadata: Optional[GenerationMetadata] = None
-    citation_metrics: Optional[CitationMetrics] = None
+    generation_metadata: GenerationMetadata | None = None
+    citation_metrics: CitationMetrics | None = None
 
     # Timestamps
     timestamp: datetime = Field(default_factory=datetime.utcnow)
-    total_time_ms: Optional[float] = None
+    total_time_ms: float | None = None
 
     # Quality indicators
-    confidence: Optional[str] = None  # "high", "medium", "low"
-    warnings: List[str] = Field(default_factory=list)
+    confidence: str | None = None  # "high", "medium", "low"
+    warnings: list[str] = Field(default_factory=list)
 
     class Config:
         """Pydantic config."""
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+
+        json_encoders = {datetime: lambda v: v.isoformat()}
 
     def add_warning(self, warning: str) -> None:
         """Add a warning to the response.
@@ -182,7 +182,9 @@ class QueryResponse(BaseModel):
 
         # Check search results quality
         if self.sources:
-            avg_similarity = sum(s.similarity for s in self.sources if s.similarity) / len(self.sources)
+            avg_similarity = sum(s.similarity for s in self.sources if s.similarity) / len(
+                self.sources
+            )
 
             if avg_similarity > 0.7:
                 confidence = "high"
@@ -193,14 +195,12 @@ class QueryResponse(BaseModel):
         if self.citation_metrics:
             if self.citation_metrics.has_hallucinations:
                 confidence = "low"
-            elif self.citation_metrics.citation_accuracy < 0.8:
-                if confidence == "high":
-                    confidence = "medium"
+            elif self.citation_metrics.citation_accuracy < 0.8 and confidence == "high":
+                confidence = "medium"
 
         # Downgrade if very few results
-        if self.search_metadata.num_results < 2:
-            if confidence == "high":
-                confidence = "medium"
+        if self.search_metadata.num_results < 2 and confidence == "high":
+            confidence = "medium"
 
         # Check for "don't know" responses
         if "don't know" in self.answer.lower() or "insufficient" in self.answer.lower():
@@ -209,7 +209,7 @@ class QueryResponse(BaseModel):
         self.confidence = confidence
         return confidence
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization.
 
         Returns:
@@ -283,17 +283,16 @@ class ErrorResponse(BaseModel):
 
     error: str
     error_type: str
-    query: Optional[str] = None
+    query: str | None = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
-    details: Optional[Dict[str, Any]] = None
+    details: dict[str, Any] | None = None
 
     class Config:
         """Pydantic config."""
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
 
-    def to_dict(self) -> Dict[str, Any]:
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary.
 
         Returns:

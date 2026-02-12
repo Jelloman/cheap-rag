@@ -93,8 +93,7 @@ class RetrievalMetrics:
             return 0.0
 
         rr_scores = [
-            RetrievalMetrics.reciprocal_rank(q['retrieved'], q['relevant'])
-            for q in queries
+            RetrievalMetrics.reciprocal_rank(q["retrieved"], q["relevant"]) for q in queries
         ]
         return sum(rr_scores) / len(rr_scores)
 
@@ -165,18 +164,17 @@ def test_precision_at_5(semantic_search, test_queries):
 
         # Placeholder: assume artifacts with similarity > 0.5 are relevant
         # In real evaluation, you'd have manual relevance judgments
-        relevant_ids = {
-            r.artifact.id for r in search_results.results
-            if r.similarity > 0.5
-        }
+        relevant_ids = {r.artifact.id for r in search_results.results if r.similarity > 0.5}
 
         if relevant_ids:
             precision = RetrievalMetrics.precision_at_k(retrieved_ids, relevant_ids, k=5)
-            results.append({
-                "query": query,
-                "precision": precision,
-                "num_relevant": len(relevant_ids),
-            })
+            results.append(
+                {
+                    "query": query,
+                    "precision": precision,
+                    "num_relevant": len(relevant_ids),
+                }
+            )
 
             logger.info(f"  Precision@5: {precision:.3f} ({len(relevant_ids)} relevant)")
 
@@ -211,10 +209,7 @@ def test_recall_at_10(semantic_search, test_queries):
         )
 
         retrieved_ids = [r.artifact.id for r in search_results.results]
-        relevant_ids = {
-            r.artifact.id for r in search_results.results
-            if r.similarity > 0.5
-        }
+        relevant_ids = {r.artifact.id for r in search_results.results if r.similarity > 0.5}
 
         if relevant_ids:
             recall = RetrievalMetrics.recall_at_k(retrieved_ids, relevant_ids, k=10)
@@ -246,15 +241,14 @@ def test_mrr(semantic_search, test_queries):
         )
 
         retrieved_ids = [r.artifact.id for r in search_results.results]
-        relevant_ids = {
-            r.artifact.id for r in search_results.results
-            if r.similarity > 0.5
-        }
+        relevant_ids = {r.artifact.id for r in search_results.results if r.similarity > 0.5}
 
-        query_results.append({
-            "retrieved": retrieved_ids,
-            "relevant": relevant_ids,
-        })
+        query_results.append(
+            {
+                "retrieved": retrieved_ids,
+                "relevant": relevant_ids,
+            }
+        )
 
         rr = RetrievalMetrics.reciprocal_rank(retrieved_ids, relevant_ids)
         logger.info(f"Query: {query}")
@@ -315,8 +309,7 @@ def test_similarity_threshold(semantic_search):
 
     # All results should meet threshold
     for result in results_high.results:
-        assert result.similarity >= 0.6, \
-            f"Result has similarity {result.similarity} < 0.6"
+        assert result.similarity >= 0.6, f"Result has similarity {result.similarity} < 0.6"
 
 
 if __name__ == "__main__":

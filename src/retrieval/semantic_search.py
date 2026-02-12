@@ -1,10 +1,9 @@
 """Semantic search over metadata artifacts using embeddings and vector similarity."""
 
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass
-from typing import List, Optional
-
-import numpy as np
 
 from src.embeddings.service import EmbeddingService
 from src.extractors.base import MetadataArtifact
@@ -38,11 +37,11 @@ class SearchResults:
     """Collection of search results with query metadata."""
 
     query: str
-    results: List[SearchResult]
+    results: list[SearchResult]
     total_results: int
     top_k: int
     similarity_threshold: float
-    filters: Optional[MetadataFilter] = None
+    filters: MetadataFilter | None = None
 
     def to_dict(self):
         """Convert to dictionary for JSON serialization."""
@@ -55,7 +54,7 @@ class SearchResults:
             "filters": self.filters.to_dict() if self.filters else None,
         }
 
-    def get_artifacts(self) -> List[MetadataArtifact]:
+    def get_artifacts(self) -> list[MetadataArtifact]:
         """Extract just the artifacts from results.
 
         Returns:
@@ -63,7 +62,7 @@ class SearchResults:
         """
         return [r.artifact for r in self.results]
 
-    def get_top(self, n: int) -> List[SearchResult]:
+    def get_top(self, n: int) -> list[SearchResult]:
         """Get top N results.
 
         Args:
@@ -109,9 +108,9 @@ class SemanticSearch:
     def search(
         self,
         query: str,
-        top_k: Optional[int] = None,
-        similarity_threshold: Optional[float] = None,
-        filters: Optional[MetadataFilter] = None,
+        top_k: int | None = None,
+        similarity_threshold: float | None = None,
+        filters: MetadataFilter | None = None,
     ) -> SearchResults:
         """Search for relevant metadata artifacts using semantic similarity.
 
@@ -158,7 +157,7 @@ class SemanticSearch:
         # Filter by similarity threshold
         results = []
         for i, (artifact_id, metadata, distance, similarity) in enumerate(
-            zip(ids, metadatas, distances, similarities)
+            zip(ids, metadatas, distances, similarities, strict=True)
         ):
             if similarity >= similarity_threshold:
                 # Reconstruct MetadataArtifact from metadata
@@ -173,8 +172,10 @@ class SemanticSearch:
 
         logger.info(f"Found {len(results)} results above threshold {similarity_threshold}")
         if results:
-            logger.info(f"  Top result: {results[0].artifact.name} "
-                       f"(similarity: {results[0].similarity:.3f})")
+            logger.info(
+                f"  Top result: {results[0].artifact.name} "
+                f"(similarity: {results[0].similarity:.3f})"
+            )
 
         return SearchResults(
             query=query,
@@ -188,9 +189,9 @@ class SemanticSearch:
     def search_similar(
         self,
         artifact: MetadataArtifact,
-        top_k: Optional[int] = None,
-        similarity_threshold: Optional[float] = None,
-        filters: Optional[MetadataFilter] = None,
+        top_k: int | None = None,
+        similarity_threshold: float | None = None,
+        filters: MetadataFilter | None = None,
     ) -> SearchResults:
         """Find artifacts similar to a given artifact.
 
@@ -229,9 +230,20 @@ class SemanticSearch:
 
         # Build custom metadata dict
         custom_metadata = {}
-        for key in ["table_name", "column_type", "nullable", "primary_key",
-                   "foreign_key", "unique", "indexed", "cardinality",
-                   "from_table", "to_table", "from_columns", "to_columns"]:
+        for key in [
+            "table_name",
+            "column_type",
+            "nullable",
+            "primary_key",
+            "foreign_key",
+            "unique",
+            "indexed",
+            "cardinality",
+            "from_table",
+            "to_table",
+            "from_columns",
+            "to_columns",
+        ]:
             if key in metadata:
                 value = metadata[key]
                 # Convert string "True"/"False" to boolean

@@ -1,13 +1,15 @@
 """Base class for database schema extractors."""
 
-from abc import abstractmethod
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
-from .base import MetadataArtifact, MetadataExtractor
+from .base import MetadataArtifact
 
 
-class DatabaseExtractor(MetadataExtractor):
+class DatabaseExtractor(ABC):
     """Base class for database schema extractors.
 
     Database extractors connect to a database, extract schema metadata
@@ -84,10 +86,10 @@ class DatabaseExtractor(MetadataExtractor):
 
         # Read connection config from file
         if source_path.suffix in [".yaml", ".yml"]:
-            with open(source_path, "r") as f:
+            with open(source_path) as f:
                 config = yaml.safe_load(f)
         elif source_path.suffix == ".json":
-            with open(source_path, "r") as f:
+            with open(source_path) as f:
                 config = json.load(f)
         else:
             raise ValueError(f"Unsupported config file format: {source_path.suffix}")

@@ -1,21 +1,30 @@
 """FastAPI routes for CHEAP RAG system."""
 
+from __future__ import annotations
+
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from src.config import load_config, get_anthropic_api_key
 from src.embeddings.service import EmbeddingService
 from src.generation.citations import CitationExtractor
 from src.generation.generator import Generator, OllamaProvider, AnthropicProvider
 from src.generation.response import (
-    QueryResponse, ErrorResponse, SearchMetadata, GenerationMetadata,
-    CitationMetrics, ArtifactSummary, CitationInfo
+    QueryResponse,
+    ErrorResponse,
+    SearchMetadata,
+    GenerationMetadata,
+    CitationMetrics,
+    ArtifactSummary,
+    CitationInfo,
 )
 from src.retrieval.filters import FilterBuilder, MetadataFilter
 from src.retrieval.semantic_search import SemanticSearch
@@ -23,8 +32,7 @@ from src.vectorstore.chroma_store import ChromaVectorStore
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -32,11 +40,11 @@ logger = logging.getLogger(__name__)
 config = load_config()
 
 # Initialize services (singleton pattern)
-_embedding_service: Optional[EmbeddingService] = None
-_vector_store: Optional[ChromaVectorStore] = None
-_semantic_search: Optional[SemanticSearch] = None
-_generator: Optional[Generator] = None
-_citation_extractor: Optional[CitationExtractor] = None
+_embedding_service: EmbeddingService | None = None
+_vector_store: ChromaVectorStore | None = None
+_semantic_search: SemanticSearch | None = None
+_generator: Generator | None = None
+_citation_extractor: CitationExtractor | None = None
 
 
 def get_embedding_service() -> EmbeddingService:
@@ -109,15 +117,18 @@ def get_citation_extractor() -> CitationExtractor:
 
 # Pydantic models for requests
 
+
 class QueryRequest(BaseModel):
     """Request model for query endpoint."""
 
     query: str = Field(..., description="User's question", min_length=1)
-    top_k: Optional[int] = Field(None, description="Number of results to retrieve", ge=1, le=50)
-    similarity_threshold: Optional[float] = Field(None, description="Minimum similarity score", ge=0.0, le=1.0)
-    filters: Optional[Dict[str, Any]] = Field(None, description="Metadata filters")
-    temperature: Optional[float] = Field(None, description="LLM temperature", ge=0.0, le=2.0)
-    max_tokens: Optional[int] = Field(None, description="Max tokens to generate", ge=100, le=4096)
+    top_k: int | None = Field(None, description="Number of results to retrieve", ge=1, le=50)
+    similarity_threshold: float | None = Field(
+        None, description="Minimum similarity score", ge=0.0, le=1.0
+    )
+    filters: dict[str, Any] | None = Field(None, description="Metadata filters")
+    temperature: float | None = Field(None, description="LLM temperature", ge=0.0, le=2.0)
+    max_tokens: int | None = Field(None, description="Max tokens to generate", ge=100, le=4096)
 
 
 class IndexStatus(BaseModel):
@@ -127,13 +138,13 @@ class IndexStatus(BaseModel):
     total_artifacts: int
     embedding_dimension: int
     vector_store_path: str
-    last_updated: Optional[datetime] = None
+    last_updated: datetime | None = None
 
 
 class MetadataBrowseRequest(BaseModel):
     """Request model for browsing metadata."""
 
-    filters: Optional[Dict[str, Any]] = None
+    filters: dict[str, Any] | None = None
     limit: int = Field(20, ge=1, le=100)
     offset: int = Field(0, ge=0)
 
@@ -158,6 +169,7 @@ app.add_middleware(
 
 # Routes
 
+
 @app.get("/")
 async def root():
     """Root endpoint with API info."""
@@ -169,7 +181,7 @@ async def root():
             "query": "/api/query",
             "index_status": "/api/index/status",
             "metadata": "/api/metadata",
-        }
+        },
     }
 
 
@@ -188,7 +200,7 @@ async def health_check():
         }
     except Exception as e:
         logger.error(f"Health check failed: {e}")
-        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}") from e
 
 
 @app.post("/api/query", response_model=QueryResponse)
@@ -233,7 +245,8 @@ async def query(request: QueryRequest) -> QueryResponse:
                 search_metadata=SearchMetadata(
                     query=request.query,
                     top_k=request.top_k or config.retrieval.top_k,
-                    similarity_threshold=request.similarity_threshold or config.retrieval.similarity_threshold,
+                    similarity_threshold=request.similarity_threshold
+                    or config.retrieval.similarity_threshold,
                     num_results=0,
                     filters=request.filters,
                     retrieval_time_ms=retrieval_time,
@@ -258,7 +271,9 @@ async def query(request: QueryRequest) -> QueryResponse:
         # Extract and validate citations
         citation_extractor = get_citation_extractor()
         citations = citation_extractor.extract_and_validate(answer, search_results.results)
-        citation_quality = citation_extractor.get_citation_quality_metrics(answer, search_results.results)
+        citation_quality = citation_extractor.get_citation_quality_metrics(
+            answer, search_results.results
+        )
 
         # Build response
         response = QueryResponse(
@@ -300,7 +315,7 @@ async def query(request: QueryRequest) -> QueryResponse:
 
     except Exception as e:
         logger.error(f"Query failed: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Query processing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Query processing failed: {str(e)}") from e
 
 
 @app.get("/api/index/status", response_model=IndexStatus)
@@ -323,7 +338,7 @@ async def index_status() -> IndexStatus:
 
     except Exception as e:
         logger.error(f"Index status check failed: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post("/api/index/rebuild")
@@ -340,9 +355,9 @@ async def rebuild_index():
 
 @app.get("/api/metadata")
 async def browse_metadata(
-    language: Optional[str] = Query(None, description="Filter by language"),
-    type: Optional[str] = Query(None, description="Filter by artifact type"),
-    source_type: Optional[str] = Query(None, description="Filter by source type"),
+    language: str | None = Query(None, description="Filter by language"),
+    type: str | None = Query(None, description="Filter by artifact type"),
+    source_type: str | None = Query(None, description="Filter by source type"),
     limit: int = Query(20, ge=1, le=100, description="Number of results"),
     offset: int = Query(0, ge=0, description="Offset for pagination"),
 ):
@@ -386,10 +401,11 @@ async def browse_metadata(
 
     except Exception as e:
         logger.error(f"Metadata browse failed: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # Startup/shutdown events
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -414,25 +430,28 @@ async def shutdown_event():
 
 # Error handlers
 
+
 @app.exception_handler(HTTPException)
-async def http_exception_handler(request, exc):
+async def http_exception_handler(_request: Request, exc: HTTPException) -> JSONResponse:
     """Handle HTTP exceptions."""
-    return ErrorResponse(
+    error_dict = ErrorResponse(
         error=exc.detail,
         error_type="HTTPException",
         query=None,
     ).to_dict()
+    return JSONResponse(content=error_dict, status_code=exc.status_code)
 
 
 @app.exception_handler(Exception)
-async def general_exception_handler(request, exc):
+async def general_exception_handler(_request: Request, exc: Exception) -> JSONResponse:
     """Handle general exceptions."""
     logger.error(f"Unhandled exception: {exc}", exc_info=True)
-    return ErrorResponse(
+    error_dict = ErrorResponse(
         error=str(exc),
         error_type=type(exc).__name__,
         query=None,
     ).to_dict()
+    return JSONResponse(content=error_dict, status_code=500)
 
 
 if __name__ == "__main__":

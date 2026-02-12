@@ -1,7 +1,9 @@
 """Metadata filtering for semantic search results."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -12,19 +14,19 @@ class MetadataFilter:
     Multiple filters are combined with AND logic by default.
     """
 
-    language: Optional[str | List[str]] = None
-    type: Optional[str | List[str]] = None
-    source_type: Optional[str | List[str]] = None
-    module: Optional[str | List[str]] = None
-    tags: Optional[str | List[str]] = None
+    language: str | list[str] | None = None
+    type: str | list[str] | None = None
+    source_type: str | list[str] | None = None
+    module: str | list[str] | None = None
+    tags: str | list[str] | None = None
     # Custom fields for database-specific filtering
-    table_name: Optional[str | List[str]] = None
-    column_type: Optional[str | List[str]] = None
-    primary_key: Optional[bool] = None
+    table_name: str | list[str] | None = None
+    column_type: str | list[str] | None = None
+    primary_key: bool | None = None
     # Additional custom filters
-    custom: Optional[Dict[str, Any]] = None
+    custom: dict[str, Any] | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert filter to dictionary format for ChromaDB.
 
         Returns:
@@ -72,17 +74,17 @@ class FilterBuilder:
 
     def __init__(self):
         """Initialize empty filter builder."""
-        self._language: Optional[str | List[str]] = None
-        self._type: Optional[str | List[str]] = None
-        self._source_type: Optional[str | List[str]] = None
-        self._module: Optional[str | List[str]] = None
-        self._tags: Optional[str | List[str]] = None
-        self._table_name: Optional[str | List[str]] = None
-        self._column_type: Optional[str | List[str]] = None
-        self._primary_key: Optional[bool] = None
-        self._custom: Dict[str, Any] = {}
+        self._language: str | list[str] | None = None
+        self._type: str | list[str] | None = None
+        self._source_type: str | list[str] | None = None
+        self._module: str | list[str] | None = None
+        self._tags: str | list[str] | None = None
+        self._table_name: str | list[str] | None = None
+        self._column_type: str | list[str] | None = None
+        self._primary_key: bool | None = None
+        self._custom: dict[str, Any] = {}
 
-    def language(self, language: str | List[str]) -> "FilterBuilder":
+    def language(self, language: str | list[str]) -> FilterBuilder:
         """Filter by language (e.g., "java", "postgresql", ["java", "typescript"]).
 
         Args:
@@ -94,7 +96,7 @@ class FilterBuilder:
         self._language = language
         return self
 
-    def type(self, artifact_type: str | List[str]) -> "FilterBuilder":
+    def type(self, artifact_type: str | list[str]) -> FilterBuilder:
         """Filter by artifact type (e.g., "table", "class", ["table", "view"]).
 
         Args:
@@ -106,7 +108,7 @@ class FilterBuilder:
         self._type = artifact_type
         return self
 
-    def source_type(self, source_type: str | List[str]) -> "FilterBuilder":
+    def source_type(self, source_type: str | list[str]) -> FilterBuilder:
         """Filter by source type (e.g., "database", "code").
 
         Args:
@@ -118,7 +120,7 @@ class FilterBuilder:
         self._source_type = source_type
         return self
 
-    def module(self, module: str | List[str]) -> "FilterBuilder":
+    def module(self, module: str | list[str]) -> FilterBuilder:
         """Filter by module/schema (e.g., "public", "com.example.app").
 
         Args:
@@ -130,7 +132,7 @@ class FilterBuilder:
         self._module = module
         return self
 
-    def tags(self, tags: str | List[str]) -> "FilterBuilder":
+    def tags(self, tags: str | list[str]) -> FilterBuilder:
         """Filter by tags (e.g., "core", ["database", "sales"]).
 
         Args:
@@ -142,7 +144,7 @@ class FilterBuilder:
         self._tags = tags
         return self
 
-    def table_name(self, table_name: str | List[str]) -> "FilterBuilder":
+    def table_name(self, table_name: str | list[str]) -> FilterBuilder:
         """Filter by table name (for column artifacts).
 
         Args:
@@ -154,7 +156,7 @@ class FilterBuilder:
         self._table_name = table_name
         return self
 
-    def column_type(self, column_type: str | List[str]) -> "FilterBuilder":
+    def column_type(self, column_type: str | list[str]) -> FilterBuilder:
         """Filter by column data type (e.g., "VARCHAR", "INTEGER").
 
         Args:
@@ -166,7 +168,7 @@ class FilterBuilder:
         self._column_type = column_type
         return self
 
-    def primary_key(self, is_primary_key: bool) -> "FilterBuilder":
+    def primary_key(self, is_primary_key: bool) -> FilterBuilder:
         """Filter by primary key status (for column artifacts).
 
         Args:
@@ -178,7 +180,7 @@ class FilterBuilder:
         self._primary_key = is_primary_key
         return self
 
-    def custom(self, key: str, value: Any) -> "FilterBuilder":
+    def custom(self, key: str, value: Any) -> FilterBuilder:
         """Add custom metadata filter.
 
         Args:
@@ -210,7 +212,7 @@ class FilterBuilder:
         )
 
 
-def validate_filter(filter_dict: Dict[str, Any]) -> bool:
+def validate_filter(filter_dict: dict[str, Any]) -> bool:
     """Validate filter dictionary has valid keys and values.
 
     Args:
@@ -220,16 +222,21 @@ def validate_filter(filter_dict: Dict[str, Any]) -> bool:
         True if valid, False otherwise.
     """
     valid_keys = {
-        "language", "type", "source_type", "module", "tags",
-        "table_name", "column_type", "primary_key", "nullable",
-        "foreign_key", "unique", "indexed",
+        "language",
+        "type",
+        "source_type",
+        "module",
+        "tags",
+        "table_name",
+        "column_type",
+        "primary_key",
+        "nullable",
+        "foreign_key",
+        "unique",
+        "indexed",
     }
 
-    for key in filter_dict.keys():
-        if key not in valid_keys:
-            return False
-
-    return True
+    return all(key in valid_keys for key in filter_dict)
 
 
 # Predefined filter presets for common use cases
@@ -246,7 +253,7 @@ PRESET_FILTERS = {
 }
 
 
-def get_preset_filter(preset_name: str) -> Optional[MetadataFilter]:
+def get_preset_filter(preset_name: str) -> MetadataFilter | None:
     """Get a predefined filter by name.
 
     Args:

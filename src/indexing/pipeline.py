@@ -1,8 +1,10 @@
 """Unified indexing pipeline for metadata extraction and embedding."""
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from sqlalchemy import create_engine
 
@@ -12,7 +14,6 @@ from src.extractors.base import MetadataArtifact, MetadataExtractor
 from src.extractors.database_extractor import DatabaseExtractor
 from src.extractors.postgres_extractor import PostgresExtractor
 from src.extractors.sqlite_extractor import SQLiteExtractor
-from src.extractors.java_extractor import JavaExtractor
 from src.indexing.schema import validate_artifact
 from src.vectorstore.chroma_store import ChromaVectorStore
 
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 class ExtractionError(Exception):
     """Error during metadata extraction."""
+
     pass
 
 
@@ -45,7 +47,7 @@ class IndexingPipeline:
         self.vector_store = vector_store
 
         # Registry of extractors
-        self.extractors: Dict[str, MetadataExtractor] = {}
+        self.extractors: dict[str, MetadataExtractor] = {}
 
         # Statistics
         self.stats = {
@@ -72,7 +74,7 @@ class IndexingPipeline:
         self,
         source_path: Path,
         extractor_name: str,
-    ) -> List[MetadataArtifact]:
+    ) -> list[MetadataArtifact]:
         """Extract metadata from a source using specified extractor.
 
         Args:
@@ -106,9 +108,9 @@ class IndexingPipeline:
     def extract_from_database(
         self,
         db_url: str,
-        extractor_name: str = "database",
-        schema: Optional[str] = None,
-    ) -> List[MetadataArtifact]:
+        _extractor_name: str = "database",
+        schema: str | None = None,
+    ) -> list[MetadataArtifact]:
         """Extract metadata from a database.
 
         Args:
@@ -147,8 +149,8 @@ class IndexingPipeline:
 
     def validate_artifacts(
         self,
-        artifacts: List[MetadataArtifact],
-    ) -> List[MetadataArtifact]:
+        artifacts: list[MetadataArtifact],
+    ) -> list[MetadataArtifact]:
         """Validate artifacts against schema.
 
         Args:
@@ -177,8 +179,8 @@ class IndexingPipeline:
 
     def embed_artifacts(
         self,
-        artifacts: List[MetadataArtifact],
-    ) -> tuple[List[MetadataArtifact], Any]:
+        artifacts: list[MetadataArtifact],
+    ) -> tuple[list[MetadataArtifact], Any]:
         """Generate embeddings for artifacts.
 
         Args:
@@ -206,7 +208,7 @@ class IndexingPipeline:
 
     def index_artifacts(
         self,
-        artifacts: List[MetadataArtifact],
+        artifacts: list[MetadataArtifact],
         embeddings: Any,
     ) -> None:
         """Index artifacts with embeddings in vector store.
@@ -233,9 +235,9 @@ class IndexingPipeline:
 
     def run_pipeline(
         self,
-        artifacts: List[MetadataArtifact],
+        artifacts: list[MetadataArtifact],
         validate: bool = True,
-    ) -> Dict[str, int]:
+    ) -> dict[str, int]:
         """Run full pipeline on extracted artifacts.
 
         Args:
@@ -276,9 +278,9 @@ class IndexingPipeline:
     def index_database(
         self,
         db_url: str,
-        schema: Optional[str] = None,
+        schema: str | None = None,
         validate: bool = True,
-    ) -> Dict[str, int]:
+    ) -> dict[str, int]:
         """Extract and index metadata from a database.
 
         Args:
@@ -302,7 +304,7 @@ class IndexingPipeline:
         source_path: Path,
         language: str,
         validate: bool = True,
-    ) -> Dict[str, int]:
+    ) -> dict[str, int]:
         """Extract and index metadata from code.
 
         Args:
@@ -323,9 +325,9 @@ class IndexingPipeline:
 
     def discover_and_index(
         self,
-        source_paths: List[str],
-        extractors_config: Dict[str, ExtractorConfig],
-    ) -> Dict[str, Any]:
+        source_paths: list[str],
+        _extractors_config: dict[str, ExtractorConfig],
+    ) -> dict[str, Any]:
         """Discover and index from multiple sources.
 
         Args:
@@ -382,7 +384,7 @@ class IndexingPipeline:
 
         return overall_stats
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get pipeline statistics.
 
         Returns:
