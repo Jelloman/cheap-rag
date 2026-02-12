@@ -56,9 +56,9 @@ class MetadataFilter:
 
         # Custom filters
         if self.custom:
-            filters.update(self.custom)
+            filters.update(self.custom)  # type: ignore[reportUnknownMemberType]
 
-        return {k: v for k, v in filters.items() if v is not None}
+        return {k: v for k, v in filters.items() if v is not None}  # type: ignore[reportUnknownVariableType]
 
     def is_empty(self) -> bool:
         """Check if filter has any active constraints.

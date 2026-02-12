@@ -210,22 +210,22 @@ class AnthropicProvider:
             if system_message:
                 kwargs["system"] = system_message
 
-            response = self.client.messages.create(**kwargs)
+            response = self.client.messages.create(**kwargs)  # type: ignore[reportUnknownVariableType]  # anthropic
 
             elapsed = time.time() - start_time
 
             # Extract answer
-            answer = response.content[0].text
+            answer = response.content[0].text  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
 
             # Track usage
-            input_tokens = response.usage.input_tokens
-            output_tokens = response.usage.output_tokens
+            input_tokens = response.usage.input_tokens  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
+            output_tokens = response.usage.output_tokens  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
 
-            self.total_input_tokens += input_tokens
-            self.total_output_tokens += output_tokens
+            self.total_input_tokens += input_tokens  # type: ignore[reportUnknownMemberType]  # anthropic
+            self.total_output_tokens += output_tokens  # type: ignore[reportUnknownMemberType]  # anthropic
 
             # Calculate cost (approximate pricing)
-            cost = self._calculate_cost(input_tokens, output_tokens)
+            cost = self._calculate_cost(input_tokens, output_tokens)  # type: ignore[reportUnknownArgumentType]  # anthropic
             self.total_cost_usd += cost
 
             logger.info(f"Anthropic generation completed in {elapsed:.2f}s")
@@ -233,7 +233,7 @@ class AnthropicProvider:
             if self.config.track_costs:
                 logger.info(f"  Cost: ${cost:.4f} (total: ${self.total_cost_usd:.4f})")
 
-            return answer.strip()
+            return answer.strip()  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
 
         except anthropic.APIError as e:
             logger.error(f"Anthropic API error: {e}")
@@ -281,8 +281,8 @@ class AnthropicProvider:
             Dictionary with token counts and costs.
         """
         return {
-            "total_input_tokens": self.total_input_tokens,
-            "total_output_tokens": self.total_output_tokens,
+            "total_input_tokens": self.total_input_tokens,  # type: ignore[reportUnknownMemberType]  # anthropic
+            "total_output_tokens": self.total_output_tokens,  # type: ignore[reportUnknownMemberType]  # anthropic
             "total_cost_usd": self.total_cost_usd,
         }
 

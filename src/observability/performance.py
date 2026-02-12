@@ -187,7 +187,7 @@ class PerformanceProfiler:
                 operation_stats = self.get_stats(operation)
                 if operation_stats:
                     stats[operation] = operation_stats
-            return stats
+            return stats  # type: ignore[reportUnknownVariableType]
 
     def clear_old_records(self) -> int:
         """Remove records outside the time window.
@@ -239,7 +239,7 @@ class MemoryProfiler:
         Returns:
             Dictionary with memory usage in MB
         """
-        import psutil
+        import psutil  # type: ignore[reportMissingModuleSource]  # psutil
 
         process = psutil.Process(os.getpid())
         memory_info = process.memory_info()

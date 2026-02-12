@@ -16,7 +16,9 @@
       "Bash(.nox/lint/Scripts/ruff check --fix --unsafe-fixes src/)",
       "Bash(.nox/lint/Scripts/ruff check src/)",
       "Bash(.nox/typecheck/Scripts/basedpyright:*)",
-      "Bash(.nox/lint/Scripts/ruff format src/)"
+      "Bash(.nox/lint/Scripts/ruff format src/)",
+      "Bash(basedpyright:*)",
+      "Bash(npx basedpyright:*)"
     ]
   }
 }
