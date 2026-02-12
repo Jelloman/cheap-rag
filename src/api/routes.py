@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import logging
 import time
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import Any, AsyncIterator
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -158,7 +159,7 @@ class MetadataBrowseRequest(BaseModel):
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """Manage application lifespan events."""
     # Startup
     logger.info("Starting CHEAP RAG API...")
@@ -322,12 +323,10 @@ async def query(request: QueryRequest) -> QueryResponse:
             generation_metadata=GenerationMetadata(
                 provider=config.llm.provider,
                 model=generator.provider.provider_name(),
-                temperature=request.temperature or (
-                    config.llm.ollama.temperature if config.llm.ollama else 0.1
-                ),
-                max_tokens=request.max_tokens or (
-                    config.llm.ollama.max_tokens if config.llm.ollama else 1024
-                ),
+                temperature=request.temperature
+                or (config.llm.ollama.temperature if config.llm.ollama else 0.1),
+                max_tokens=request.max_tokens
+                or (config.llm.ollama.max_tokens if config.llm.ollama else 1024),
                 generation_time_ms=generation_time,
             ),
             citation_metrics=CitationMetrics(

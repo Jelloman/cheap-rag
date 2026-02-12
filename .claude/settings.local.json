@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(nox -s typecheck:*)"
+      "Bash(nox -s typecheck:*)",
+      "Bash(nox:*)",
+      "Bash(ruff format:*)"
     ]
   }
 }

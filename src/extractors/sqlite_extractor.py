@@ -65,7 +65,7 @@ class SqliteExtractor(DatabaseExtractor):
             self.inspector = None
             self._connected = False
 
-    def extract_schema(self, schema_name: str = "main") -> list[MetadataArtifact]:
+    def extract_schema(self, schema_name: str = "main") -> list[MetadataArtifact]:  # noqa: ARG002
         """Extract complete SQLite schema metadata.
 
         Args:

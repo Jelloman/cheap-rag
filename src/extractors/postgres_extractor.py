@@ -281,7 +281,9 @@ class PostgresExtractor(DatabaseExtractor):
 
         # Get check constraints
         try:
-            check_constraints = self._get_inspector().get_check_constraints(table_name, schema=schema)
+            check_constraints = self._get_inspector().get_check_constraints(
+                table_name, schema=schema
+            )
 
             for chk in check_constraints:
                 chk_name = chk["name"]
