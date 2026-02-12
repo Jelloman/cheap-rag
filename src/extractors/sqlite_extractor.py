@@ -170,7 +170,7 @@ class SqliteExtractor(DatabaseExtractor):
             default = col.get("default", "")
 
             # Build constraints list
-            constraints = []
+            constraints: list[str] = []
             if not nullable:
                 constraints.append("NOT NULL")
             if col_name in pk_columns:

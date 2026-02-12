@@ -171,7 +171,7 @@ class PostgresExtractor(DatabaseExtractor):
 
         # Get unique constraints
         unique_constraints = self._get_inspector().get_unique_constraints(table_name, schema=schema)
-        unique_columns = set()
+        unique_columns: set[str] = set()
         for uc in unique_constraints:
             unique_columns.update(uc.get("column_names", []))
 
@@ -185,7 +185,7 @@ class PostgresExtractor(DatabaseExtractor):
             comment = col.get("comment", "")
 
             # Build constraints list
-            constraints = []
+            constraints: list[str] = []
             if not nullable:
                 constraints.append("NOT NULL")
             if col_name in pk_columns:

@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 from src.extractors.base import MetadataArtifact
 from src.generation.citations import Citation
@@ -158,10 +158,12 @@ class QueryResponse(BaseModel):
     confidence: str | None = None  # "high", "medium", "low"
     warnings: list[str] = Field(default_factory=list)
 
-    class Config:
-        """Pydantic config."""
+    model_config = ConfigDict(ser_json_timedelta="iso8601")
 
-        json_encoders = {datetime: lambda v: v.isoformat()}
+    @field_serializer("timestamp")
+    def serialize_timestamp(self, dt: datetime) -> str:
+        """Serialize datetime to ISO format."""
+        return dt.isoformat()
 
     def add_warning(self, warning: str) -> None:
         """Add a warning to the response.
@@ -287,10 +289,12 @@ class ErrorResponse(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     details: dict[str, Any] | None = None
 
-    class Config:
-        """Pydantic config."""
+    model_config = ConfigDict(ser_json_timedelta="iso8601")
 
-        json_encoders = {datetime: lambda v: v.isoformat()}
+    @field_serializer("timestamp")
+    def serialize_timestamp(self, dt: datetime) -> str:
+        """Serialize datetime to ISO format."""
+        return dt.isoformat()
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary.

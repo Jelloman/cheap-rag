@@ -122,6 +122,32 @@ class EmbeddingService:
 
         return embeddings
 
+    def embed_query(self, query: str) -> np.ndarray:
+        """Generate embedding for a query string.
+
+        Alias for embed_text for consistency with common embedding service APIs.
+
+        Args:
+            query: Query text to embed
+
+        Returns:
+            Embedding vector as numpy array
+        """
+        return self.embed_text(query)
+
+    def embed_batch(self, texts: list[str]) -> np.ndarray:
+        """Generate embeddings for multiple texts in batch.
+
+        Alias for embed_texts for consistency with common embedding service APIs.
+
+        Args:
+            texts: List of input texts
+
+        Returns:
+            Matrix of embeddings (num_texts x embedding_dim)
+        """
+        return self.embed_texts(texts)
+
     def get_dimension(self) -> int:
         """Get the dimensionality of embeddings produced by this model.
 
