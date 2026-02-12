@@ -1,6 +1,10 @@
 """JSON Schema for metadata artifacts."""
 
+from __future__ import annotations
+
 from typing import Any
+
+from src.extractors.base import MetadataArtifact
 
 # JSON Schema for MetadataArtifact validation
 METADATA_ARTIFACT_SCHEMA: dict[str, Any] = {
@@ -22,9 +26,20 @@ METADATA_ARTIFACT_SCHEMA: dict[str, Any] = {
             "type": "string",
             "enum": [
                 # Database types
-                "table", "column", "index", "constraint", "relationship", "view", "trigger",
+                "table",
+                "column",
+                "index",
+                "constraint",
+                "relationship",
+                "view",
+                "trigger",
                 # Code types
-                "class", "interface", "field", "method", "function", "type",
+                "class",
+                "interface",
+                "field",
+                "method",
+                "function",
+                "type",
             ],
             "description": "Type of metadata artifact",
         },
@@ -37,11 +52,19 @@ METADATA_ARTIFACT_SCHEMA: dict[str, Any] = {
             "type": "string",
             "enum": [
                 # Database languages
-                "postgresql", "sqlite", "mariadb", "mysql",
+                "postgresql",
+                "sqlite",
+                "mariadb",
+                "mysql",
                 # Code languages
-                "java", "typescript", "python", "rust",
+                "java",
+                "typescript",
+                "python",
+                "rust",
                 # File formats
-                "csv", "json", "parquet",
+                "csv",
+                "json",
+                "parquet",
             ],
             "description": "Source language or technology",
         },
@@ -117,6 +140,7 @@ class MetadataSchema:
         # Import jsonschema only when needed
         try:
             import jsonschema
+
             jsonschema.validate(instance=artifact_dict, schema=METADATA_ARTIFACT_SCHEMA)
             return True
         except ImportError:
@@ -124,5 +148,65 @@ class MetadataSchema:
             required = ["id", "name", "type", "source_type", "language", "module", "description"]
             for field in required:
                 if field not in artifact_dict:
-                    raise ValueError(f"Missing required field: {field}")
+                    raise ValueError(f"Missing required field: {field}") from None
             return True
+
+
+def validate_artifact(artifact: MetadataArtifact) -> tuple[bool, list[str]]:
+    """Validate a metadata artifact against the schema.
+
+    Args:
+        artifact: Metadata artifact to validate.
+
+    Returns:
+        Tuple of (is_valid, error_messages).
+    """
+    errors = []
+
+    # Check required fields
+    required_fields = ["id", "name", "type", "source_type", "language", "module", "description"]
+    for field in required_fields:
+        value = getattr(artifact, field, None)
+        if not value:
+            errors.append(f"Missing or empty required field: {field}")
+
+    # Check type enums
+    valid_types = [
+        "table",
+        "column",
+        "index",
+        "constraint",
+        "relationship",
+        "view",
+        "trigger",
+        "class",
+        "interface",
+        "field",
+        "method",
+        "function",
+        "type",
+    ]
+    if artifact.type and artifact.type not in valid_types:
+        errors.append(f"Invalid artifact type: {artifact.type}")
+
+    valid_source_types = ["database", "code", "csv", "key_value"]
+    if artifact.source_type and artifact.source_type not in valid_source_types:
+        errors.append(f"Invalid source_type: {artifact.source_type}")
+
+    valid_languages = [
+        "postgresql",
+        "sqlite",
+        "mariadb",
+        "mysql",
+        "java",
+        "typescript",
+        "python",
+        "rust",
+        "csv",
+        "json",
+        "parquet",
+    ]
+    if artifact.language and artifact.language not in valid_languages:
+        errors.append(f"Invalid language: {artifact.language}")
+
+    return len(errors) == 0, errors

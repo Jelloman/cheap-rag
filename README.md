@@ -1,342 +1,387 @@
-# CHEAP RAG - Database & Code Metadata Semantic Search
+# CHEAP RAG - Semantic Search Over Metadata
 
-Phase 1 implementation of the CHEAP AI Enhancement project: Core RAG pipeline with embeddings and vector search over **database schemas** and **multi-language code metadata**.
-
-## Overview
-
-This system provides semantic question-answering over database schemas (PostgreSQL, SQLite, MariaDB) and code metadata (Java, TypeScript, Python, Rust). It combines:
-
-- **Database metadata extraction** from PostgreSQL, SQLite, MariaDB (tables, columns, relationships, indexes)
-- **Code metadata extraction** from Java, TypeScript, Python, Rust source files
-- **Unified metadata model** representing both databases and code
-- **Semantic embeddings** using sentence-transformers
-- **Vector search** with ChromaDB
-- **LLM-powered generation** with citations using local models or Claude API
-
-**Primary Use Case:** Enable semantic search over database schemas (e.g., Odoo ERP) with natural language queries like "What tables are related to sales orders?" or "How is the product table connected to inventory?"
-
-**Secondary Use Case:** Unified search across database metadata AND code metadata (e.g., "Compare the Catalog interface in Java to the database table structure")
-
-## Project Status
-
-**Phase:** 1 - Core RAG + Embeddings + Vector Search
-**Status:** Initial setup
-**Timeline:** Weeks 1-2
-
-## Technology Stack
-
-- **Language:** Python 3.14
-- **Embeddings:** sentence-transformers/all-mpnet-base-v2 (local)
-- **Vector Store:** ChromaDB (local persistence)
-- **LLM (Default):** Qwen2.5-Coder-7B-Instruct via Ollama
-- **LLM (Alternate):** Claude Sonnet 4.5 / Haiku 4.5 via API
-- **API Framework:** FastAPI
-
-See [TECH_STACK_DECISIONS.md](../cheap-planning/TECH_STACK_DECISIONS.md) for detailed rationale.
+Phase 1 implementation of the CHEAP AI Enhancement project: a RAG (Retrieval-Augmented Generation) system that enables semantic search and natural language Q&A over multi-language metadata definitions.
 
 ## Quick Start
 
-### Prerequisites
-
-- Python 3.11+
-- CUDA-capable GPU (recommended: 8GB+ VRAM)
-- [Ollama](https://ollama.ai) installed (for local LLM)
-
-### Installation
+### 1. Installation
 
 ```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+cd cheap-rag
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies with development extras using UV
+uv sync --extra dev
 
-# Download Ollama model
-ollama pull qwen2.5-coder:7b-instruct-q4_K_M
-
-# Download embedding model (automatic on first run)
-python scripts/download_models.py
+# Or with pip
+pip install -e ".[dev]"
 ```
 
-### Configuration
+**GPU Acceleration:**
 
-Three configuration profiles are available:
+This project is configured to use PyTorch with CUDA 12.4 for GPU-accelerated embeddings. The CUDA-enabled PyTorch is automatically installed via UV's custom index configuration in `pyproject.toml`.
 
-1. **Local (Default)**: `config/local.yaml` - All processing on local GPU
-2. **Claude**: `config/claude.yaml` - Claude API for generation
-3. **Hybrid**: `config/hybrid.yaml` - Configurable mix
+**Hardware tested on:**
+- NVIDIA GeForce RTX 4090 (24GB VRAM)
+- CUDA 13.0 drivers (backward compatible with PyTorch CUDA 12.4)
+- Performance: 10-50x faster embeddings compared to CPU-only
 
-Copy `.env.example` to `.env` and configure:
+If you don't have a CUDA-capable GPU, the system will automatically fall back to CPU (tests include this fallback logic).
+
+### 2. Configuration
+
+Copy and configure your environment:
 
 ```bash
-# For Claude API mode
-ANTHROPIC_API_KEY=your_api_key_here
-
-# Configuration profile
-CONFIG_PROFILE=local  # or claude, or hybrid
-
-# Database credentials (for database metadata extraction)
-ODOO_DB_PASSWORD=your_odoo_password_here
+cp .env.example .env
+# Edit .env with your settings
 ```
 
-Edit `config/local.yaml` to configure database connections:
+Configuration profiles in `config/`:
+- `local.yaml` - Local-only (Ollama + sentence-transformers)
+- `claude.yaml` - Claude API for generation
+- `hybrid.yaml` - Hybrid routing between local and Claude
 
-```yaml
-indexing:
-  # Database connections (for database metadata)
-  databases:
-    odoo_ecommerce:
-      enabled: true  # Set to true when Odoo is installed
-      type: "postgresql"
-      connection:
-        host: "localhost"
-        port: 5432
-        database: "odoo"
-        user: "odoo"
-        password: "${ODOO_DB_PASSWORD}"
-      schema: "public"
-      include_tables:  # Optional: limit to specific tables
-        - "sale_order"
-        - "product_product"
-        # ... other tables
-      tags: ["odoo", "ecommerce"]
+Set profile via environment variable:
+```bash
+export CONFIG_PROFILE=local  # or claude, hybrid
 ```
 
-### Usage
-
-#### Demo: SQLite Database Extraction
-
-Run the SQLite demo to see database metadata extraction in action:
+### 3. Index Metadata
 
 ```bash
-# Create demo database and extract metadata
-python scripts/demo_sqlite_extraction.py
+# Index from database
+python scripts/index_metadata.py --source "postgresql://user:pass@localhost/dbname"
 
-# Review extracted metadata
-cat data/metadata/demo_sqlite_metadata.json
+# Index from code
+python scripts/index_metadata.py --source "/path/to/java/project"
+
+# Reset and reindex
+python scripts/index_metadata.py --reset
 ```
 
-This creates a simple eCommerce database (customers, products, orders) and extracts:
-- Tables (4)
-- Columns (20+)
-- Relationships (foreign keys)
-- Indexes
+### 4. Query
 
-#### Demo: Java Code Extraction
-
-Run the Java demo to see code metadata extraction:
-
+**CLI:**
 ```bash
-# Extract metadata from CHEAP core Java interfaces
-python scripts/demo_java_extraction.py
+python scripts/query_example.py "What is the sale_order table?"
 
-# Review extracted metadata
-cat data/metadata/demo_java_metadata.json
+# With filters
+python scripts/query_example.py "What columns exist?" --language postgresql --type column
+
+# Markdown output
+python scripts/query_example.py "How are sales linked to customers?" --markdown
 ```
 
-This extracts metadata from CHEAP core Java source files:
-- Interfaces (Catalog, Hierarchy, Entity, Aspect, Property)
-- Classes and implementations
-- Fields with types and constraints
-
-#### 1. Index Database Metadata (When Odoo is installed)
-
+**API Server:**
 ```bash
-# Extract from Odoo PostgreSQL database
-python scripts/index_metadata.py --databases odoo_ecommerce
+# Start server
+uvicorn src.api.routes:app --reload
 
-# Or extract from all configured databases
-python scripts/index_metadata.py --databases all
+# Or
+python src/api/routes.py
 ```
 
-#### 2. Index Code Metadata
+**API Endpoints:**
+- `POST /api/query` - Question answering
+- `GET /api/index/status` - Index statistics
+- `GET /api/metadata` - Browse metadata (basic)
 
+Example query:
 ```bash
-# Extract from CHEAP Java source
-python scripts/index_metadata.py --source ../cheap/cheap-core/src/main/java
-
-# Or extract from multiple sources
-python scripts/index_metadata.py \
-  --source ../cheap/cheap-core/src/main/java \
-  --source ../cheap-ts/src
-```
-
-#### 3. Query the System
-
-```bash
-# Interactive query
-python scripts/query_example.py
-
-# Example queries:
-# - "What tables are related to sales orders?"
-# - "Show me columns in the product_product table"
-# - "How is sale_order connected to res_partner?"
-# - "What is the Catalog interface in Java?"
-```
-
-#### 3. Start API Server
-
-```bash
-# Run FastAPI server
-uvicorn src.api.routes:app --reload --port 8000
-
-# Query via HTTP
-curl -X POST http://localhost:8000/api/query \
+curl -X POST "http://localhost:8000/api/query" \
   -H "Content-Type: application/json" \
-  -d '{"query": "What constraints are defined for User fields?"}'
-```
-
-## Project Structure
-
-```
-cheap-rag/
-├── config/               # Configuration files
-│   ├── local.yaml        # Local LLM configuration (default)
-│   ├── claude.yaml       # Claude API configuration
-│   └── hybrid.yaml       # Hybrid mode configuration
-├── src/
-│   ├── extractors/       # Metadata extraction from source code
-│   ├── indexing/         # Indexing pipeline and schema
-│   ├── embeddings/       # Embedding generation service
-│   ├── vectorstore/      # ChromaDB integration
-│   ├── retrieval/        # Semantic search and filtering
-│   ├── generation/       # LLM-powered answer generation
-│   └── api/              # FastAPI endpoints
-├── tests/                # Test suites
-├── data/
-│   ├── metadata/         # Extracted metadata artifacts (JSON)
-│   └── vector_db/        # ChromaDB persistence
-├── scripts/
-│   ├── download_models.py
-│   ├── index_metadata.py
-│   └── query_example.py
-├── requirements.txt      # Python dependencies
-└── README.md
+  -d '{
+    "query": "What is the sale_order table?",
+    "top_k": 5,
+    "similarity_threshold": 0.3
+  }'
 ```
 
 ## Development
 
-### Running Tests
+This project uses modern Python tooling with strict type safety and automated quality checks.
+
+### Setup Development Environment
 
 ```bash
-# All tests
-pytest
+# Install with development dependencies
+uv sync --extra dev
 
-# Specific module
-pytest tests/test_extractors/
-
-# With coverage
-pytest --cov=src --cov-report=html
+# Verify installation
+nox --list
 ```
 
-### Configuration Modes
+### Development Workflow
 
-#### Local Mode (Default)
-- Zero API costs
-- Runs entirely on local GPU
-- Good for development and high query volume
-
-#### Claude Mode
-- Highest quality answers
-- API costs apply
-- Best for quality benchmarking
-
-#### Hybrid Mode
-- Use local for most queries
-- Fallback to Claude for complex queries
-- Configurable complexity threshold
-
-### Adding New Extractors
-
-See `src/extractors/base.py` for the `MetadataExtractor` interface.
-
-Example:
-```python
-from src.extractors.base import MetadataExtractor
-
-class MyLanguageExtractor(MetadataExtractor):
-    def extract_metadata(self, source_path: Path) -> List[MetadataArtifact]:
-        # Implementation
-        pass
+**Run all quality checks:**
+```bash
+nox                    # Runs tests, type checking, and linting
 ```
 
-## API Endpoints
-
-### `POST /api/query`
-Semantic question-answering over metadata.
-
-**Request:**
-```json
-{
-  "query": "What validation constraints exist?",
-  "filters": {
-    "language": "java",
-    "type": "field"
-  },
-  "top_k": 5
-}
+**Individual checks:**
+```bash
+nox -s tests           # Run pytest with coverage
+nox -s typecheck       # Type check with BasedPyright (strict mode)
+nox -s lint            # Lint and format check with Ruff
+nox -s format          # Auto-format code with Ruff
 ```
 
-**Response:**
-```json
-{
-  "answer": "...",
-  "sources": [...],
-  "retrieved_artifacts": [...],
-  "metadata": {
-    "query_time_ms": 234,
-    "num_retrieved": 5
-  }
-}
+**Pass arguments to underlying tools:**
+```bash
+nox -s tests -- -v -k test_query        # Run specific tests
+nox -s typecheck -- src/api/routes.py   # Type check specific file
+nox -s lint -- --fix                    # Auto-fix lint issues
 ```
 
-### `POST /api/index/rebuild`
-Trigger full metadata reindexing.
+### Type Safety
 
-### `GET /api/index/status`
-Get indexing progress and statistics.
+This project enforces **100% type hint coverage** with BasedPyright in strict mode:
 
-### `GET /api/metadata`
-Browse metadata directly with filters.
+```bash
+# Type check entire codebase
+nox -s typecheck
 
-## Performance
+# Type check with statistics
+basedpyright --stats src/
+```
 
-### Local Stack (RTX 4090)
-- Embedding: ~50ms per query
-- Vector search: ~10ms
-- LLM generation: ~2-5s (7B model, 4-bit)
-- **Total latency**: ~2-6 seconds per query
+**Type system requirements:**
+- All functions and methods must have type hints
+- Use PEP 604 syntax: `T | None`, `list[T]`, `dict[K, V]`
+- Include `from __future__ import annotations` in all files
+- Define interfaces using `@runtime_checkable Protocol`
 
-### Claude Stack
-- Embedding: ~50ms per query
-- Vector search: ~10ms
-- Claude API: ~1-3s
-- **Total latency**: ~1-4 seconds per query
+### Code Quality
 
-## Phase 1 Deliverables
+**Linting and formatting:**
+```bash
+# Check code style
+nox -s lint
 
-- [x] Technology stack decisions
-- [x] Project structure setup
-- [ ] Metadata extractors (Java, TypeScript, Python)
-- [ ] Unified indexing pipeline
-- [ ] Embedding service
-- [ ] ChromaDB integration
-- [ ] Semantic search implementation
-- [ ] Prompt engineering for grounded QA
-- [ ] Answer generation with citations
-- [ ] FastAPI endpoints
-- [ ] Test query dataset
-- [ ] Manual evaluation
+# Auto-format code
+nox -s format
 
-## Next Phases
+# Or use ruff directly
+ruff check src/        # Check for issues
+ruff format src/       # Format code
+```
 
-- **Phase 2**: Evaluation + Observability
-- **Phase 3**: Agent Orchestration + Guardrails
-- **Phase 4**: Frontend + Backend Integration
+**Ruff configuration:**
+- Line length: 100 characters
+- Enabled rules: pycodestyle, pyflakes, bugbear, comprehensions, pyupgrade, unused-arguments, simplify
+- See `pyproject.toml` for complete configuration
 
-See [PROJECT_OVERVIEW_2026.md](../cheap-planning/PROJECT_OVERVIEW_2026.md) for full roadmap.
+### Testing
+
+```bash
+# Run all tests with coverage
+nox -s tests
+
+# Run specific test file
+pytest tests/test_extractors/test_java_extractor.py -v
+
+# Run with coverage report
+pytest --cov=src --cov-report=html tests/
+
+# View coverage report
+open htmlcov/index.html
+```
+
+**Testing standards:**
+- Minimum 80% code coverage
+- Unit tests for all extractors, services, and utilities
+- Integration tests for end-to-end workflows
+- Mock external services (LLM APIs, databases)
+
+### Hatch Commands (Alternative)
+
+If you prefer Hatch over Nox:
+
+```bash
+hatch run test         # Run tests
+hatch run typecheck    # Type checking
+hatch run lint         # Linting
+hatch run format       # Formatting
+```
+
+### Build System
+
+This project uses:
+- **Build backend:** Hatchling
+- **Package manager:** UV (recommended) or pip
+- **Task runner:** Nox (primary) or Hatch (alternative)
+- **Type checker:** BasedPyright (strict mode)
+- **Linter/Formatter:** Ruff
+
+### Pre-commit Checklist
+
+Before committing code:
+
+1. **Format code:** `nox -s format`
+2. **Run all checks:** `nox` (tests + typecheck + lint)
+3. **Verify all pass:** Zero errors in all sessions
+
+### CI/CD
+
+The project is configured for automated checks:
+- Type checking: BasedPyright strict mode must pass
+- Linting: Ruff checks must pass
+- Testing: All tests must pass with >80% coverage
+- Formatting: Code must be formatted with Ruff
+
+## Architecture
+
+```
+Query Flow:
+1. User query → Embedding Service (sentence-transformers)
+2. Query embedding → Vector Store (ChromaDB) → Top-K similar artifacts
+3. Retrieved artifacts → LLM (Qwen2.5-Coder or Claude) → Answer with citations
+4. Citations validated against retrieved artifacts
+5. Response with answer + sources + quality metrics
+```
+
+**Components:**
+- **Extractors** - Extract metadata from databases (PostgreSQL, SQLite) and code (Java)
+- **Embeddings** - Generate vector embeddings using sentence-transformers
+- **Vector Store** - ChromaDB for persistent vector search
+- **Retrieval** - Semantic search with filtering
+- **Generation** - LLM answer generation with citations
+- **API** - FastAPI endpoints
+
+### Troubleshooting
+
+**Type checking errors:**
+```bash
+# Get detailed error information
+basedpyright --verbose src/
+
+# Check type coverage statistics
+basedpyright --stats src/
+```
+
+**Linting issues:**
+```bash
+# Auto-fix most issues
+ruff check src/ --fix
+
+# Show detailed explanations
+ruff check src/ --output-format=full
+```
+
+**Test failures:**
+```bash
+# Run with verbose output
+pytest -vv tests/
+
+# Run with debugging
+pytest --pdb tests/
+
+# Run specific test
+pytest tests/test_file.py::test_function -v
+```
+
+**Import errors:**
+```bash
+# Reinstall in editable mode
+uv sync --extra dev
+
+# Verify installation
+python -c "import src; print(src.__file__)"
+```
+
+**Nox issues:**
+```bash
+# Clear nox cache and rebuild
+nox --clean
+
+# List available sessions
+nox --list
+
+# Run with verbose output
+nox -s tests -- -v
+```
+
+## Development Status
+
+**Phase 1 Core Implementation Complete (2026-02-11):**
+
+✅ **Implemented and Tested:**
+- Retrieval Layer (semantic search, filters) - 85% test coverage
+- Metadata extraction (PostgreSQL, SQLite, Java)
+- Embedding service (sentence-transformers with GPU support)
+- Vector store (ChromaDB with persistent storage)
+- Test infrastructure (15 tests passing, 21% overall coverage)
+- Development tooling (nox, BasedPyright, Ruff, PyTorch CUDA 12.4)
+
+✅ **Implemented (Integration Testing Needed):**
+- LLM Answer Generation (Ollama + Claude providers)
+- Citation extraction and validation
+- API endpoints (query, index, metadata)
+- Indexing pipeline
+- Test query dataset (20+ diverse questions)
+
+⏳ **In Progress:**
+- Integration testing for generation and API layers
+- Manual evaluation of answer quality
+- Performance benchmarking (<10s per query target)
+
+See `../cheap-planning/TODO_PHASE_1.md` for detailed status and remaining tasks.
+
+## Quick Reference
+
+### Essential Commands
+
+```bash
+# Setup
+uv sync --extra dev              # Install dependencies
+
+# Development
+nox                              # Run all checks
+nox -s format                    # Format code
+nox -s tests                     # Run tests
+nox -s typecheck                 # Type check
+nox -s lint                      # Lint code
+
+# Running
+python scripts/index_metadata.py # Index metadata
+python scripts/query_example.py  # Query via CLI
+uvicorn src.api.routes:app       # Start API server
+
+# Debugging
+pytest -vv --pdb                 # Debug tests
+basedpyright --verbose src/      # Detailed type errors
+ruff check src/ --output-format=full  # Detailed lint info
+```
+
+### File Structure
+
+```
+cheap-rag/
+├── src/                    # Source code
+│   ├── extractors/         # Metadata extraction
+│   ├── embeddings/         # Embedding generation
+│   ├── vectorstore/        # Vector storage (ChromaDB, FAISS)
+│   ├── retrieval/          # Semantic search
+│   ├── generation/         # LLM answer generation
+│   ├── api/                # FastAPI endpoints
+│   ├── indexing/           # Pipeline and schema
+│   └── config.py           # Configuration loading
+├── tests/                  # Test suite
+├── config/                 # YAML configuration profiles
+├── scripts/                # Utility scripts
+├── noxfile.py             # Task automation
+├── pyrightconfig.json     # Type checker config
+└── pyproject.toml         # Build and tool config
+```
+
+### Configuration Files
+
+- **pyproject.toml** - Dependencies, build config, tool settings
+- **pyrightconfig.json** - BasedPyright strict type checking
+- **noxfile.py** - Automated test/lint/format tasks
+- **src/py.typed** - PEP 561 type distribution marker
+- **config/*.yaml** - Application runtime configuration
 
 ## License
 
-Same as parent CHEAP project.
+Part of the CHEAP metadata framework project.

@@ -28,6 +28,12 @@ class SqliteExtractor(DatabaseExtractor):
         self.inspector: Inspector | None = None
         self.database_path: str = ""
 
+    def _get_inspector(self) -> Inspector:
+        """Get inspector, raising error if not connected."""
+        if self.inspector is None:
+            raise RuntimeError("Not connected to database. Call connect() first.")
+        return self.inspector
+
     def connect(self, connection_config: dict[str, Any]) -> None:
         """Establish SQLite connection.
 
@@ -59,11 +65,11 @@ class SqliteExtractor(DatabaseExtractor):
             self.inspector = None
             self._connected = False
 
-    def extract_schema(self, schema_name: str | None = None) -> list[MetadataArtifact]:
+    def extract_schema(self, schema_name: str = "main") -> list[MetadataArtifact]:  # noqa: ARG002
         """Extract complete SQLite schema metadata.
 
         Args:
-            schema_name: Ignored for SQLite (no schema support).
+            schema_name: Ignored for SQLite (no schema support, always "main").
 
         Returns:
             List of metadata artifacts for tables, columns, indexes,
@@ -75,10 +81,13 @@ class SqliteExtractor(DatabaseExtractor):
         if not self._connected or not self.inspector:
             raise RuntimeError("Not connected to database. Call connect() first.")
 
-        artifacts = []
+        # Type narrowing for inspector
+        assert self.inspector is not None
+
+        artifacts: list[MetadataArtifact] = []
 
         # Get all tables (SQLite has no schemas, use None)
-        table_names = self.inspector.get_table_names()
+        table_names = self._get_inspector().get_table_names()
 
         for table_name in table_names:
             # Skip SQLite internal tables
@@ -136,17 +145,17 @@ class SqliteExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for each column.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Get column details from inspector
-        columns = self.inspector.get_columns(table_name)
+        columns = self._get_inspector().get_columns(table_name)
 
         # Get primary key constraint
-        pk_constraint = self.inspector.get_pk_constraint(table_name)
+        pk_constraint = self._get_inspector().get_pk_constraint(table_name)
         pk_columns = pk_constraint.get("constrained_columns", [])
 
         # Get foreign keys to mark FK columns
-        foreign_keys = self.inspector.get_foreign_keys(table_name)
+        foreign_keys = self._get_inspector().get_foreign_keys(table_name)
         fk_map = {}  # column_name -> referenced_table.column
         for fk in foreign_keys:
             for i, col in enumerate(fk["constrained_columns"]):
@@ -205,12 +214,14 @@ class SqliteExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for each index.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
-        indexes = self.inspector.get_indexes(table_name)
+        indexes = self._get_inspector().get_indexes(table_name)
 
         for idx in indexes:
             idx_name = idx["name"]
+            if idx_name is None:
+                continue  # Skip indexes without names
             unique = idx.get("unique", False)
             columns = idx.get("column_names", [])
 
@@ -245,25 +256,25 @@ class SqliteExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for foreign key relationships.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
-        table_names = self.inspector.get_table_names()
+        table_names = self._get_inspector().get_table_names()
 
         for table_name in table_names:
             # Skip SQLite internal tables
             if table_name.startswith("sqlite_"):
                 continue
 
-            foreign_keys = self.inspector.get_foreign_keys(table_name)
+            foreign_keys = self._get_inspector().get_foreign_keys(table_name)
 
             for fk in foreign_keys:
-                fk_name = fk.get("name", f"{table_name}_fk")
+                fk_name: str = fk.get("name") or f"{table_name}_fk"
                 referred_table = fk["referred_table"]
                 constrained_cols = fk["constrained_columns"]
                 referred_cols = fk["referred_columns"]
 
                 # Build relation strings
-                relations = []
+                relations: list[str] = []
                 for i, col in enumerate(constrained_cols):
                     ref_col = referred_cols[i] if i < len(referred_cols) else "?"
                     relations.append(f"{table_name}.{col} -> {referred_table}.{ref_col}")

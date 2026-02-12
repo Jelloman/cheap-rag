@@ -60,3 +60,4 @@ htmlcov/
 
 # OS
 Thumbs.db
+coverage.xml

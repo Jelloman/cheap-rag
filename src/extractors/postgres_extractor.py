@@ -23,6 +23,12 @@ class PostgresExtractor(DatabaseExtractor):
         self.engine: Engine | None = None
         self.inspector: Inspector | None = None
 
+    def _get_inspector(self) -> Inspector:
+        """Get inspector, raising error if not connected."""
+        if self.inspector is None:
+            raise RuntimeError("Not connected to database. Call connect() first.")
+        return self.inspector
+
     def connect(self, connection_config: dict[str, Any]) -> None:
         """Establish PostgreSQL connection.
 
@@ -78,10 +84,13 @@ class PostgresExtractor(DatabaseExtractor):
         if not self._connected or not self.inspector:
             raise RuntimeError("Not connected to database. Call connect() first.")
 
-        artifacts = []
+        # Type narrowing for inspector
+        assert self.inspector is not None
+
+        artifacts: list[MetadataArtifact] = []
 
         # Get all tables in schema
-        table_names = self.inspector.get_table_names(schema=schema_name)
+        table_names = self._get_inspector().get_table_names(schema=schema_name)
 
         for table_name in table_names:
             # 1. Extract table artifact
@@ -142,17 +151,17 @@ class PostgresExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for each column.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Get column details from inspector
-        columns = self.inspector.get_columns(table_name, schema=schema)
+        columns = self._get_inspector().get_columns(table_name, schema=schema)
 
         # Get primary key constraint
-        pk_constraint = self.inspector.get_pk_constraint(table_name, schema=schema)
+        pk_constraint = self._get_inspector().get_pk_constraint(table_name, schema=schema)
         pk_columns = pk_constraint.get("constrained_columns", [])
 
         # Get foreign keys to mark FK columns
-        foreign_keys = self.inspector.get_foreign_keys(table_name, schema=schema)
+        foreign_keys = self._get_inspector().get_foreign_keys(table_name, schema=schema)
         fk_map = {}  # column_name -> referenced_table.column
         for fk in foreign_keys:
             for i, col in enumerate(fk["constrained_columns"]):
@@ -161,7 +170,7 @@ class PostgresExtractor(DatabaseExtractor):
                 fk_map[col] = f"{ref_table}.{ref_col}"
 
         # Get unique constraints
-        unique_constraints = self.inspector.get_unique_constraints(table_name, schema=schema)
+        unique_constraints = self._get_inspector().get_unique_constraints(table_name, schema=schema)
         unique_columns = set()
         for uc in unique_constraints:
             unique_columns.update(uc.get("column_names", []))
@@ -223,12 +232,14 @@ class PostgresExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for each index.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
-        indexes = self.inspector.get_indexes(table_name, schema=schema)
+        indexes = self._get_inspector().get_indexes(table_name, schema=schema)
 
         for idx in indexes:
             idx_name = idx["name"]
+            if idx_name is None:
+                continue  # Skip indexes without names
             unique = idx.get("unique", False)
             columns = idx.get("column_names", [])
 
@@ -266,14 +277,18 @@ class PostgresExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for constraints.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Get check constraints
         try:
-            check_constraints = self.inspector.get_check_constraints(table_name, schema=schema)
+            check_constraints = self._get_inspector().get_check_constraints(
+                table_name, schema=schema
+            )
 
             for chk in check_constraints:
                 chk_name = chk["name"]
+                if chk_name is None:
+                    continue  # Skip constraints without names
                 sqltext = chk.get("sqltext", "")
 
                 # Generate unique ID
@@ -313,21 +328,23 @@ class PostgresExtractor(DatabaseExtractor):
         Returns:
             List of MetadataArtifact objects for foreign key relationships.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
-        table_names = self.inspector.get_table_names(schema=schema)
+        table_names = self._get_inspector().get_table_names(schema=schema)
 
         for table_name in table_names:
-            foreign_keys = self.inspector.get_foreign_keys(table_name, schema=schema)
+            foreign_keys = self._get_inspector().get_foreign_keys(table_name, schema=schema)
 
             for fk in foreign_keys:
                 fk_name = fk["name"]
+                if fk_name is None:
+                    continue  # Skip foreign keys without names
                 referred_table = fk["referred_table"]
                 constrained_cols = fk["constrained_columns"]
                 referred_cols = fk["referred_columns"]
 
                 # Build relation strings
-                relations = []
+                relations: list[str] = []
                 for i, col in enumerate(constrained_cols):
                     ref_col = referred_cols[i] if i < len(referred_cols) else "?"
                     relations.append(f"{table_name}.{col} -> {referred_table}.{ref_col}")

@@ -1,8 +1,10 @@
 """ChromaDB vector store integration for metadata search."""
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import chromadb
 from chromadb.config import Settings
@@ -67,7 +69,7 @@ class ChromaVectorStore:
 
     def add_artifacts(
         self,
-        artifacts: List[MetadataArtifact],
+        artifacts: list[MetadataArtifact],
         embeddings: np.ndarray,
     ) -> None:
         """Add artifacts with their embeddings to the vector store.
@@ -106,8 +108,9 @@ class ChromaVectorStore:
                 embeddings=embeddings_list[i:end_idx],
             )
 
-            logger.info(f"  Added batch {i // batch_size + 1} "
-                       f"({i + 1}-{end_idx} of {len(artifacts)})")
+            logger.info(
+                f"  Added batch {i // batch_size + 1} ({i + 1}-{end_idx} of {len(artifacts)})"
+            )
 
         logger.info(f"Successfully added {len(artifacts)} artifacts")
         logger.info(f"Total items in collection: {self.collection.count()}")
@@ -116,8 +119,8 @@ class ChromaVectorStore:
         self,
         query_embedding: np.ndarray,
         top_k: int = 5,
-        filters: Optional[Dict[str, Any]] = None,
-    ) -> Tuple[List[str], List[Dict[str, Any]], List[float]]:
+        filters: dict[str, Any] | None = None,
+    ) -> tuple[list[str], list[dict[str, Any]], list[float]]:
         """Search for similar artifacts using a query embedding.
 
         Args:
@@ -152,7 +155,7 @@ class ChromaVectorStore:
 
         return ids, metadatas, distances
 
-    def get_artifact(self, artifact_id: str) -> Optional[Dict[str, Any]]:
+    def get_artifact(self, artifact_id: str) -> dict[str, Any] | None:
         """Retrieve a specific artifact by ID.
 
         Args:
@@ -197,7 +200,7 @@ class ChromaVectorStore:
         """
         return self.collection.count()
 
-    def _artifact_to_metadata(self, artifact: MetadataArtifact) -> Dict[str, Any]:
+    def _artifact_to_metadata(self, artifact: MetadataArtifact) -> dict[str, Any]:
         """Convert artifact to ChromaDB metadata dict.
 
         ChromaDB metadata must be JSON-serializable with limited types.
@@ -218,8 +221,16 @@ class ChromaVectorStore:
             metadata["tags"] = ",".join(artifact.tags)
 
         # Add selected custom metadata fields
-        for key in ["table_name", "column_type", "nullable", "primary_key",
-                   "foreign_key", "cardinality", "from_table", "to_table"]:
+        for key in [
+            "table_name",
+            "column_type",
+            "nullable",
+            "primary_key",
+            "foreign_key",
+            "cardinality",
+            "from_table",
+            "to_table",
+        ]:
             if key in artifact.metadata:
                 value = artifact.metadata[key]
                 # Convert to JSON-serializable type
@@ -230,7 +241,7 @@ class ChromaVectorStore:
 
         return metadata
 
-    def _build_where_clause(self, filters: Dict[str, Any]) -> Dict[str, Any]:
+    def _build_where_clause(self, filters: dict[str, Any]) -> dict[str, Any]:
         """Build ChromaDB where clause from filter dict.
 
         Args:

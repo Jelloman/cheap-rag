@@ -3,11 +3,12 @@
 Alternative to ChromaDB that works with Python 3.14+.
 """
 
-import json
+from __future__ import annotations
+
 import logging
 import pickle
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import faiss
 import numpy as np
@@ -76,7 +77,9 @@ class FAISSVectorStore:
 
             if self.distance_metric == "cosine":
                 # Normalize vectors for cosine similarity using L2 index
-                self.index = faiss.IndexFlatIP(self.dimension)  # Inner product after normalization = cosine
+                self.index = faiss.IndexFlatIP(
+                    self.dimension
+                )  # Inner product after normalization = cosine
             else:  # l2
                 self.index = faiss.IndexFlatL2(self.dimension)
 
@@ -88,7 +91,7 @@ class FAISSVectorStore:
 
     def add_artifacts(
         self,
-        artifacts: List[MetadataArtifact],
+        artifacts: list[MetadataArtifact],
         embeddings: np.ndarray,
     ) -> None:
         """Add artifacts with their embeddings to the vector store.
@@ -132,8 +135,8 @@ class FAISSVectorStore:
         self,
         query_embedding: np.ndarray,
         top_k: int = 5,
-        filters: Optional[Dict[str, Any]] = None,
-    ) -> Tuple[List[str], List[Dict[str, Any]], List[float]]:
+        filters: dict[str, Any] | None = None,
+    ) -> tuple[list[str], list[dict[str, Any]], list[float]]:
         """Search for similar artifacts using a query embedding.
 
         Args:
@@ -170,7 +173,7 @@ class FAISSVectorStore:
         result_metadatas = []
         result_distances = []
 
-        for idx, distance in zip(indices, distances):
+        for idx, distance in zip(indices, distances, strict=True):
             if idx < 0 or idx >= len(self.ids):
                 continue
 
@@ -189,7 +192,7 @@ class FAISSVectorStore:
 
         return result_ids, result_metadatas, result_distances
 
-    def get_artifact(self, artifact_id: str) -> Optional[Dict[str, Any]]:
+    def get_artifact(self, artifact_id: str) -> dict[str, Any] | None:
         """Retrieve a specific artifact by ID.
 
         Args:
@@ -240,15 +243,18 @@ class FAISSVectorStore:
         faiss.write_index(self.index, str(self.index_path))
 
         with open(self.metadata_path, "wb") as f:
-            pickle.dump({
-                "ids": self.ids,
-                "metadatas": self.metadatas,
-                "documents": self.documents,
-            }, f)
+            pickle.dump(
+                {
+                    "ids": self.ids,
+                    "metadatas": self.metadatas,
+                    "documents": self.documents,
+                },
+                f,
+            )
 
         logger.info(f"Index saved to: {self.index_path}")
 
-    def _artifact_to_metadata(self, artifact: MetadataArtifact) -> Dict[str, Any]:
+    def _artifact_to_metadata(self, artifact: MetadataArtifact) -> dict[str, Any]:
         """Convert artifact to metadata dict."""
         metadata = {
             "name": artifact.name,
@@ -263,14 +269,22 @@ class FAISSVectorStore:
         }
 
         # Add selected custom metadata fields
-        for key in ["table_name", "column_type", "nullable", "primary_key",
-                   "foreign_key", "cardinality", "from_table", "to_table"]:
+        for key in [
+            "table_name",
+            "column_type",
+            "nullable",
+            "primary_key",
+            "foreign_key",
+            "cardinality",
+            "from_table",
+            "to_table",
+        ]:
             if key in artifact.metadata:
                 metadata[key] = artifact.metadata[key]
 
         return metadata
 
-    def _matches_filters(self, metadata: Dict[str, Any], filters: Dict[str, Any]) -> bool:
+    def _matches_filters(self, metadata: dict[str, Any], filters: dict[str, Any]) -> bool:
         """Check if metadata matches filter criteria."""
         for key, value in filters.items():
             if key not in metadata:

@@ -1,0 +1,191 @@
+{
+  "description": "Test query dataset for evaluating CHEAP RAG retrieval and answer quality",
+  "version": "1.0",
+  "created": "2026-02-11",
+  "categories": {
+    "entity_lookup": "Simple lookups of specific entities (tables, classes, etc.)",
+    "constraint_query": "Questions about constraints, types, validation rules",
+    "relationship_query": "Questions about relationships and foreign keys",
+    "cross_entity": "Questions spanning multiple entities",
+    "multi_language": "Questions requiring information from multiple languages",
+    "schema_exploration": "Exploratory questions about database schemas"
+  },
+  "queries": [
+    {
+      "id": "entity_001",
+      "category": "entity_lookup",
+      "query": "What is the sale_order table?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order table"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "entity_002",
+      "category": "entity_lookup",
+      "query": "Tell me about the res_partner table",
+      "language": "postgresql",
+      "expected_artifacts": ["res_partner table"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "constraint_001",
+      "category": "constraint_query",
+      "query": "What columns are in the sale_order table?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order columns"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "constraint_002",
+      "category": "constraint_query",
+      "query": "What is the data type of the amount_total column in sale_order?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order.amount_total column"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "constraint_003",
+      "category": "constraint_query",
+      "query": "Which columns in sale_order are required (not nullable)?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order columns with nullable=False"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "relationship_001",
+      "category": "relationship_query",
+      "query": "What is the relationship between sale_order and res_partner?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order.partner_id foreign key", "res_partner table"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "relationship_002",
+      "category": "relationship_query",
+      "query": "What tables have foreign keys to res_partner?",
+      "language": "postgresql",
+      "expected_artifacts": ["relationships to res_partner"],
+      "difficulty": "hard"
+    },
+    {
+      "id": "relationship_003",
+      "category": "relationship_query",
+      "query": "How are sales orders linked to customers?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order table", "partner_id foreign key", "res_partner table"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "cross_001",
+      "category": "cross_entity",
+      "query": "What information is stored about sales and customers?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order table", "res_partner table"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "cross_002",
+      "category": "cross_entity",
+      "query": "What indexes exist on the sale_order table?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order indexes"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "schema_001",
+      "category": "schema_exploration",
+      "query": "What tables are in the public schema?",
+      "language": "postgresql",
+      "expected_artifacts": ["public schema tables"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "schema_002",
+      "category": "schema_exploration",
+      "query": "What are the main entities in the Odoo database?",
+      "language": "postgresql",
+      "expected_artifacts": ["tables: sale_order, res_partner, product_product, etc."],
+      "difficulty": "medium"
+    },
+    {
+      "id": "schema_003",
+      "category": "schema_exploration",
+      "query": "Tell me about the product-related tables",
+      "language": "postgresql",
+      "expected_artifacts": ["product_product, product_template tables"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "java_001",
+      "category": "entity_lookup",
+      "query": "What is the Catalog interface in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["Catalog interface"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_002",
+      "category": "constraint_query",
+      "query": "What fields does the Entity class have?",
+      "language": "java",
+      "expected_artifacts": ["Entity class fields"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "multi_001",
+      "category": "multi_language",
+      "query": "What metadata entities exist across all languages?",
+      "language": "multi",
+      "expected_artifacts": ["tables, classes, interfaces from multiple languages"],
+      "difficulty": "hard"
+    },
+    {
+      "id": "constraint_004",
+      "category": "constraint_query",
+      "query": "What are the primary keys in the database?",
+      "language": "postgresql",
+      "expected_artifacts": ["columns with primary_key=True"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "relationship_004",
+      "category": "relationship_query",
+      "query": "Show me all foreign key relationships",
+      "language": "postgresql",
+      "expected_artifacts": ["relationship artifacts"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "entity_003",
+      "category": "entity_lookup",
+      "query": "What is the product_product table used for?",
+      "language": "postgresql",
+      "expected_artifacts": ["product_product table"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "constraint_005",
+      "category": "constraint_query",
+      "query": "What columns in res_partner store email addresses?",
+      "language": "postgresql",
+      "expected_artifacts": ["res_partner.email column"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "schema_004",
+      "category": "schema_exploration",
+      "query": "What are the most important tables for sales management?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order, sale_order_line, res_partner"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "cross_003",
+      "category": "cross_entity",
+      "query": "How is order pricing stored in the database?",
+      "language": "postgresql",
+      "expected_artifacts": ["sale_order.amount_total, sale_order_line.price_unit"],
+      "difficulty": "hard"
+    }
+  ]
+}

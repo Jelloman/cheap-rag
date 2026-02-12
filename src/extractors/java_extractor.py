@@ -8,12 +8,12 @@ import hashlib
 from pathlib import Path
 from typing import Any
 
-import javalang
+import javalang  # type: ignore[import-untyped]
 
-from .base import MetadataArtifact, MetadataExtractor
+from .base import MetadataArtifact
 
 
-class JavaExtractor(MetadataExtractor):
+class JavaExtractor:
     """Extract metadata from Java source files.
 
     Phase 1 scope: Extract class-level and field-level metadata only.
@@ -29,7 +29,7 @@ class JavaExtractor(MetadataExtractor):
         Returns:
             List of extracted metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         if source_path.is_file():
             if source_path.suffix == ".java":
@@ -54,20 +54,20 @@ class JavaExtractor(MetadataExtractor):
         Returns:
             List of metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         try:
             # Read source code
             source_code = file_path.read_text(encoding="utf-8")
 
             # Parse with javalang
-            tree = javalang.parse.parse(source_code)
+            tree = javalang.parse.parse(source_code)  # type: ignore[attr-defined]
 
             # Get package name
-            package_name = tree.package.name if tree.package else ""
+            package_name: str = tree.package.name if tree.package else ""  # type: ignore[attr-defined]
 
             # Extract from type declarations (classes, interfaces, enums)
-            for path, node in tree.filter(javalang.tree.TypeDeclaration):
+            for _path, node in tree.filter(javalang.tree.TypeDeclaration):  # type: ignore[attr-defined]
                 artifacts.extend(
                     self._extract_type_declaration(node, package_name, file_path, source_code)
                 )
@@ -80,10 +80,10 @@ class JavaExtractor(MetadataExtractor):
 
     def _extract_type_declaration(
         self,
-        node: javalang.tree.TypeDeclaration,
+        node: Any,  # javalang.tree.TypeDeclaration
         package_name: str,
         file_path: Path,
-        source_code: str,
+        _source_code: str,
     ) -> list[MetadataArtifact]:
         """Extract metadata from a type declaration (class/interface).
 
@@ -96,7 +96,7 @@ class JavaExtractor(MetadataExtractor):
         Returns:
             List of metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Determine type
         if isinstance(node, javalang.tree.ClassDeclaration):
@@ -127,7 +127,10 @@ class JavaExtractor(MetadataExtractor):
         tags = ["java", "code", artifact_type]
         if "cheap" in package_name.lower():
             tags.append("cheap")
-        if any(keyword in type_name.lower() for keyword in ["catalog", "hierarchy", "entity", "aspect", "property"]):
+        if any(
+            keyword in type_name.lower()
+            for keyword in ["catalog", "hierarchy", "entity", "aspect", "property"]
+        ):
             tags.append("core")
 
         # Create artifact for type
@@ -154,7 +157,7 @@ class JavaExtractor(MetadataExtractor):
 
     def _extract_fields(
         self,
-        type_node: javalang.tree.TypeDeclaration,
+        type_node: Any,  # javalang.tree.TypeDeclaration
         qualified_type_name: str,
         file_path: Path,
     ) -> list[MetadataArtifact]:
@@ -168,13 +171,17 @@ class JavaExtractor(MetadataExtractor):
         Returns:
             List of field metadata artifacts.
         """
-        artifacts = []
+        artifacts: list[MetadataArtifact] = []
 
         # Get all field declarations
         for field_decl in type_node.fields:
             for declarator in field_decl.declarators:
                 field_name = declarator.name
-                field_type = field_decl.type.name if hasattr(field_decl.type, "name") else str(field_decl.type)
+                field_type = (
+                    field_decl.type.name
+                    if hasattr(field_decl.type, "name")
+                    else str(field_decl.type)
+                )
 
                 # Extract javadoc
                 javadoc = self._extract_javadoc(field_decl.documentation)
