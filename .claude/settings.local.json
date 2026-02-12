@@ -9,7 +9,8 @@
       "Bash(.nox/tests-3-13/Scripts/python.exe:*)",
       "Bash(uv pip install:*)",
       "Bash(uv run:*)",
-      "Bash(uv sync:*)"
+      "Bash(uv sync:*)",
+      "Bash(ls:*)"
     ]
   }
 }

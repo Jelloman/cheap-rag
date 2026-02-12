@@ -7,7 +7,20 @@ This file provides guidance to Claude Code when working on the CHEAP RAG system.
 This is the Phase 1 implementation of the CHEAP AI Enhancement project: a RAG (Retrieval-Augmented Generation) system that enables semantic search over multi-language metadata definitions.
 
 **Current Phase:** Phase 1 - Core RAG + Embeddings + Vector Search
-**Status:** Extraction and vector indexing complete, retrieval and generation in progress
+**Status:** Core implementation complete, integration testing in progress
+
+**Recent Progress (2026-02-11):**
+- ✅ Retrieval layer implemented and tested (85% coverage on semantic_search.py)
+- ✅ Generation layer implemented (Ollama + Claude providers, citation extraction)
+- ✅ API endpoints implemented (FastAPI with CORS, query/index/metadata routes)
+- ✅ Indexing pipeline implemented (unified extractor registration, error handling)
+- ✅ Development tooling complete (nox, BasedPyright strict mode, PyTorch CUDA 12.4)
+- ✅ 15 tests passing with 21% overall coverage (retrieval tested, generation/API need tests)
+
+**Next Steps:**
+- Integration testing for generation and API layers
+- Manual evaluation of answer quality
+- Performance benchmarking
 
 See [../cheap-planning/PROJECT_STATUS.md](../cheap-planning/PROJECT_STATUS.md) for overall project status.
 See [../cheap-planning/TODO_PHASE_1.md](../cheap-planning/TODO_PHASE_1.md) for remaining tasks.
@@ -18,11 +31,13 @@ See [../cheap-planning/attic/TECH_STACK_DECISIONS.md](../cheap-planning/attic/TE
 
 **Core Stack:**
 - Python 3.13 (ChromaDB incompatible with 3.14)
+- PyTorch: 2.6.0+cu124 (CUDA 12.4 for GPU acceleration)
 - Embeddings: sentence-transformers/all-mpnet-base-v2 (local GPU)
 - Vector Store: ChromaDB (local persistence)
 - LLM (Default): Qwen2.5-Coder-7B-Instruct via Ollama
 - LLM (Alternate): Claude Sonnet 4.5 / Haiku 4.5 via API
 - API: FastAPI
+- Dev Tools: BasedPyright (strict), Ruff (lint/format), Nox (tasks), pytest
 
 ## Project Structure
 
@@ -192,35 +207,44 @@ Use `MetadataArtifact.to_embedding_text()` for consistency.
 
 ## Phase 1 Implementation Order
 
-See [../cheap-planning/TODO_PHASE_1.md](../cheap-planning/TODO_PHASE_1.md) for remaining tasks.
+See [../cheap-planning/TODO_PHASE_1.md](../cheap-planning/TODO_PHASE_1.md) for detailed task status.
 
 1. ✅ Technology stack decisions
 2. ✅ Project structure setup
 3. ✅ Metadata extraction (Java, PostgreSQL, SQLite)
 4. ✅ Embedding service
 5. ✅ Vector store integration
-6. [ ] Semantic search
-7. [ ] Answer generation with citations
-8. [ ] API endpoints
-9. [ ] Testing and evaluation
+6. ✅ Semantic search (implemented and tested, 85% coverage)
+7. ✅ Answer generation with citations (implemented, needs integration tests)
+8. ✅ API endpoints (implemented, needs integration tests)
+9. ⏳ Testing and evaluation (retrieval tested, integration tests in progress)
 
 ## Testing Strategy
 
 ### Unit Tests
-- Each extractor independently
-- Embedding service
-- Vector store operations
-- Prompt formatting
+- ✅ MetadataArtifact model (10 tests passing)
+- Each extractor independently (basic tests exist)
+- Embedding service (partial coverage)
+- Vector store operations (partial coverage)
+- Prompt formatting (needs tests)
 
 ### Integration Tests
-- Full RAG pipeline (extract → embed → index → search → generate)
-- API endpoints
-- Configuration loading
+- ⏳ Full RAG pipeline (extract → embed → index → search → generate)
+- API endpoints (needs tests)
+- Configuration loading (90% coverage)
+- ✅ Retrieval quality tests (Precision@K, Recall@K, MRR - 5 tests passing)
 
 ### Manual Evaluation
-- Test query dataset (15-25 questions)
-- Answer quality review
-- Citation accuracy
+- ✅ Test query dataset created (20+ questions in tests/fixtures/test_queries.json)
+- ⏳ Answer quality review (needs testing)
+- ⏳ Citation accuracy (needs testing)
+
+**Current Test Status (2026-02-11):**
+- 15 tests passing
+- 21% overall code coverage
+- 85% coverage on semantic_search.py
+- 67% coverage on filters.py
+- 0% coverage on generation/* and api/* (implemented but not tested)
 
 ## Common Patterns
 

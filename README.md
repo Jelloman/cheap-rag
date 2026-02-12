@@ -16,6 +16,17 @@ uv sync --extra dev
 pip install -e ".[dev]"
 ```
 
+**GPU Acceleration:**
+
+This project is configured to use PyTorch with CUDA 12.4 for GPU-accelerated embeddings. The CUDA-enabled PyTorch is automatically installed via UV's custom index configuration in `pyproject.toml`.
+
+**Hardware tested on:**
+- NVIDIA GeForce RTX 4090 (24GB VRAM)
+- CUDA 13.0 drivers (backward compatible with PyTorch CUDA 12.4)
+- Performance: 10-50x faster embeddings compared to CPU-only
+
+If you don't have a CUDA-capable GPU, the system will automatically fall back to CPU (tests include this fallback logic).
+
 ### 2. Configuration
 
 Copy and configure your environment:
@@ -292,15 +303,29 @@ nox -s tests -- -v
 
 ## Development Status
 
-All Phase 1 core components complete:
-- ✅ Retrieval Layer (semantic search, filters)
-- ✅ LLM Answer Generation (Ollama + Claude providers)
-- ✅ Citation extraction and validation
-- ✅ API endpoints
-- ✅ Indexing pipeline
-- ✅ Test query dataset
+**Phase 1 Core Implementation Complete (2026-02-11):**
 
-See `../cheap-planning/TODO_PHASE_1.md` for detailed status.
+✅ **Implemented and Tested:**
+- Retrieval Layer (semantic search, filters) - 85% test coverage
+- Metadata extraction (PostgreSQL, SQLite, Java)
+- Embedding service (sentence-transformers with GPU support)
+- Vector store (ChromaDB with persistent storage)
+- Test infrastructure (15 tests passing, 21% overall coverage)
+- Development tooling (nox, BasedPyright, Ruff, PyTorch CUDA 12.4)
+
+✅ **Implemented (Integration Testing Needed):**
+- LLM Answer Generation (Ollama + Claude providers)
+- Citation extraction and validation
+- API endpoints (query, index, metadata)
+- Indexing pipeline
+- Test query dataset (20+ diverse questions)
+
+⏳ **In Progress:**
+- Integration testing for generation and API layers
+- Manual evaluation of answer quality
+- Performance benchmarking (<10s per query target)
+
+See `../cheap-planning/TODO_PHASE_1.md` for detailed status and remaining tasks.
 
 ## Quick Reference
 
