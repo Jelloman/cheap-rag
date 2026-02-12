@@ -158,9 +158,9 @@ class QueryResponse(BaseModel):
     confidence: str | None = None  # "high", "medium", "low"
     warnings: list[str] = Field(default_factory=list)
 
-    model_config = ConfigDict(ser_json_timedelta='iso8601')
+    model_config = ConfigDict(ser_json_timedelta="iso8601")
 
-    @field_serializer('timestamp')
+    @field_serializer("timestamp")
     def serialize_timestamp(self, dt: datetime) -> str:
         """Serialize datetime to ISO format."""
         return dt.isoformat()
@@ -289,9 +289,9 @@ class ErrorResponse(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     details: dict[str, Any] | None = None
 
-    model_config = ConfigDict(ser_json_timedelta='iso8601')
+    model_config = ConfigDict(ser_json_timedelta="iso8601")
 
-    @field_serializer('timestamp')
+    @field_serializer("timestamp")
     def serialize_timestamp(self, dt: datetime) -> str:
         """Serialize datetime to ISO format."""
         return dt.isoformat()

@@ -116,7 +116,7 @@ class JavaExtractor:
         javadoc = self._extract_javadoc(node.documentation)
 
         # Extract extends/implements
-        relations = []
+        relations: list[str] = []
         if hasattr(node, "extends") and node.extends:
             relations.append(f"extends {node.extends.name}")
         if hasattr(node, "implements") and node.implements:
@@ -187,7 +187,7 @@ class JavaExtractor:
                 javadoc = self._extract_javadoc(field_decl.documentation)
 
                 # Build constraints (modifiers)
-                constraints = []
+                constraints: list[str] = []
                 if "final" in field_decl.modifiers:
                     constraints.append("final")
                 if "static" in field_decl.modifiers:
@@ -237,7 +237,7 @@ class JavaExtractor:
 
         # Remove javadoc markers and asterisks
         lines = documentation.split("\n")
-        cleaned_lines = []
+        cleaned_lines: list[str] = []
 
         for line in lines:
             # Remove leading/trailing whitespace

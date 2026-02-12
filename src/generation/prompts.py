@@ -86,7 +86,7 @@ def format_artifact_context(artifact: MetadataArtifact) -> str:
     Returns:
         Formatted context string.
     """
-    lines = []
+    lines: list[str] = []
 
     # Header with artifact type and name
     lines.append(f"### {artifact.type.upper()}: {artifact.name}")
