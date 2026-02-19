@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import logging
 import time
+import uuid
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -28,15 +28,22 @@ from src.generation.response import (
     ArtifactSummary,
     CitationInfo,
 )
+from src.observability import (
+    StructuredLogger,
+    get_correlation_id,
+    get_performance_monitor,
+    init_logging,
+    init_tracing,
+    record_error,
+    record_operation,
+    set_correlation_id,
+    shutdown_tracing,
+)
 from src.retrieval.filters import FilterBuilder, MetadataFilter
 from src.retrieval.semantic_search import SemanticSearch
 from src.vectorstore.chroma_store import ChromaVectorStore
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = StructuredLogger("cheap_rag.api")
 
 # Load configuration
 config = load_config()
@@ -94,7 +101,7 @@ def get_generator() -> Generator:
     """Get or create generator singleton."""
     global _generator
     if _generator is None:
-        logger.info("Initializing Generator...")
+        logger.info("Initializing Generator...", provider=config.llm.provider)
         provider_type = config.llm.provider
 
         if provider_type == "ollama":
@@ -161,9 +168,12 @@ class MetadataBrowseRequest(BaseModel):
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """Manage application lifespan events."""
+    # Initialize observability
+    init_logging(level="INFO", format_type="text")
+    init_tracing(service_name="cheap-rag", enable_console=True, enable_otlp=False)
+
     # Startup
-    logger.info("Starting CHEAP RAG API...")
-    logger.info(f"Configuration profile: {config.llm.provider}")
+    logger.info("Starting CHEAP RAG API...", provider=config.llm.provider)
 
     # Initialize services
     get_embedding_service()
@@ -177,6 +187,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
     # Shutdown
     logger.info("Shutting down CHEAP RAG API...")
+    shutdown_tracing()
 
 
 # Create FastAPI app
@@ -224,13 +235,18 @@ async def health_check():
         vector_store = get_vector_store()
         count = vector_store.count()
 
+        # Include performance summary
+        perf_summary = get_performance_monitor().get_summary()
+
         return {
             "status": "healthy",
             "vector_store": "connected",
             "artifacts_count": count,
+            "memory": perf_summary.get("memory"),
+            "gpu_memory": perf_summary.get("gpu_memory"),
         }
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
+        logger.error("Health check failed", error=str(e))
         raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}") from e
 
 
@@ -244,10 +260,18 @@ async def query(request: QueryRequest) -> QueryResponse:
     Returns:
         QueryResponse with answer, sources, and metadata.
     """
-    start_time = time.time()
+    # Set correlation ID for this request
+    correlation_id = str(uuid.uuid4())
+    set_correlation_id(correlation_id)
+
+    start_time = time.perf_counter()
 
     try:
-        logger.info(f"Processing query: '{request.query}'")
+        logger.info(
+            "Processing query",
+            query=request.query,
+            correlation_id=correlation_id,
+        )
 
         # Parse filters
         metadata_filter = None
@@ -256,7 +280,7 @@ async def query(request: QueryRequest) -> QueryResponse:
             metadata_filter = MetadataFilter(**request.filters)
 
         # Retrieval
-        retrieval_start = time.time()
+        retrieval_start = time.perf_counter()
         semantic_search = get_semantic_search()
         search_results = semantic_search.search(
             query=request.query,
@@ -264,12 +288,18 @@ async def query(request: QueryRequest) -> QueryResponse:
             similarity_threshold=request.similarity_threshold,
             filters=metadata_filter,
         )
-        retrieval_time = (time.time() - retrieval_start) * 1000
+        retrieval_time = (time.perf_counter() - retrieval_start) * 1000
 
-        logger.info(f"Retrieved {len(search_results.results)} artifacts in {retrieval_time:.0f}ms")
+        logger.info(
+            "Retrieval complete",
+            num_results=len(search_results.results),
+            retrieval_time_ms=round(retrieval_time, 1),
+        )
 
         if not search_results.results:
             # No results found
+            total_time = (time.perf_counter() - start_time) * 1000
+            record_operation("query_endpoint", total_time, {"num_results": 0})
             return QueryResponse(
                 answer="I don't know based on the provided context. No relevant metadata artifacts were found for this query.",
                 query=request.query,
@@ -282,12 +312,12 @@ async def query(request: QueryRequest) -> QueryResponse:
                     filters=request.filters,
                     retrieval_time_ms=retrieval_time,
                 ),
-                total_time_ms=(time.time() - start_time) * 1000,
+                total_time_ms=total_time,
                 warnings=["No artifacts matched the query and filters"],
             )
 
         # Generation
-        generation_start = time.time()
+        generation_start = time.perf_counter()
         generator = get_generator()
         answer = generator.generate_answer(
             query=request.query,
@@ -295,9 +325,9 @@ async def query(request: QueryRequest) -> QueryResponse:
             temperature=request.temperature,
             max_tokens=request.max_tokens,
         )
-        generation_time = (time.time() - generation_start) * 1000
+        generation_time = (time.perf_counter() - generation_start) * 1000
 
-        logger.info(f"Generated answer in {generation_time:.0f}ms")
+        logger.info("Generation complete", generation_time_ms=round(generation_time, 1))
 
         # Extract and validate citations
         citation_extractor = get_citation_extractor()
@@ -305,6 +335,8 @@ async def query(request: QueryRequest) -> QueryResponse:
         citation_quality = citation_extractor.get_citation_quality_metrics(
             answer, search_results.results
         )
+
+        total_time = (time.perf_counter() - start_time) * 1000
 
         # Build response
         response = QueryResponse(
@@ -337,7 +369,7 @@ async def query(request: QueryRequest) -> QueryResponse:
                 citation_coverage=float(citation_quality["citation_coverage"]),
                 has_hallucinations=bool(citation_quality["has_hallucinations"]),
             ),
-            total_time_ms=(time.time() - start_time) * 1000,
+            total_time_ms=total_time,
         )
 
         # Assess confidence
@@ -349,12 +381,27 @@ async def query(request: QueryRequest) -> QueryResponse:
         if citation_quality["citation_coverage"] < 0.5:
             response.add_warning("Low citation coverage - not all retrieved artifacts were used")
 
-        logger.info(f"Query completed in {response.total_time_ms:.0f}ms")
+        record_operation(
+            "query_endpoint",
+            total_time,
+            {
+                "num_results": len(search_results.results),
+                "retrieval_ms": round(retrieval_time, 1),
+                "generation_ms": round(generation_time, 1),
+            },
+        )
+        logger.info(
+            "Query completed",
+            total_time_ms=round(total_time, 1),
+            num_results=len(search_results.results),
+            correlation_id=correlation_id,
+        )
 
         return response
 
     except Exception as e:
-        logger.error(f"Query failed: {e}", exc_info=True)
+        record_error("api", e, correlation_id)
+        logger.error("Query failed", error=str(e), correlation_id=correlation_id)
         raise HTTPException(status_code=500, detail=f"Query processing failed: {str(e)}") from e
 
 
@@ -377,7 +424,7 @@ async def index_status() -> IndexStatus:
         )
 
     except Exception as e:
-        logger.error(f"Index status check failed: {e}")
+        logger.error("Index status check failed", error=str(e))
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 
@@ -440,7 +487,7 @@ async def browse_metadata(
         }
 
     except Exception as e:
-        logger.error(f"Metadata browse failed: {e}")
+        logger.error("Metadata browse failed", error=str(e))
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 
@@ -461,7 +508,13 @@ async def http_exception_handler(_request: Request, exc: HTTPException) -> JSONR
 @app.exception_handler(Exception)
 async def general_exception_handler(_request: Request, exc: Exception) -> JSONResponse:
     """Handle general exceptions."""
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    record_error("api", exc, get_correlation_id())
+    logger.error(
+        "Unhandled exception",
+        error=str(exc),
+        error_type=type(exc).__name__,
+        correlation_id=get_correlation_id(),
+    )
     error_dict = ErrorResponse(
         error=str(exc),
         error_type=type(exc).__name__,

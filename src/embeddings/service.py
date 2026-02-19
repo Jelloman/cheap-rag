@@ -2,15 +2,22 @@
 
 from __future__ import annotations
 
-import logging
+import time
 from pathlib import Path
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from src.extractors.base import MetadataArtifact
+from src.observability import (
+    StructuredLogger,
+    get_correlation_id,
+    record_error,
+    record_operation,
+    trace_function,
+)
 
-logger = logging.getLogger(__name__)
+logger = StructuredLogger("cheap_rag.embeddings")
 
 
 class EmbeddingService:
@@ -40,8 +47,7 @@ class EmbeddingService:
         self.batch_size = batch_size
         self.cache_dir = Path(cache_dir) if cache_dir else None
 
-        logger.info(f"Loading embedding model: {model_name}")
-        logger.info(f"Using device: {device}")
+        logger.info("Loading embedding model", model=model_name, device=device)
 
         # Create cache directory if specified
         if self.cache_dir:
@@ -58,8 +64,9 @@ class EmbeddingService:
         if dimension is None:
             raise ValueError(f"Could not determine embedding dimension for model {model_name}")
         self.dimension: int = dimension
-        logger.info(f"Model loaded successfully (dimension: {self.dimension})")
+        logger.info("Model loaded successfully", dimension=self.dimension)
 
+    @trace_function("embed_text")
     def embed_text(self, text: str) -> np.ndarray:
         """Generate embedding for a single text string.
 
@@ -69,8 +76,17 @@ class EmbeddingService:
         Returns:
             Embedding vector as numpy array
         """
-        return self.model.encode(text, convert_to_numpy=True)  # type: ignore[reportUnknownMemberType]  # sentence-transformers
+        start = time.perf_counter()
+        try:
+            result = self.model.encode(text, convert_to_numpy=True)  # type: ignore[reportUnknownMemberType]  # sentence-transformers
+            duration_ms = (time.perf_counter() - start) * 1000
+            record_operation("embed_text", duration_ms, {"text_length": len(text)})
+            return result
+        except Exception as e:
+            record_error("embeddings", e, get_correlation_id())
+            raise
 
+    @trace_function("embed_texts")
     def embed_texts(self, texts: list[str]) -> np.ndarray:
         """Generate embeddings for multiple texts in batch.
 
@@ -83,12 +99,22 @@ class EmbeddingService:
         if not texts:
             return np.array([])
 
-        return self.model.encode(  # type: ignore[reportUnknownMemberType]  # sentence-transformers
-            texts,
-            batch_size=self.batch_size,
-            show_progress_bar=len(texts) > 10,
-            convert_to_numpy=True,
-        )
+        start = time.perf_counter()
+        try:
+            result = self.model.encode(  # type: ignore[reportUnknownMemberType]  # sentence-transformers
+                texts,
+                batch_size=self.batch_size,
+                show_progress_bar=len(texts) > 10,
+                convert_to_numpy=True,
+            )
+            duration_ms = (time.perf_counter() - start) * 1000
+            record_operation(
+                "embed_texts", duration_ms, {"batch_size": len(texts)}
+            )
+            return result
+        except Exception as e:
+            record_error("embeddings", e, get_correlation_id())
+            raise
 
     def embed_artifact(self, artifact: MetadataArtifact) -> np.ndarray:
         """Generate embedding for a metadata artifact.
@@ -102,6 +128,7 @@ class EmbeddingService:
         text = artifact.to_embedding_text()
         return self.embed_text(text)
 
+    @trace_function("embed_artifacts")
     def embed_artifacts(self, artifacts: list[MetadataArtifact]) -> np.ndarray:
         """Generate embeddings for multiple artifacts in batch.
 
@@ -115,10 +142,10 @@ class EmbeddingService:
             return np.array([])
 
         texts = [a.to_embedding_text() for a in artifacts]
-        logger.info(f"Generating embeddings for {len(texts)} artifacts...")
+        logger.info("Generating embeddings for artifacts", count=len(texts))
 
         embeddings = self.embed_texts(texts)
-        logger.info(f"Generated {len(embeddings)} embeddings")
+        logger.info("Generated embeddings", count=len(embeddings))
 
         return embeddings
 
