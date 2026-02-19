@@ -6,17 +6,31 @@ This file provides guidance to Claude Code when working on the CHEAP RAG system.
 
 CHEAP RAG is a multi-phase implementation of an AI-enhanced metadata exploration system with semantic search over multi-language metadata definitions.
 
-**Current Status:** Phase 2 Complete ✅
-**Date:** 2026-02-11
+**Current Status:** Phase 2.5 In Progress (Observability Integration)
+**Date:** 2026-02-19
 
 ### Phase Completion Status
 
 - **Phase 1:** Core RAG + Embeddings + Vector Search ✅ **COMPLETE** (2026-02-11)
 - **Phase 2:** Evaluation + Observability ✅ **COMPLETE** (2026-02-11)
+- **Phase 2.5:** Observability Integration ⏳ **IN PROGRESS** (2026-02-19)
 - **Phase 3:** Agent Orchestration + Guardrails (Not Started)
 - **Phase 4:** Frontend + Backend Integration (Not Started)
 
-### Phase 2 Highlights (Completed Today)
+### Phase 2.5 Highlights (Integration work)
+
+- ✅ Tracing wired into `EmbeddingService`, `SemanticSearch`, `Generator`, `routes`
+- ✅ `StructuredLogger` replaces stdlib logging throughout pipeline
+- ✅ `record_operation()` / `record_error()` wired throughout pipeline
+- ✅ Per-request correlation IDs in API (UUID per request, propagated downstream)
+- ✅ `GET /health` returns live performance stats and memory usage
+- ✅ Unit tests for all Phase 2 modules (324 total tests passing)
+- ⏳ Gold dataset creation (deferred — requires running services)
+- ⏳ Initial evaluation run (deferred — requires indexed data)
+- ⏳ A/B test run (deferred — requires running models)
+- ⏳ OTLP / log aggregation config (deferred — infrastructure work)
+
+### Phase 2 Highlights
 
 - ✅ Gold question dataset system with ground truth annotations
 - ✅ Retrieval metrics (Precision@K, Recall@K, MRR, MAP, NDCG)

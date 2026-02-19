@@ -1,6 +1,8 @@
 # CHEAP RAG - Semantic Search Over Metadata
 
-Phase 1 implementation of the CHEAP AI Enhancement project: a RAG (Retrieval-Augmented Generation) system that enables semantic search and natural language Q&A over multi-language metadata definitions.
+**Current Status: Phase 2.5 (Observability Integration) — In Progress**
+
+Phases 1 and 2 complete. Phase 2.5 integrates the observability infrastructure built in Phase 2 throughout the pipeline. The RAG system provides semantic search and natural language Q&A over multi-language metadata definitions.
 
 ## Quick Start
 
@@ -242,11 +244,13 @@ Query Flow:
 
 **Components:**
 - **Extractors** - Extract metadata from databases (PostgreSQL, SQLite) and code (Java)
-- **Embeddings** - Generate vector embeddings using sentence-transformers
+- **Embeddings** - Generate vector embeddings using sentence-transformers (GPU-accelerated)
 - **Vector Store** - ChromaDB for persistent vector search
 - **Retrieval** - Semantic search with filtering
-- **Generation** - LLM answer generation with citations
-- **API** - FastAPI endpoints
+- **Generation** - LLM answer generation with citations (Ollama + Claude)
+- **API** - FastAPI endpoints with per-request correlation IDs
+- **Observability** - OpenTelemetry tracing, structured logging, error tracking, performance monitoring
+- **Evaluation** - Retrieval metrics (P@K, MRR, NDCG), gold dataset, A/B testing
 
 ### Troubleshooting
 
@@ -303,29 +307,42 @@ nox -s tests -- -v
 
 ## Development Status
 
-**Phase 1 Core Implementation Complete (2026-02-11):**
+### Phase 2.5 — Observability Integration (Current, 2026-02-19)
 
-✅ **Implemented and Tested:**
-- Retrieval Layer (semantic search, filters) - 85% test coverage
+✅ **Completed (Phase 2.5):**
+- Integrated OpenTelemetry tracing into `EmbeddingService`, `SemanticSearch`, `Generator`, and API routes
+- Integrated `StructuredLogger` (replaces stdlib logging) throughout pipeline
+- Integrated `record_operation()` / `record_error()` throughout pipeline
+- Per-request correlation IDs propagated from API through all downstream calls
+- `GET /health` endpoint now includes live performance stats and memory usage
+- 324 tests passing (unit tests for all Phase 1 + Phase 2 modules)
+
+✅ **Complete (Phase 1 — Core RAG):**
 - Metadata extraction (PostgreSQL, SQLite, Java)
-- Embedding service (sentence-transformers with GPU support)
+- Embedding service (sentence-transformers with CUDA GPU support)
 - Vector store (ChromaDB with persistent storage)
-- Test infrastructure (15 tests passing, 21% overall coverage)
-- Development tooling (nox, BasedPyright, Ruff, PyTorch CUDA 12.4)
+- Semantic search with metadata filtering
+- LLM answer generation with citations (Ollama + Claude providers)
+- API endpoints: `POST /api/query`, `GET /api/index/status`, `GET /api/metadata`, `GET /health`
 
-✅ **Implemented (Integration Testing Needed):**
-- LLM Answer Generation (Ollama + Claude providers)
-- Citation extraction and validation
-- API endpoints (query, index, metadata)
-- Indexing pipeline
-- Test query dataset (20+ diverse questions)
+✅ **Complete (Phase 2 — Evaluation + Observability):**
+- Retrieval metrics: Precision@K, Recall@K, MRR, MAP, NDCG
+- Gold dataset system with ground truth annotations
+- Evaluation reporting (JSON + Markdown)
+- A/B testing framework for embedding model comparison
+- OpenTelemetry tracing infrastructure
+- Structured logging with correlation IDs
+- Error tracking and rate monitoring
+- Performance profiling (latency percentiles, throughput, memory)
 
-⏳ **In Progress:**
-- Integration testing for generation and API layers
-- Manual evaluation of answer quality
-- Performance benchmarking (<10s per query target)
+⏳ **Deferred (requires running services / manual work):**
+- Create and annotate gold evaluation dataset
+- Run initial retrieval evaluation to establish baselines
+- Run A/B test comparing embedding models
+- Configure OTLP exporter (Jaeger / Grafana Tempo)
+- Configure log aggregation (ELK / Loki)
+- Manual API testing with real data
 
-See `../cheap-planning/TODO_PHASE_1.md` for detailed status and remaining tasks.
 
 ## Quick Reference
 
@@ -360,13 +377,16 @@ cheap-rag/
 ├── src/                    # Source code
 │   ├── extractors/         # Metadata extraction
 │   ├── embeddings/         # Embedding generation
-│   ├── vectorstore/        # Vector storage (ChromaDB, FAISS)
+│   ├── vectorstore/        # Vector storage (ChromaDB)
 │   ├── retrieval/          # Semantic search
 │   ├── generation/         # LLM answer generation
 │   ├── api/                # FastAPI endpoints
 │   ├── indexing/           # Pipeline and schema
+│   ├── observability/      # Tracing, logging, metrics, error tracking
+│   ├── evaluation/         # Retrieval metrics, gold dataset, reporting
+│   ├── ab_testing/         # A/B testing framework
 │   └── config.py           # Configuration loading
-├── tests/                  # Test suite
+├── tests/                  # Test suite (324 tests)
 ├── config/                 # YAML configuration profiles
 ├── scripts/                # Utility scripts
 ├── noxfile.py             # Task automation
