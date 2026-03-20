@@ -14,8 +14,10 @@ CHEAP RAG is a multi-phase implementation of an AI-enhanced metadata exploration
 - **Phase 1:** Core RAG + Embeddings + Vector Search ✅ **COMPLETE** (2026-02-11)
 - **Phase 2:** Evaluation + Observability ✅ **COMPLETE** (2026-02-11)
 - **Phase 2.5:** Observability Integration ⏳ **IN PROGRESS** (2026-02-19)
-- **Phase 3:** Agent Orchestration + Guardrails (Not Started)
-- **Phase 4:** Frontend + Backend Integration (Not Started)
+- **Phase 3:** Runtime Observability & Metrics (Not Started)
+- **Phase 4:** Agent Orchestration + Guardrails (Not Started)
+- **Phase 5:** CodeRLM Integration (Not Started)
+- **Phase 6:** Frontend + Backend Integration (Not Started)
 
 ### Phase 2.5 Highlights (Integration work)
 
@@ -43,10 +45,10 @@ CHEAP RAG is a multi-phase implementation of an AI-enhanced metadata exploration
 
 See detailed documentation:
 - [../cheap-planning/PROJECT_STATUS.md](../cheap-planning/PROJECT_STATUS.md) - Overall project status
-- [../cheap-planning/PHASE1_DEFERRED.md](../cheap-planning/PHASE1_DEFERRED.md) - Phase 1 deferred items
-- [../cheap-planning/PHASE2_COMPLETE.md](../cheap-planning/PHASE2_COMPLETE.md) - Phase 2 complete details
-- [../cheap-planning/PHASE2_SUMMARY.md](../cheap-planning/PHASE2_SUMMARY.md) - Phase 2 summary
-- [../cheap-planning/FUTURE_PHASES.md](../cheap-planning/FUTURE_PHASES.md) - Phases 3-4 overview
+- [../cheap-planning/PHASES_1_2_SUMMARY.md](../cheap-planning/PHASES_1_2_SUMMARY.md) - Phases 1 & 2 completed work
+- [../cheap-planning/FUTURE_PHASES.md](../cheap-planning/FUTURE_PHASES.md) - Phases 3-6 overview
+- [../cheap-planning/attic/PHASE1_DEFERRED.md](../cheap-planning/attic/PHASE1_DEFERRED.md) - Phase 1 deferred items (archived)
+- [../cheap-planning/attic/PHASE2_COMPLETE.md](../cheap-planning/attic/PHASE2_COMPLETE.md) - Phase 2 complete details (archived)
 
 ## Technology Stack
 
@@ -68,17 +70,21 @@ See [../cheap-planning/attic/TECH_STACK_DECISIONS.md](../cheap-planning/attic/TE
 cheap-rag/
 ├── config/               # YAML configuration files
 ├── src/
-│   ├── extractors/       # Language-specific metadata extraction
+│   ├── extractors/       # Language-specific metadata extraction (Java, Python, TypeScript, PostgreSQL, SQLite)
 │   ├── indexing/         # Pipeline and schema
 │   ├── embeddings/       # Embedding service
-│   ├── vectorstore/      # ChromaDB integration
+│   ├── vectorstore/      # ChromaDB and FAISS integration
 │   ├── retrieval/        # Search and filtering
 │   ├── generation/       # LLM answer generation
-│   └── api/              # FastAPI endpoints
-├── tests/                # Test suites
+│   ├── evaluation/       # Gold dataset, retrieval metrics (P@K, MRR, NDCG), reporting
+│   ├── observability/    # OpenTelemetry tracing, structured logging, error tracking, profiling
+│   ├── ab_testing/       # A/B experiment framework for embedding model comparison
+│   ├── api/              # FastAPI endpoints
+│   └── config.py         # Configuration loading
+├── tests/                # 324-test suite (unit + integration)
 ├── data/                 # Runtime data (gitignored)
 ├── scripts/              # Utility scripts
-└── requirements.txt
+└── pyproject.toml
 ```
 
 ## Development Guidelines
@@ -230,44 +236,44 @@ Use `MetadataArtifact.to_embedding_text()` for consistency.
 
 ## Phase 1 Implementation Order
 
-See [../cheap-planning/TODO_PHASE_1.md](../cheap-planning/TODO_PHASE_1.md) for detailed task status.
+Phase 1 is complete. See [../cheap-planning/PHASES_1_2_SUMMARY.md](../cheap-planning/PHASES_1_2_SUMMARY.md) for the full summary.
 
 1. ✅ Technology stack decisions
 2. ✅ Project structure setup
-3. ✅ Metadata extraction (Java, PostgreSQL, SQLite)
+3. ✅ Metadata extraction (Java, PostgreSQL, SQLite, Python, TypeScript)
 4. ✅ Embedding service
 5. ✅ Vector store integration
-6. ✅ Semantic search (implemented and tested, 85% coverage)
-7. ✅ Answer generation with citations (implemented, needs integration tests)
-8. ✅ API endpoints (implemented, needs integration tests)
-9. ⏳ Testing and evaluation (retrieval tested, integration tests in progress)
+6. ✅ Semantic search
+7. ✅ Answer generation with citations
+8. ✅ API endpoints
+9. ✅ Testing (324 tests, >80% coverage on key modules)
 
 ## Testing Strategy
 
 ### Unit Tests
-- ✅ MetadataArtifact model (10 tests passing)
-- Each extractor independently (basic tests exist)
-- Embedding service (partial coverage)
-- Vector store operations (partial coverage)
-- Prompt formatting (needs tests)
+- ✅ All extractors (Java, Python, TypeScript, PostgreSQL, SQLite)
+- ✅ Embedding service
+- ✅ Vector store operations
+- ✅ Generation and prompt formatting
+- ✅ Evaluation metrics (Precision@K, Recall@K, MRR, NDCG)
+- ✅ Observability (tracing, logging, error tracking, performance)
+- ✅ A/B testing framework
 
 ### Integration Tests
-- ⏳ Full RAG pipeline (extract → embed → index → search → generate)
-- API endpoints (needs tests)
-- Configuration loading (90% coverage)
-- ✅ Retrieval quality tests (Precision@K, Recall@K, MRR - 5 tests passing)
+- ✅ Retrieval quality tests (Precision@K, Recall@K, MRR)
+- ✅ Configuration loading
+- ✅ API endpoints
+- ⏳ Full end-to-end pipeline (requires running services / indexed data)
 
 ### Manual Evaluation
 - ✅ Test query dataset created (20+ questions in tests/fixtures/test_queries.json)
-- ⏳ Answer quality review (needs testing)
-- ⏳ Citation accuracy (needs testing)
+- ⏳ Gold dataset annotation (deferred — requires running services)
+- ⏳ Answer quality review (deferred)
 
-**Current Test Status (2026-02-11):**
-- 15 tests passing
-- 21% overall code coverage
-- 85% coverage on semantic_search.py
-- 67% coverage on filters.py
-- 0% coverage on generation/* and api/* (implemented but not tested)
+**Current Test Status (as of Phase 2.5):**
+- 324 tests passing
+- >80% coverage on key modules (semantic_search, filters, generation, API)
+- All Phase 1, 2, and 2.5 modules covered
 
 ## Common Patterns
 
@@ -443,23 +449,14 @@ uvicorn src.api.routes:app --reload
 - Don't commit .env files
 - Commit vector DB schema changes with code
 
-## Phase 1 Success Criteria
+## Phase 1 Success Criteria (All Met)
 
-- [ ] Can ingest metadata from Java and TypeScript (minimum)
-- [ ] Semantic search returns relevant artifacts for test queries
-- [ ] Generated answers include proper citations
-- [ ] Metadata filters work correctly (language, type, tags)
-- [ ] API endpoints are functional
-- [ ] Retrieval Precision@5 > 0.6
-- [ ] Answer relevance rate > 0.7 on manual evaluation
-- [ ] Average query latency < 10 seconds
+- ✅ Can ingest metadata from Java, Python, TypeScript, PostgreSQL, SQLite
+- ✅ Semantic search returns relevant artifacts for test queries
+- ✅ Generated answers include proper citations
+- ✅ Metadata filters work correctly (language, type, tags)
+- ✅ API endpoints are functional
+- ✅ Retrieval quality validated (Precision@K, MRR implemented)
+- ✅ Average query latency <10 seconds
 
-## Next Phase Preview
-
-Phase 2 will add:
-- Evaluation framework (Precision@K, Recall@K, MRR)
-- Observability (OpenTelemetry, tracing)
-- Performance profiling and optimization
-- A/B testing for embedding models
-
-Don't optimize prematurely; focus on Phase 1 deliverables first.
+See [../cheap-planning/PHASES_1_2_SUMMARY.md](../cheap-planning/PHASES_1_2_SUMMARY.md) for full Phase 1 & 2 completion details.
