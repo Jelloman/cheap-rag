@@ -1,4 +1,4 @@
-"""Test Odoo PostgreSQL database connection."""
+"""Test Pagila PostgreSQL database connection."""
 
 import os
 import sys
@@ -14,28 +14,28 @@ from src.extractors.postgres_extractor import PostgresExtractor
 load_dotenv()
 
 def test_connection():
-    """Test connection to Odoo database."""
+    """Test connection to Pagila database."""
     extractor = PostgresExtractor()
 
     # Get password from environment
-    password = os.getenv("ODOO_DB_PASSWORD")
+    password = os.getenv("PAGILA_DB_PASSWORD")
     if not password:
-        print("[ERROR] ODOO_DB_PASSWORD not found in environment")
-        print("   Make sure .env file exists and contains ODOO_DB_PASSWORD")
+        print("[ERROR] PAGILA_DB_PASSWORD not found in environment")
+        print("   Make sure .env file exists and contains PAGILA_DB_PASSWORD")
         return False
 
     print("=" * 80)
-    print("Testing Odoo PostgreSQL Connection")
+    print("Testing Pagila PostgreSQL Connection")
     print("=" * 80)
 
     try:
-        # Connect to Odoo database
+        # Connect to Pagila database
         print("\n1. Connecting to database...")
         extractor.connect({
             "host": "localhost",
             "port": 5432,
-            "database": "odoo",
-            "user": "odoo",
+            "database": "postgres",
+            "user": "postgres",
             "password": password
         })
 
@@ -46,20 +46,19 @@ def test_connection():
         tables = extractor.inspector.get_table_names(schema="public")
         print(f"   [OK] Found {len(tables)} tables in 'public' schema")
 
-        # Show eCommerce-related tables
-        print("\n3. eCommerce-related tables:")
-        ecommerce_tables = [
-            "sale_order", "sale_order_line", "sale_order_template",
-            "product_product", "product_template", "product_category",
-            "stock_picking", "stock_move", "stock_location",
-            "res_partner", "res_partner_category",
-            "account_move", "account_move_line"
+        # Show expected Pagila core tables
+        print("\n3. Core Pagila tables:")
+        core_tables = [
+            "actor", "film", "film_actor", "film_category",
+            "category", "language", "customer", "address",
+            "city", "country", "inventory", "rental",
+            "payment", "staff", "store"
         ]
 
         found_tables = []
         missing_tables = []
 
-        for table in ecommerce_tables:
+        for table in core_tables:
             if table in tables:
                 found_tables.append(table)
                 print(f"   [OK] {table}")
@@ -67,23 +66,20 @@ def test_connection():
                 missing_tables.append(table)
 
         if missing_tables:
-            print(f"\n4. Tables not found (may not be in Odoo installation):")
+            print(f"\n4. Tables not found:")
             for table in missing_tables:
                 print(f"   [MISSING] {table}")
 
-        # Show sample of all tables
-        print(f"\n5. Sample of all available tables (first 20):")
-        for table in sorted(tables)[:20]:
+        # Show all tables
+        print(f"\n5. All available tables:")
+        for table in sorted(tables):
             print(f"   - {table}")
-
-        if len(tables) > 20:
-            print(f"   ... and {len(tables) - 20} more")
 
         # Disconnect
         extractor.disconnect()
         print("\n" + "=" * 80)
         print(f"Connection test successful!")
-        print(f"Ready to extract from {len(found_tables)} eCommerce tables")
+        print(f"Ready to extract from {len(found_tables)} core tables")
         print("=" * 80)
 
         return True
@@ -91,11 +87,10 @@ def test_connection():
     except Exception as e:
         print(f"\n[ERROR] Connection failed: {e}")
         print("\nTroubleshooting:")
-        print("1. Verify Odoo is running: systemctl status odoo (Linux) or check services")
-        print("2. Verify PostgreSQL is running: systemctl status postgresql")
-        print("3. Check database exists: psql -l | grep odoo")
-        print("4. Test manual connection: psql -h localhost -U odoo -d odoo")
-        print("5. Verify password in .env matches database password")
+        print("1. Verify Pagila Docker container is running: docker ps | grep pagila")
+        print("2. Check port 5432 is accessible: docker port pagila")
+        print("3. Verify password in .env matches docker-compose.yml")
+        print("4. Test manual connection: psql -h localhost -U postgres -d postgres")
         return False
 
 
