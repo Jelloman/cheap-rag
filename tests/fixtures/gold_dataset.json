@@ -1,0 +1,996 @@
+{
+  "description": "Gold dataset for CHEAP RAG evaluation (Pagila database, auto-generated, needs review)",
+  "version": "2.0",
+  "metadata": {
+    "generated_from": "D:\\src\\claude\\cheap-rag\\tests\\fixtures\\test_queries.json",
+    "top_k": 10,
+    "requires_manual_review": true,
+    "database": "pagila"
+  },
+  "queries": [
+    {
+      "id": "entity_001",
+      "category": "entity_lookup",
+      "query": "What is the film table?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_e5f19fb863d1fa62",
+        "pg_column_bc27f24fe2fd21d7",
+        "pg_table_27a130f53257a313",
+        "pg_index_595f8d938fa1c47c",
+        "pg_column_5c9884461ff957e9"
+      ],
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film table"
+        ],
+        "all_candidates": [
+          "pg_table_e5f19fb863d1fa62",
+          "pg_column_bc27f24fe2fd21d7",
+          "pg_table_27a130f53257a313",
+          "pg_index_595f8d938fa1c47c",
+          "pg_column_5c9884461ff957e9",
+          "pg_table_62b453d1a523600d",
+          "pg_column_98a7f32ec96303ac",
+          "pg_column_56c28104cd13be0f",
+          "pg_column_236e09908013a32d",
+          "pg_column_9cc287d6fc271df8"
+        ],
+        "candidate_scores": [
+          0.8044247031211853,
+          0.7576948404312134,
+          0.7500689923763275,
+          0.7457802891731262,
+          0.7432482242584229,
+          0.7415070533752441,
+          0.739120215177536,
+          0.7389830648899078,
+          0.7368949055671692,
+          0.7293205261230469
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "entity_002",
+      "category": "entity_lookup",
+      "query": "Tell me about the customer table",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_13d9004cb041690a",
+        "pg_column_0497b7182f24789d",
+        "pg_column_56510315972d27f3",
+        "pg_column_70a23b337164ba23",
+        "pg_column_c1dd05051c0f7c37"
+      ],
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "customer table"
+        ],
+        "all_candidates": [
+          "pg_table_13d9004cb041690a",
+          "pg_column_0497b7182f24789d",
+          "pg_column_56510315972d27f3",
+          "pg_column_70a23b337164ba23",
+          "pg_column_c1dd05051c0f7c37",
+          "pg_table_a44bc3185418eae9",
+          "pg_column_02a08afe2f1a6a3a",
+          "pg_table_7c76cbb31743ce50",
+          "pg_relationship_01e0b93385dbbebb",
+          "pg_column_68ef72bea609537c"
+        ],
+        "candidate_scores": [
+          0.8181231617927551,
+          0.7602440118789673,
+          0.7387787997722626,
+          0.7334202229976654,
+          0.7293352484703064,
+          0.7286365330219269,
+          0.7275338768959045,
+          0.7271815538406372,
+          0.7235998213291168,
+          0.7213970422744751
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "constraint_001",
+      "category": "constraint_query",
+      "query": "What columns are in the film table?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_e5f19fb863d1fa62",
+        "pg_column_bc27f24fe2fd21d7",
+        "pg_column_5c9884461ff957e9",
+        "pg_column_9cc287d6fc271df8",
+        "pg_column_98a7f32ec96303ac"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film columns"
+        ],
+        "all_candidates": [
+          "pg_table_e5f19fb863d1fa62",
+          "pg_column_bc27f24fe2fd21d7",
+          "pg_column_5c9884461ff957e9",
+          "pg_column_9cc287d6fc271df8",
+          "pg_column_98a7f32ec96303ac",
+          "pg_column_56c28104cd13be0f",
+          "pg_column_236e09908013a32d",
+          "pg_table_27a130f53257a313",
+          "pg_index_595f8d938fa1c47c",
+          "pg_table_62b453d1a523600d"
+        ],
+        "candidate_scores": [
+          0.7899112105369568,
+          0.7698056995868683,
+          0.7669323980808258,
+          0.7620997428894043,
+          0.7498713135719299,
+          0.7494135499000549,
+          0.7475384473800659,
+          0.7428959012031555,
+          0.7380024194717407,
+          0.7344900667667389
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "constraint_002",
+      "category": "constraint_query",
+      "query": "What is the data type of the rental_rate column in film?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_column_b619d28e78887a12",
+        "pg_table_e5f19fb863d1fa62",
+        "pg_table_a2de30f831562c03",
+        "pg_column_9cc287d6fc271df8",
+        "pg_column_f720f61684d2ad03"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film.rental_rate column"
+        ],
+        "all_candidates": [
+          "pg_column_b619d28e78887a12",
+          "pg_table_e5f19fb863d1fa62",
+          "pg_table_a2de30f831562c03",
+          "pg_column_9cc287d6fc271df8",
+          "pg_column_f720f61684d2ad03",
+          "pg_table_27a130f53257a313",
+          "pg_column_236e09908013a32d",
+          "pg_column_98a7f32ec96303ac",
+          "pg_column_5c9884461ff957e9",
+          "pg_table_62b453d1a523600d"
+        ],
+        "candidate_scores": [
+          0.8005448281764984,
+          0.784647524356842,
+          0.7802556157112122,
+          0.7739439606666565,
+          0.7586606740951538,
+          0.748662680387497,
+          0.7430481910705566,
+          0.7417882084846497,
+          0.7382144033908844,
+          0.736915647983551
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "constraint_003",
+      "category": "constraint_query",
+      "query": "Which columns in the rental table are required (not nullable)?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_column_716484d3d6e50ee7",
+        "pg_column_4fa672e7041c4053",
+        "pg_column_b619d28e78887a12",
+        "pg_column_008a013e0fed40d2",
+        "pg_column_f720f61684d2ad03"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental columns with nullable=False"
+        ],
+        "all_candidates": [
+          "pg_column_716484d3d6e50ee7",
+          "pg_column_4fa672e7041c4053",
+          "pg_column_b619d28e78887a12",
+          "pg_column_008a013e0fed40d2",
+          "pg_column_f720f61684d2ad03",
+          "pg_column_8a6311f2de5dd34d",
+          "pg_table_a2de30f831562c03",
+          "pg_column_f5cfc64af20223a1",
+          "pg_column_4de5e041d3601d55",
+          "pg_column_669069b8b18dc6a5"
+        ],
+        "candidate_scores": [
+          0.8349800109863281,
+          0.8134410381317139,
+          0.8076395988464355,
+          0.8073225617408752,
+          0.8046617209911346,
+          0.7938722372055054,
+          0.7931800484657288,
+          0.7819050848484039,
+          0.7780081629753113,
+          0.7696941792964935
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "relationship_001",
+      "category": "relationship_query",
+      "query": "What is the relationship between rental and customer?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_relationship_c890660670ed10f1",
+        "pg_column_8a6311f2de5dd34d",
+        "pg_table_a2de30f831562c03",
+        "pg_table_13d9004cb041690a",
+        "pg_column_716484d3d6e50ee7"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental.customer_id foreign key",
+          "customer table"
+        ],
+        "all_candidates": [
+          "pg_relationship_c890660670ed10f1",
+          "pg_column_8a6311f2de5dd34d",
+          "pg_table_a2de30f831562c03",
+          "pg_table_13d9004cb041690a",
+          "pg_column_716484d3d6e50ee7",
+          "pg_column_4fa672e7041c4053",
+          "pg_column_b619d28e78887a12",
+          "pg_relationship_d9e30bb9e6e84de3",
+          "pg_relationship_6e9629f015a69ade",
+          "pg_column_008a013e0fed40d2"
+        ],
+        "candidate_scores": [
+          0.7675940692424774,
+          0.7624757289886475,
+          0.7442463934421539,
+          0.7164669036865234,
+          0.7158352732658386,
+          0.7041033506393433,
+          0.6865922808647156,
+          0.6838937103748322,
+          0.6795836091041565,
+          0.6765589118003845
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "relationship_002",
+      "category": "relationship_query",
+      "query": "What tables have foreign keys to film?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_e5f19fb863d1fa62",
+        "pg_column_f14a06d8682a606d",
+        "pg_relationship_381bc048794daf41",
+        "pg_column_f6ad91f725ccbaa9",
+        "pg_relationship_6dc5b16b2001eaf3"
+      ],
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "relationships to film"
+        ],
+        "all_candidates": [
+          "pg_table_e5f19fb863d1fa62",
+          "pg_column_f14a06d8682a606d",
+          "pg_relationship_381bc048794daf41",
+          "pg_column_f6ad91f725ccbaa9",
+          "pg_relationship_6dc5b16b2001eaf3",
+          "pg_column_8df6409a098a0526",
+          "pg_column_98a7f32ec96303ac",
+          "pg_column_ebd6a2a998a1694c",
+          "pg_relationship_b88c868c78cfff19",
+          "pg_table_27a130f53257a313"
+        ],
+        "candidate_scores": [
+          0.8216140270233154,
+          0.799847275018692,
+          0.7965716421604156,
+          0.7964849174022675,
+          0.7957605123519897,
+          0.7902069091796875,
+          0.7875483632087708,
+          0.7868745028972626,
+          0.7867563366889954,
+          0.786605566740036
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "relationship_003",
+      "category": "relationship_query",
+      "query": "How are rentals linked to customers?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_relationship_c890660670ed10f1",
+        "pg_table_a2de30f831562c03",
+        "pg_column_8a6311f2de5dd34d",
+        "pg_column_716484d3d6e50ee7",
+        "pg_table_13d9004cb041690a"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental table",
+          "customer_id foreign key",
+          "customer table"
+        ],
+        "all_candidates": [
+          "pg_relationship_c890660670ed10f1",
+          "pg_table_a2de30f831562c03",
+          "pg_column_8a6311f2de5dd34d",
+          "pg_column_716484d3d6e50ee7",
+          "pg_table_13d9004cb041690a",
+          "pg_relationship_6e9629f015a69ade",
+          "pg_column_4fa672e7041c4053",
+          "pg_relationship_1e7ee1468c84919e",
+          "pg_relationship_d9e30bb9e6e84de3",
+          "pg_column_b619d28e78887a12"
+        ],
+        "candidate_scores": [
+          0.7459754049777985,
+          0.7445284724235535,
+          0.7270805239677429,
+          0.7039705514907837,
+          0.6858325898647308,
+          0.6803874969482422,
+          0.6739049851894379,
+          0.6670154333114624,
+          0.6657860279083252,
+          0.6630476117134094
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "cross_001",
+      "category": "cross_entity",
+      "query": "What information is stored about films and actors?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_e5f19fb863d1fa62",
+        "pg_table_27a130f53257a313",
+        "pg_column_f14a06d8682a606d",
+        "pg_table_62b453d1a523600d",
+        "pg_column_98a7f32ec96303ac"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film table",
+          "actor table",
+          "film_actor table"
+        ],
+        "all_candidates": [
+          "pg_table_e5f19fb863d1fa62",
+          "pg_table_27a130f53257a313",
+          "pg_column_f14a06d8682a606d",
+          "pg_table_62b453d1a523600d",
+          "pg_column_98a7f32ec96303ac",
+          "pg_relationship_b88c868c78cfff19",
+          "pg_relationship_6dc5b16b2001eaf3",
+          "pg_relationship_381bc048794daf41",
+          "pg_column_f6ad91f725ccbaa9",
+          "pg_relationship_a06e2c24cf1da308"
+        ],
+        "candidate_scores": [
+          0.7209400236606598,
+          0.6983116865158081,
+          0.6759874820709229,
+          0.6699391007423401,
+          0.6690976917743683,
+          0.6685993373394012,
+          0.6682648956775665,
+          0.6680987179279327,
+          0.665268063545227,
+          0.6649537086486816
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "cross_002",
+      "category": "cross_entity",
+      "query": "What indexes exist on the rental table?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_a2de30f831562c03",
+        "pg_index_406b8ab206c4cfd1",
+        "pg_index_24cf894771093a5d",
+        "pg_column_716484d3d6e50ee7",
+        "pg_column_b619d28e78887a12"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental indexes"
+        ],
+        "all_candidates": [
+          "pg_table_a2de30f831562c03",
+          "pg_index_406b8ab206c4cfd1",
+          "pg_index_24cf894771093a5d",
+          "pg_column_716484d3d6e50ee7",
+          "pg_column_b619d28e78887a12",
+          "pg_column_f720f61684d2ad03",
+          "pg_index_c484197446857311",
+          "pg_index_595f8d938fa1c47c",
+          "pg_table_0dd32e57eff261c4",
+          "pg_index_3a6447ba3ff156c6"
+        ],
+        "candidate_scores": [
+          0.8172634840011597,
+          0.7953721880912781,
+          0.7826421856880188,
+          0.769848495721817,
+          0.7411800622940063,
+          0.7369865775108337,
+          0.7352801263332367,
+          0.7326004505157471,
+          0.7295699715614319,
+          0.7286913394927979
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "schema_001",
+      "category": "schema_exploration",
+      "query": "What tables are in the public schema?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_f195d08ca1229d82",
+        "pg_table_69ef272f10ed5c5f",
+        "pg_table_ab969cd77dd2e0a4",
+        "pg_table_13d9004cb041690a",
+        "pg_table_d5710663729b3430"
+      ],
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "public schema tables"
+        ],
+        "all_candidates": [
+          "pg_table_f195d08ca1229d82",
+          "pg_table_69ef272f10ed5c5f",
+          "pg_table_ab969cd77dd2e0a4",
+          "pg_table_13d9004cb041690a",
+          "pg_table_d5710663729b3430",
+          "pg_table_a44bc3185418eae9",
+          "pg_table_0dd32e57eff261c4",
+          "pg_table_7b5a5ca66500bd78",
+          "pg_table_efa617532130eb82",
+          "pg_table_7c76cbb31743ce50"
+        ],
+        "candidate_scores": [
+          0.7614750862121582,
+          0.753155916929245,
+          0.7434304356575012,
+          0.7347036004066467,
+          0.7330053150653839,
+          0.7287960052490234,
+          0.7166057825088501,
+          0.714408814907074,
+          0.7134355902671814,
+          0.710192084312439
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "schema_002",
+      "category": "schema_exploration",
+      "query": "What are the main entities in the Pagila database?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_a44bc3185418eae9",
+        "pg_table_f195d08ca1229d82",
+        "pg_table_7b5a5ca66500bd78",
+        "pg_table_d5710663729b3430",
+        "pg_table_0dd32e57eff261c4"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "tables: film, customer, rental, actor, etc."
+        ],
+        "all_candidates": [
+          "pg_table_a44bc3185418eae9",
+          "pg_table_f195d08ca1229d82",
+          "pg_table_7b5a5ca66500bd78",
+          "pg_table_d5710663729b3430",
+          "pg_table_0dd32e57eff261c4",
+          "pg_table_7c76cbb31743ce50",
+          "pg_table_13d9004cb041690a",
+          "pg_table_ab969cd77dd2e0a4",
+          "pg_table_69ef272f10ed5c5f",
+          "pg_table_efa617532130eb82"
+        ],
+        "candidate_scores": [
+          0.7003708481788635,
+          0.6991552710533142,
+          0.6977798938751221,
+          0.6941866874694824,
+          0.6910783648490906,
+          0.6906555891036987,
+          0.6807346343994141,
+          0.6778233647346497,
+          0.6744268536567688,
+          0.6597312986850739
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "schema_003",
+      "category": "schema_exploration",
+      "query": "Tell me about the inventory-related tables",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_0dd32e57eff261c4",
+        "pg_column_62681d3629f3ff53",
+        "pg_relationship_233f9aeeb2c3a696",
+        "pg_relationship_1e7ee1468c84919e",
+        "pg_column_11ccf3a8de4557b4"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "inventory, store, film tables"
+        ],
+        "all_candidates": [
+          "pg_table_0dd32e57eff261c4",
+          "pg_column_62681d3629f3ff53",
+          "pg_relationship_233f9aeeb2c3a696",
+          "pg_relationship_1e7ee1468c84919e",
+          "pg_column_11ccf3a8de4557b4",
+          "pg_relationship_bae8120114ec01fa",
+          "pg_column_fe4e7b8c2e49b0da",
+          "pg_index_24cf894771093a5d",
+          "pg_column_715e2bf119239996",
+          "pg_column_442132eb49297bd2"
+        ],
+        "candidate_scores": [
+          0.8446696698665619,
+          0.7975806891918182,
+          0.7676261365413666,
+          0.7453340888023376,
+          0.7335638701915741,
+          0.7324942946434021,
+          0.7312934398651123,
+          0.7267778515815735,
+          0.725748211145401,
+          0.7041976153850555
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_001",
+      "category": "entity_lookup",
+      "query": "What is the Catalog interface in CHEAP?",
+      "language": "java",
+      "relevant_artifact_ids": [],
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "Catalog interface"
+        ],
+        "all_candidates": [],
+        "candidate_scores": [],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_002",
+      "category": "constraint_query",
+      "query": "What fields does the Entity class have?",
+      "language": "java",
+      "relevant_artifact_ids": [],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "Entity class fields"
+        ],
+        "all_candidates": [],
+        "candidate_scores": [],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "multi_001",
+      "category": "multi_language",
+      "query": "What metadata entities exist across all languages?",
+      "language": "multi",
+      "relevant_artifact_ids": [
+        "pg_table_d5710663729b3430",
+        "pg_column_7d5ca802b6c9f58e",
+        "pg_relationship_6dc5b16b2001eaf3",
+        "pg_relationship_381bc048794daf41",
+        "pg_table_f195d08ca1229d82"
+      ],
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "tables, classes, interfaces from multiple languages"
+        ],
+        "all_candidates": [
+          "pg_table_d5710663729b3430",
+          "pg_column_7d5ca802b6c9f58e",
+          "pg_relationship_6dc5b16b2001eaf3",
+          "pg_relationship_381bc048794daf41",
+          "pg_table_f195d08ca1229d82",
+          "pg_column_ebd6a2a998a1694c",
+          "pg_column_87d4a66899dd1dab",
+          "pg_table_a0c6a0dc1f573fb8",
+          "pg_table_ab969cd77dd2e0a4",
+          "pg_column_8df6409a098a0526"
+        ],
+        "candidate_scores": [
+          0.699810802936554,
+          0.6486160159111023,
+          0.639047235250473,
+          0.6380464434623718,
+          0.6377754807472229,
+          0.6251586377620697,
+          0.6187417209148407,
+          0.6176376044750214,
+          0.6175681054592133,
+          0.6165089905261993
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "constraint_004",
+      "category": "constraint_query",
+      "query": "What are the primary keys in the database?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_column_a27c154e036188a1",
+        "pg_column_c389ad063eeda406",
+        "pg_column_8fc8b4d9834f25f2",
+        "pg_column_7d5ca802b6c9f58e",
+        "pg_column_5ea8efcadc044579"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "columns with primary_key=True"
+        ],
+        "all_candidates": [
+          "pg_column_a27c154e036188a1",
+          "pg_column_c389ad063eeda406",
+          "pg_column_8fc8b4d9834f25f2",
+          "pg_column_7d5ca802b6c9f58e",
+          "pg_column_5ea8efcadc044579",
+          "pg_column_0497b7182f24789d",
+          "pg_column_62681d3629f3ff53",
+          "pg_relationship_01e0b93385dbbebb",
+          "pg_column_577bc4d36b19f798",
+          "pg_column_21617a5e95e4528a"
+        ],
+        "candidate_scores": [
+          0.733786940574646,
+          0.7236311733722687,
+          0.7191912233829498,
+          0.7165753841400146,
+          0.7160576581954956,
+          0.7158486247062683,
+          0.7100529968738556,
+          0.705707311630249,
+          0.7050937712192535,
+          0.7018251121044159
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "relationship_004",
+      "category": "relationship_query",
+      "query": "Show me all foreign key relationships",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_relationship_a06e2c24cf1da308",
+        "pg_relationship_d39277b7a16d53f1",
+        "pg_relationship_381bc048794daf41",
+        "pg_relationship_6dc5b16b2001eaf3",
+        "pg_relationship_b88c868c78cfff19"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "relationship artifacts"
+        ],
+        "all_candidates": [
+          "pg_relationship_a06e2c24cf1da308",
+          "pg_relationship_d39277b7a16d53f1",
+          "pg_relationship_381bc048794daf41",
+          "pg_relationship_6dc5b16b2001eaf3",
+          "pg_relationship_b88c868c78cfff19",
+          "pg_relationship_881d1d07707c9cee",
+          "pg_relationship_01e0b93385dbbebb",
+          "pg_relationship_d8adfd576257c17b",
+          "pg_relationship_c890660670ed10f1",
+          "pg_relationship_6e9629f015a69ade"
+        ],
+        "candidate_scores": [
+          0.7690776288509369,
+          0.7612105309963226,
+          0.7528982162475586,
+          0.7517429292201996,
+          0.7502550184726715,
+          0.7484984695911407,
+          0.7387878894805908,
+          0.73792964220047,
+          0.7353362143039703,
+          0.7329291105270386
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "entity_003",
+      "category": "entity_lookup",
+      "query": "What is the actor table used for?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_7b5a5ca66500bd78",
+        "pg_column_5ea8efcadc044579",
+        "pg_column_efbc8a76c9b06c61",
+        "pg_column_082b95d50c3e2a4d",
+        "pg_table_27a130f53257a313"
+      ],
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "actor table"
+        ],
+        "all_candidates": [
+          "pg_table_7b5a5ca66500bd78",
+          "pg_column_5ea8efcadc044579",
+          "pg_column_efbc8a76c9b06c61",
+          "pg_column_082b95d50c3e2a4d",
+          "pg_table_27a130f53257a313",
+          "pg_index_474c80d5be40e0f9",
+          "pg_column_64f0260f1689fc23",
+          "pg_table_e5f19fb863d1fa62",
+          "pg_table_a44bc3185418eae9",
+          "pg_column_f14a06d8682a606d"
+        ],
+        "candidate_scores": [
+          0.7979573011398315,
+          0.7444747984409332,
+          0.7238350212574005,
+          0.7216626703739166,
+          0.7195482850074768,
+          0.7122467160224915,
+          0.7076408267021179,
+          0.6992186009883881,
+          0.6951268315315247,
+          0.681950569152832
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "constraint_005",
+      "category": "constraint_query",
+      "query": "What columns in the customer table store email addresses?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_column_4cdea9dcf357c1f9",
+        "pg_column_1fdb0d71655c15cc",
+        "pg_relationship_01e0b93385dbbebb",
+        "pg_index_08d0a0c0f724765d",
+        "pg_column_5fc2b7332b51f2ef"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "customer.email column"
+        ],
+        "all_candidates": [
+          "pg_column_4cdea9dcf357c1f9",
+          "pg_column_1fdb0d71655c15cc",
+          "pg_relationship_01e0b93385dbbebb",
+          "pg_index_08d0a0c0f724765d",
+          "pg_column_5fc2b7332b51f2ef",
+          "pg_column_a27c154e036188a1",
+          "pg_table_13d9004cb041690a",
+          "pg_column_68ef72bea609537c",
+          "pg_column_0497b7182f24789d",
+          "pg_column_63715e957f19427f"
+        ],
+        "candidate_scores": [
+          0.8015267252922058,
+          0.7634826004505157,
+          0.7460529506206512,
+          0.7204473912715912,
+          0.7114740312099457,
+          0.7097756862640381,
+          0.7090293169021606,
+          0.7087596356868744,
+          0.7041482329368591,
+          0.7020289301872253
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "schema_004",
+      "category": "schema_exploration",
+      "query": "What are the most important tables for tracking rentals?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_a2de30f831562c03",
+        "pg_column_716484d3d6e50ee7",
+        "pg_column_b619d28e78887a12",
+        "pg_column_f5cfc64af20223a1",
+        "pg_column_008a013e0fed40d2"
+      ],
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental, customer, inventory, payment"
+        ],
+        "all_candidates": [
+          "pg_table_a2de30f831562c03",
+          "pg_column_716484d3d6e50ee7",
+          "pg_column_b619d28e78887a12",
+          "pg_column_f5cfc64af20223a1",
+          "pg_column_008a013e0fed40d2",
+          "pg_column_4fa672e7041c4053",
+          "pg_column_f720f61684d2ad03",
+          "pg_table_e5f19fb863d1fa62",
+          "pg_relationship_c890660670ed10f1",
+          "pg_table_7c76cbb31743ce50"
+        ],
+        "candidate_scores": [
+          0.7839495837688446,
+          0.7213679850101471,
+          0.710180252790451,
+          0.7060981392860413,
+          0.7030640840530396,
+          0.7011410593986511,
+          0.6992798447608948,
+          0.6986311078071594,
+          0.6985696256160736,
+          0.6959863603115082
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "cross_003",
+      "category": "cross_entity",
+      "query": "How is payment information stored in the database?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_table_7c76cbb31743ce50",
+        "pg_column_256ebdd4c3ad9aa9",
+        "pg_column_5ee81dab020338eb",
+        "pg_column_56510315972d27f3",
+        "pg_column_019dd83afb933c6c"
+      ],
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "payment.amount, rental reference"
+        ],
+        "all_candidates": [
+          "pg_table_7c76cbb31743ce50",
+          "pg_column_256ebdd4c3ad9aa9",
+          "pg_column_5ee81dab020338eb",
+          "pg_column_56510315972d27f3",
+          "pg_column_019dd83afb933c6c",
+          "pg_column_0590927b145937b1",
+          "pg_column_4fa672e7041c4053",
+          "pg_table_ab969cd77dd2e0a4",
+          "pg_table_13d9004cb041690a",
+          "pg_relationship_d9e30bb9e6e84de3"
+        ],
+        "candidate_scores": [
+          0.7708771824836731,
+          0.7199227511882782,
+          0.6995903253555298,
+          0.6872360408306122,
+          0.674167662858963,
+          0.666693776845932,
+          0.6464092433452606,
+          0.6452144086360931,
+          0.6370279788970947,
+          0.6206163167953491
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "relationship_005",
+      "category": "relationship_query",
+      "query": "How is the geographic hierarchy structured?",
+      "language": "postgresql",
+      "relevant_artifact_ids": [
+        "pg_relationship_881d1d07707c9cee",
+        "pg_relationship_772e38f6cc4cf68c",
+        "pg_table_a0c6a0dc1f573fb8",
+        "pg_table_efa617532130eb82",
+        "pg_relationship_2cd32ea9a0a30887"
+      ],
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "address, city, country tables and their foreign keys"
+        ],
+        "all_candidates": [
+          "pg_relationship_881d1d07707c9cee",
+          "pg_relationship_772e38f6cc4cf68c",
+          "pg_table_a0c6a0dc1f573fb8",
+          "pg_table_efa617532130eb82",
+          "pg_relationship_2cd32ea9a0a30887",
+          "pg_index_f4346cef243d4757",
+          "pg_relationship_d9e30bb9e6e84de3",
+          "pg_table_f195d08ca1229d82",
+          "pg_relationship_01e0b93385dbbebb",
+          "pg_column_da7c809a8d91438f"
+        ],
+        "candidate_scores": [
+          0.6410577297210693,
+          0.6393480896949768,
+          0.6236510872840881,
+          0.6079486310482025,
+          0.6076436638832092,
+          0.6026256084442139,
+          0.5995694994926453,
+          0.5988706350326538,
+          0.5983885824680328,
+          0.5967780649662018
+        ],
+        "requires_manual_review": true
+      }
+    }
+  ]
+}
