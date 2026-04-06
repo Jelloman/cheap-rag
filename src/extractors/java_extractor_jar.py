@@ -25,7 +25,15 @@ from src.extractors.base import MetadataArtifact
 logger = logging.getLogger(__name__)
 
 # Default JAR location relative to cheap-rag project root
-_DEFAULT_JAR = Path(__file__).parent.parent.parent / ".." / "cheap" / "cheap-rag" / "build" / "libs" / "cheap-rag-0.1.jar"
+_DEFAULT_JAR = (
+    Path(__file__).parent.parent.parent
+    / ".."
+    / "cheap"
+    / "cheap-rag"
+    / "build"
+    / "libs"
+    / "cheap-rag-0.1.jar"
+)
 
 
 class JavaExtractorJar:
@@ -82,14 +90,17 @@ class JavaExtractorJar:
         # Write JSON to a temp file via -o so JAR logging noise on stdout
         # doesn't contaminate the artifact data.
         import tempfile
+
         with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
             tmp_path = Path(tmp.name)
 
         cmd = [
             self.java_executable,
-            "-jar", str(self.jar_path),
+            "-jar",
+            str(self.jar_path),
             str(source_path.resolve()),
-            "-o", str(tmp_path),
+            "-o",
+            str(tmp_path),
         ]
         if self.public_only:
             cmd.append("--public-only")
@@ -124,7 +135,7 @@ class JavaExtractorJar:
         # Core fields
         artifact_id: str = raw["id"]
         name: str = raw["name"]
-        artifact_type: str = raw["type"]            # "class", "interface", "enum", ...
+        artifact_type: str = raw["type"]  # "class", "interface", "enum", ...
         language: str = raw.get("language", "java")
         source_type: str = raw.get("source_type", "code")
         module: str = raw.get("module") or ""

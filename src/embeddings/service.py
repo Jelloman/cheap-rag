@@ -108,9 +108,7 @@ class EmbeddingService:
                 convert_to_numpy=True,
             )
             duration_ms = (time.perf_counter() - start) * 1000
-            record_operation(
-                "embed_texts", duration_ms, {"batch_size": len(texts)}
-            )
+            record_operation("embed_texts", duration_ms, {"batch_size": len(texts)})
             return result
         except Exception as e:
             record_error("embeddings", e, get_correlation_id())

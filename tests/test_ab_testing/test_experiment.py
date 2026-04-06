@@ -30,12 +30,16 @@ def sample_variant_config():
 def sample_experiment_config(tmp_path, sample_variant_config):
     gold_path = tmp_path / "gold.json"
     # Create minimal gold dataset file
-    gold_path.write_text(json.dumps({
-        "description": "Test dataset",
-        "version": "1.0",
-        "metadata": {},
-        "queries": [],
-    }))
+    gold_path.write_text(
+        json.dumps(
+            {
+                "description": "Test dataset",
+                "version": "1.0",
+                "metadata": {},
+                "queries": [],
+            }
+        )
+    )
     return ExperimentConfig(
         name="test_experiment",
         description="Test A/B experiment",
@@ -62,7 +66,9 @@ class TestExperimentConfig:
 
     def test_multiple_variants(self, tmp_path):
         gold_path = tmp_path / "gold.json"
-        gold_path.write_text(json.dumps({"description": "", "version": "1.0", "metadata": {}, "queries": []}))
+        gold_path.write_text(
+            json.dumps({"description": "", "version": "1.0", "metadata": {}, "queries": []})
+        )
         v1 = VariantConfig(name="v1", embedding_model="model1", embedding_dimension=768)
         v2 = VariantConfig(name="v2", embedding_model="model2", embedding_dimension=1024)
         config = ExperimentConfig(
@@ -80,7 +86,9 @@ class TestExperimentConfig:
 
     def test_custom_metadata(self, tmp_path):
         gold_path = tmp_path / "gold.json"
-        gold_path.write_text(json.dumps({"description": "", "version": "1.0", "metadata": {}, "queries": []}))
+        gold_path.write_text(
+            json.dumps({"description": "", "version": "1.0", "metadata": {}, "queries": []})
+        )
         config = ExperimentConfig(
             name="meta_test",
             description="desc",

@@ -103,10 +103,22 @@ class TestPredefinedVariants:
             assert "description" in variant.metadata
 
     def test_variants_are_distinct(self):
-        names = {BASELINE_VARIANT.name, BGE_LARGE_VARIANT.name, BGE_SMALL_VARIANT.name, E5_LARGE_VARIANT.name}
+        names = {
+            BASELINE_VARIANT.name,
+            BGE_LARGE_VARIANT.name,
+            BGE_SMALL_VARIANT.name,
+            E5_LARGE_VARIANT.name,
+        }
         assert len(names) == 4  # All unique names
 
     def test_variant_to_dict_completeness(self):
         d = BASELINE_VARIANT.to_dict()
-        required_keys = {"name", "embedding_model", "embedding_dimension", "top_k", "similarity_threshold", "metadata"}
+        required_keys = {
+            "name",
+            "embedding_model",
+            "embedding_dimension",
+            "top_k",
+            "similarity_threshold",
+            "metadata",
+        }
         assert required_keys.issubset(d.keys())

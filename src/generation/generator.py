@@ -147,9 +147,13 @@ class OllamaProvider:
             return answer.strip()
 
         except requests.exceptions.Timeout:
-            record_error("generation", requests.exceptions.Timeout(
-                f"Ollama request timed out after {self.config.timeout_seconds}s"
-            ), get_correlation_id())
+            record_error(
+                "generation",
+                requests.exceptions.Timeout(
+                    f"Ollama request timed out after {self.config.timeout_seconds}s"
+                ),
+                get_correlation_id(),
+            )
             raise
         except requests.exceptions.RequestException as e:
             record_error("generation", e, get_correlation_id())
@@ -262,7 +266,9 @@ class AnthropicProvider:
                 output_tokens=output_tokens,
             )
             if self.config.track_costs:
-                logger.info("Cost tracking", cost_usd=f"{cost:.4f}", total_usd=f"{self.total_cost_usd:.4f}")
+                logger.info(
+                    "Cost tracking", cost_usd=f"{cost:.4f}", total_usd=f"{self.total_cost_usd:.4f}"
+                )
 
             return answer.strip()  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
 
