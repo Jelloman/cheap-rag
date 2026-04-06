@@ -1,8 +1,10 @@
-"""Java code metadata extractor.
+"""Java code metadata extractor (RETIRED).
 
-Simplified extractor focusing on class and field metadata from CHEAP core interfaces.
-Uses javalang library for pure Python AST parsing.
+This module is retired. Use src.extractors.java_extractor_jar.JavaExtractorJar instead,
+which delegates to the Java-based extractor JAR for full-fidelity JavaParser analysis.
 """
+
+# ruff: noqa
 
 import hashlib
 from pathlib import Path
