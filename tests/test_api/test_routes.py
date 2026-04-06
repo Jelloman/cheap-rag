@@ -118,9 +118,7 @@ class TestQueryEndpoint:
 
         # Mock generator
         mock_generator = Mock()
-        mock_generator.generate_answer.return_value = (
-            "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) stores orders."
-        )
+        mock_generator.generate_answer.return_value = "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) stores orders."
         mock_provider = Mock()
         mock_provider.provider_name.return_value = "ollama:qwen"
         mock_generator.provider = mock_provider

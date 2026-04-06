@@ -90,9 +90,7 @@ class TestOllamaProvider:
     """Tests for Ollama provider."""
 
     @patch("requests.get")
-    def test_ollama_provider_initialization(
-        self, mock_get: Mock, ollama_config: OllamaConfig
-    ):
+    def test_ollama_provider_initialization(self, mock_get: Mock, ollama_config: OllamaConfig):
         """Test Ollama provider initialization."""
         # Mock successful connection check
         mock_response = Mock()
@@ -386,9 +384,7 @@ class TestGenerator:
         assert call_kwargs["temperature"] == 0.5
         assert call_kwargs["max_tokens"] == 512
 
-    def test_generator_handles_provider_errors(
-        self, sample_search_results: list[SearchResult]
-    ):
+    def test_generator_handles_provider_errors(self, sample_search_results: list[SearchResult]):
         """Test that generator propagates provider errors."""
         mock_provider = Mock(spec=LLMProvider)
         mock_provider.generate.side_effect = RuntimeError("Provider error")

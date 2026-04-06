@@ -20,7 +20,7 @@ def temp_typescript_file(tmp_path: Path) -> Path:
     Returns:
         Path to temporary TypeScript file.
     """
-    test_code = dedent('''
+    test_code = dedent("""
         /**
          * A simple interface for testing.
          */
@@ -70,7 +70,7 @@ def temp_typescript_file(tmp_path: Path) -> Path:
         export async function fetchData(url: string): Promise<string> {
             return "data";
         }
-    ''')
+    """)
 
     file_path = tmp_path / "test.ts"
     file_path.write_text(test_code)
@@ -192,7 +192,7 @@ def test_extract_from_directory(tmp_path: Path) -> None:
 
 def test_jsdoc_extraction(tmp_path: Path) -> None:
     """Test JSDoc comment extraction."""
-    code = dedent('''
+    code = dedent("""
         /**
          * This is a multi-line
          * JSDoc comment.
@@ -201,7 +201,7 @@ def test_jsdoc_extraction(tmp_path: Path) -> None:
         export interface MyInterface {
             value: number;
         }
-    ''')
+    """)
 
     file_path = tmp_path / "test.ts"
     file_path.write_text(code)

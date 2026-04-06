@@ -90,8 +90,8 @@ def main():
     )
 
     # Register extractors
-    from src.extractors.java_extractor import JavaExtractor
-    pipeline.register_extractor("java", JavaExtractor())
+    from src.extractors.java_extractor_jar import JavaExtractorJar
+    pipeline.register_extractor("java", JavaExtractorJar())
 
     # Build source list
     sources = config.indexing.source_paths.copy()
@@ -110,7 +110,7 @@ def main():
 
     overall_stats = pipeline.discover_and_index(
         source_paths=sources,
-        extractors_config=config.indexing.extractors,
+        _extractors_config=config.indexing.extractors,
     )
 
     # Print summary

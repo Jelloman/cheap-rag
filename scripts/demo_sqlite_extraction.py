@@ -3,7 +3,7 @@
 This script creates a simple SQLite database with a schema similar to
 a simplified eCommerce system, then extracts metadata using the SQLite extractor.
 
-Run this to verify database extraction works before connecting to Odoo.
+Run this to verify database extraction works before connecting to Pagila.
 """
 
 import json
@@ -202,8 +202,8 @@ def main():
     print("1. Review the extracted metadata in data/metadata/demo_sqlite_metadata.json")
     print("2. Notice how database artifacts (tables, columns, relationships) are")
     print("   represented in the unified MetadataArtifact model")
-    print("3. When Odoo is installed, configure config/local.yaml and extract")
-    print("   metadata from the Odoo PostgreSQL database using PostgresExtractor")
+    print("3. With Pagila running, configure config/local.yaml and extract")
+    print("   metadata from the Pagila PostgreSQL database using PostgresExtractor")
 
 
 if __name__ == "__main__":

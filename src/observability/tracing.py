@@ -13,7 +13,6 @@ from contextlib import contextmanager
 from typing import Any, ParamSpec, TypeVar
 
 from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
@@ -21,6 +20,8 @@ from opentelemetry.sdk.trace.export import (
     ConsoleSpanExporter,
     SimpleSpanProcessor,
 )
+# OTLPSpanExporter is imported lazily in init_tracing() to avoid loading gRPC at import time,
+# which can cause slow startup or hangs on some platforms (especially Windows).
 
 # Type variables for generic decorators
 P = ParamSpec("P")
@@ -71,8 +72,10 @@ def init_tracing(
         console_processor = SimpleSpanProcessor(console_exporter)
         _tracer_provider.add_span_processor(console_processor)
 
-    # Add OTLP exporter for production
+    # Add OTLP exporter for production (lazy import to avoid gRPC loading at startup)
     if enable_otlp and otlp_endpoint:
+        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter  # noqa: PLC0415
+
         otlp_exporter = OTLPSpanExporter(endpoint=otlp_endpoint)
         otlp_processor = BatchSpanProcessor(otlp_exporter)
         _tracer_provider.add_span_processor(otlp_processor)

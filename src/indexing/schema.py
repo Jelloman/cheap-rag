@@ -36,6 +36,7 @@ METADATA_ARTIFACT_SCHEMA: dict[str, Any] = {
                 # Code types
                 "class",
                 "interface",
+                "enum",
                 "field",
                 "method",
                 "function",
@@ -181,6 +182,7 @@ def validate_artifact(artifact: MetadataArtifact) -> tuple[bool, list[str]]:
         "trigger",
         "class",
         "interface",
+        "enum",
         "field",
         "method",
         "function",

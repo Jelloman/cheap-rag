@@ -2,15 +2,22 @@
 
 from __future__ import annotations
 
-import logging
+import time
 from dataclasses import dataclass
 
 from src.embeddings.service import EmbeddingService
 from src.extractors.base import MetadataArtifact
+from src.observability import (
+    StructuredLogger,
+    get_correlation_id,
+    record_error,
+    record_operation,
+    trace_function,
+)
 from src.retrieval.filters import MetadataFilter
 from src.vectorstore.chroma_store import ChromaVectorStore
 
-logger = logging.getLogger(__name__)
+logger = StructuredLogger("cheap_rag.retrieval")
 
 
 @dataclass
@@ -101,10 +108,13 @@ class SemanticSearch:
         self.default_top_k = default_top_k
         self.default_similarity_threshold = default_similarity_threshold
 
-        logger.info("SemanticSearch initialized")
-        logger.info(f"  Default top_k: {default_top_k}")
-        logger.info(f"  Default similarity threshold: {default_similarity_threshold}")
+        logger.info(
+            "SemanticSearch initialized",
+            default_top_k=default_top_k,
+            default_similarity_threshold=default_similarity_threshold,
+        )
 
+    @trace_function("semantic_search")
     def search(
         self,
         query: str,
@@ -123,68 +133,89 @@ class SemanticSearch:
         Returns:
             SearchResults object containing ranked artifacts.
         """
+        start = time.perf_counter()
+
         # Use defaults if not specified
         if top_k is None:
             top_k = self.default_top_k
         if similarity_threshold is None:
             similarity_threshold = self.default_similarity_threshold
 
-        logger.info(f"Searching for: '{query}'")
-        logger.info(f"  top_k={top_k}, threshold={similarity_threshold}")
-        if filters and not filters.is_empty():
-            logger.info(f"  filters={filters.to_dict()}")
-
-        # Generate query embedding
-        logger.debug("Generating query embedding...")
-        query_embedding = self.embedding_service.embed_text(query)
-
-        # Convert filters to ChromaDB format
-        filter_dict = filters.to_dict() if filters else None
-
-        # Search vector store
-        logger.debug("Querying vector store...")
-        ids, metadatas, distances = self.vector_store.search(
-            query_embedding=query_embedding,
+        logger.info(
+            "Searching",
+            query=query,
             top_k=top_k,
-            filters=filter_dict,
+            threshold=similarity_threshold,
         )
+        if filters and not filters.is_empty():
+            logger.debug("Applying filters", filters=str(filters.to_dict()))
 
-        # Convert distances to similarities (cosine distance -> similarity)
-        # ChromaDB returns cosine distance (0 = identical, 2 = opposite)
-        # Convert to similarity: 1 - (distance / 2) gives range [0, 1]
-        similarities = [1.0 - (d / 2.0) for d in distances]
+        try:
+            # Generate query embedding
+            query_embedding = self.embedding_service.embed_text(query)
 
-        # Filter by similarity threshold
-        results = []
-        for i, (artifact_id, metadata, distance, similarity) in enumerate(
-            zip(ids, metadatas, distances, similarities, strict=True)
-        ):
-            if similarity >= similarity_threshold:
-                # Reconstruct MetadataArtifact from metadata
-                artifact = self._metadata_to_artifact(artifact_id, metadata)  # type: ignore[reportUnknownMemberType]
-                result = SearchResult(
-                    artifact=artifact,
-                    similarity=similarity,
-                    distance=distance,
-                    rank=i + 1,
-                )
-                results.append(result)  # type: ignore[reportUnknownMemberType]
+            # Convert filters to ChromaDB format
+            filter_dict = filters.to_dict() if filters else None
 
-        logger.info(f"Found {len(results)} results above threshold {similarity_threshold}")  # type: ignore[reportUnknownArgumentType]
-        if results:
-            logger.info(
-                f"  Top result: {results[0].artifact.name} "  # type: ignore[reportUnknownMemberType]
-                f"(similarity: {results[0].similarity:.3f})"  # type: ignore[reportUnknownMemberType]
+            # Search vector store
+            ids, metadatas, distances = self.vector_store.search(
+                query_embedding=query_embedding,
+                top_k=top_k,
+                filters=filter_dict,
             )
 
-        return SearchResults(
-            query=query,
-            results=results,  # type: ignore[reportUnknownArgumentType]
-            total_results=len(results),  # type: ignore[reportUnknownArgumentType]
-            top_k=top_k,
-            similarity_threshold=similarity_threshold,
-            filters=filters,
-        )
+            # Convert distances to similarities (cosine distance -> similarity)
+            # ChromaDB returns cosine distance (0 = identical, 2 = opposite)
+            # Convert to similarity: 1 - (distance / 2) gives range [0, 1]
+            similarities = [1.0 - (d / 2.0) for d in distances]
+
+            # Filter by similarity threshold
+            results = []
+            for i, (artifact_id, metadata, distance, similarity) in enumerate(
+                zip(ids, metadatas, distances, similarities, strict=True)
+            ):
+                if similarity >= similarity_threshold:
+                    # Reconstruct MetadataArtifact from metadata
+                    artifact = self._metadata_to_artifact(artifact_id, metadata)  # type: ignore[reportUnknownMemberType]
+                    result = SearchResult(
+                        artifact=artifact,
+                        similarity=similarity,
+                        distance=distance,
+                        rank=i + 1,
+                    )
+                    results.append(result)  # type: ignore[reportUnknownMemberType]
+
+            duration_ms = (time.perf_counter() - start) * 1000
+            record_operation(
+                "semantic_search",
+                duration_ms,
+                {"query_length": len(query), "num_results": len(results), "top_k": top_k},  # type: ignore[reportUnknownArgumentType]
+            )
+
+            logger.info(
+                "Search complete",
+                num_results=len(results),  # type: ignore[reportUnknownArgumentType]
+                threshold=similarity_threshold,
+                duration_ms=round(duration_ms, 1),
+            )
+            if results:
+                logger.info(
+                    "Top result",
+                    name=results[0].artifact.name,  # type: ignore[reportUnknownMemberType]
+                    similarity=f"{results[0].similarity:.3f}",  # type: ignore[reportUnknownMemberType]
+                )
+
+            return SearchResults(
+                query=query,
+                results=results,  # type: ignore[reportUnknownArgumentType]
+                total_results=len(results),  # type: ignore[reportUnknownArgumentType]
+                top_k=top_k,
+                similarity_threshold=similarity_threshold,
+                filters=filters,
+            )
+        except Exception as e:
+            record_error("retrieval", e, get_correlation_id())
+            raise
 
     def search_similar(
         self,

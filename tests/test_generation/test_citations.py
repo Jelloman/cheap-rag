@@ -57,10 +57,7 @@ def sample_search_results(sample_artifacts: list[MetadataArtifact]) -> list[Sear
     """Create sample search results."""
     return [
         SearchResult(
-            artifact=artifact,
-            similarity=0.9 - i * 0.1,
-            distance=0.1 + i * 0.1,
-            rank=i + 1
+            artifact=artifact, similarity=0.9 - i * 0.1, distance=0.1 + i * 0.1, rank=i + 1
         )
         for i, artifact in enumerate(sample_artifacts)
     ]
@@ -115,7 +112,9 @@ class TestCitationExtraction:
 
     def test_extract_citation_with_special_chars(self, citation_extractor: CitationExtractor):
         """Test extracting citations with special characters in names."""
-        answer = "The res.partner table [res.partner] (ID: postgresql_res_partner_123) stores partners."
+        answer = (
+            "The res.partner table [res.partner] (ID: postgresql_res_partner_123) stores partners."
+        )
 
         citations = citation_extractor.extract_citations(answer)
 
@@ -295,7 +294,9 @@ class TestCitationAnalysis:
     ):
         """Test finding uncited artifacts."""
         # Only cite the first artifact
-        answer = "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        answer = (
+            "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        )
 
         citations = citation_extractor.extract_and_validate(answer, sample_search_results)
         uncited = citation_extractor.get_uncited_artifacts(citations, sample_search_results)
@@ -344,7 +345,9 @@ class TestCitationAnalysis:
         sample_search_results: list[SearchResult],
     ):
         """Test citation coverage when only some artifacts are cited."""
-        answer = "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        answer = (
+            "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        )
 
         citations = citation_extractor.extract_and_validate(answer, sample_search_results)
         coverage = citation_extractor.check_citation_coverage(citations, sample_search_results)
@@ -364,9 +367,7 @@ class TestCitationAnalysis:
 
         assert coverage == 0.0
 
-    def test_check_citation_coverage_empty_results(
-        self, citation_extractor: CitationExtractor
-    ):
+    def test_check_citation_coverage_empty_results(self, citation_extractor: CitationExtractor):
         """Test citation coverage with empty search results."""
         answer = "Some answer"
         citations = citation_extractor.extract_and_validate(answer, [])
@@ -396,7 +397,9 @@ class TestCitationAnalysis:
         sample_search_results: list[SearchResult],
     ):
         """Test when there are no hallucinated citations."""
-        answer = "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        answer = (
+            "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        )
 
         citations = citation_extractor.extract_and_validate(answer, sample_search_results)
         has_hallucinations = citation_extractor.has_hallucinated_citations(citations)
@@ -453,7 +456,9 @@ class TestCitationQualityMetrics:
         sample_search_results: list[SearchResult],
     ):
         """Test metrics with partial citation coverage."""
-        answer = "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        answer = (
+            "The sale_order table [sale_order] (ID: postgresql_public_table_sale_order_123) exists."
+        )
 
         metrics = citation_extractor.get_citation_quality_metrics(answer, sample_search_results)
 

@@ -163,6 +163,10 @@ class MetadataArtifact:
 
         # Code artifacts (classes, interfaces, methods, etc.)
         else:
+            # Use pre-computed embedding text if provided (e.g. by Java extractor JAR)
+            if self.metadata.get("embedding_text"):
+                return str(self.metadata["embedding_text"])
+
             parts = [
                 f"[{self.type.upper()}] {self.name} in {self.language}",
                 f"Module: {self.module}",

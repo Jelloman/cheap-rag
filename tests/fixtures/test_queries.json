@@ -1,7 +1,7 @@
 {
-  "description": "Test query dataset for evaluating CHEAP RAG retrieval and answer quality",
-  "version": "1.0",
-  "created": "2026-02-11",
+  "description": "Test query dataset for evaluating CHEAP RAG retrieval and answer quality against Pagila (DVD rental) database",
+  "version": "2.0",
+  "created": "2026-04-03",
   "categories": {
     "entity_lookup": "Simple lookups of specific entities (tables, classes, etc.)",
     "constraint_query": "Questions about constraints, types, validation rules",
@@ -14,81 +14,81 @@
     {
       "id": "entity_001",
       "category": "entity_lookup",
-      "query": "What is the sale_order table?",
+      "query": "What is the film table?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order table"],
+      "expected_artifacts": ["film table"],
       "difficulty": "easy"
     },
     {
       "id": "entity_002",
       "category": "entity_lookup",
-      "query": "Tell me about the res_partner table",
+      "query": "Tell me about the customer table",
       "language": "postgresql",
-      "expected_artifacts": ["res_partner table"],
+      "expected_artifacts": ["customer table"],
       "difficulty": "easy"
     },
     {
       "id": "constraint_001",
       "category": "constraint_query",
-      "query": "What columns are in the sale_order table?",
+      "query": "What columns are in the film table?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order columns"],
+      "expected_artifacts": ["film columns"],
       "difficulty": "medium"
     },
     {
       "id": "constraint_002",
       "category": "constraint_query",
-      "query": "What is the data type of the amount_total column in sale_order?",
+      "query": "What is the data type of the rental_rate column in film?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order.amount_total column"],
+      "expected_artifacts": ["film.rental_rate column"],
       "difficulty": "medium"
     },
     {
       "id": "constraint_003",
       "category": "constraint_query",
-      "query": "Which columns in sale_order are required (not nullable)?",
+      "query": "Which columns in the rental table are required (not nullable)?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order columns with nullable=False"],
+      "expected_artifacts": ["rental columns with nullable=False"],
       "difficulty": "medium"
     },
     {
       "id": "relationship_001",
       "category": "relationship_query",
-      "query": "What is the relationship between sale_order and res_partner?",
+      "query": "What is the relationship between rental and customer?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order.partner_id foreign key", "res_partner table"],
+      "expected_artifacts": ["rental.customer_id foreign key", "customer table"],
       "difficulty": "medium"
     },
     {
       "id": "relationship_002",
       "category": "relationship_query",
-      "query": "What tables have foreign keys to res_partner?",
+      "query": "What tables have foreign keys to film?",
       "language": "postgresql",
-      "expected_artifacts": ["relationships to res_partner"],
+      "expected_artifacts": ["relationships to film"],
       "difficulty": "hard"
     },
     {
       "id": "relationship_003",
       "category": "relationship_query",
-      "query": "How are sales orders linked to customers?",
+      "query": "How are rentals linked to customers?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order table", "partner_id foreign key", "res_partner table"],
+      "expected_artifacts": ["rental table", "customer_id foreign key", "customer table"],
       "difficulty": "medium"
     },
     {
       "id": "cross_001",
       "category": "cross_entity",
-      "query": "What information is stored about sales and customers?",
+      "query": "What information is stored about films and actors?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order table", "res_partner table"],
+      "expected_artifacts": ["film table", "actor table", "film_actor table"],
       "difficulty": "medium"
     },
     {
       "id": "cross_002",
       "category": "cross_entity",
-      "query": "What indexes exist on the sale_order table?",
+      "query": "What indexes exist on the rental table?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order indexes"],
+      "expected_artifacts": ["rental indexes"],
       "difficulty": "medium"
     },
     {
@@ -102,17 +102,17 @@
     {
       "id": "schema_002",
       "category": "schema_exploration",
-      "query": "What are the main entities in the Odoo database?",
+      "query": "What are the main entities in the Pagila database?",
       "language": "postgresql",
-      "expected_artifacts": ["tables: sale_order, res_partner, product_product, etc."],
+      "expected_artifacts": ["tables: film, customer, rental, actor, etc."],
       "difficulty": "medium"
     },
     {
       "id": "schema_003",
       "category": "schema_exploration",
-      "query": "Tell me about the product-related tables",
+      "query": "Tell me about the inventory-related tables",
       "language": "postgresql",
-      "expected_artifacts": ["product_product, product_template tables"],
+      "expected_artifacts": ["inventory, store, film tables"],
       "difficulty": "medium"
     },
     {
@@ -129,6 +129,86 @@
       "query": "What fields does the Entity class have?",
       "language": "java",
       "expected_artifacts": ["Entity class fields"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "java_003",
+      "category": "entity_lookup",
+      "query": "What is the AspectDef interface in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["AspectDef interface"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_004",
+      "category": "entity_lookup",
+      "query": "What hierarchy types exist in CHEAP and what are they used for?",
+      "language": "java",
+      "expected_artifacts": ["HierarchyType enum", "Hierarchy interface"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_005",
+      "category": "constraint_query",
+      "query": "What property types are supported in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["PropertyType enum"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_006",
+      "category": "entity_lookup",
+      "query": "What is CatalogSpecies and what values does it have?",
+      "language": "java",
+      "expected_artifacts": ["CatalogSpecies enum"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_007",
+      "category": "relationship_query",
+      "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["Aspect interface", "AspectDef interface", "Entity interface"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "java_008",
+      "category": "entity_lookup",
+      "query": "What is a TagDefinition and what fields does it have?",
+      "language": "java",
+      "expected_artifacts": ["TagDefinition class"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_009",
+      "category": "entity_lookup",
+      "query": "What standard tags are built into CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["StandardTags class"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "java_010",
+      "category": "constraint_query",
+      "query": "What element types can tags be applied to in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["ElementType enum"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_011",
+      "category": "cross_entity",
+      "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
+      "language": "java",
+      "expected_artifacts": ["ImmutablePojoAspect", "MutablePojoAspect", "RecordAspect"],
+      "difficulty": "hard"
+    },
+    {
+      "id": "java_012",
+      "category": "relationship_query",
+      "query": "What does CheapFactory provide and how is it used to create catalogs?",
+      "language": "java",
+      "expected_artifacts": ["CheapFactory class", "Catalog interface"],
       "difficulty": "medium"
     },
     {
@@ -158,33 +238,41 @@
     {
       "id": "entity_003",
       "category": "entity_lookup",
-      "query": "What is the product_product table used for?",
+      "query": "What is the actor table used for?",
       "language": "postgresql",
-      "expected_artifacts": ["product_product table"],
+      "expected_artifacts": ["actor table"],
       "difficulty": "easy"
     },
     {
       "id": "constraint_005",
       "category": "constraint_query",
-      "query": "What columns in res_partner store email addresses?",
+      "query": "What columns in the customer table store email addresses?",
       "language": "postgresql",
-      "expected_artifacts": ["res_partner.email column"],
+      "expected_artifacts": ["customer.email column"],
       "difficulty": "medium"
     },
     {
       "id": "schema_004",
       "category": "schema_exploration",
-      "query": "What are the most important tables for sales management?",
+      "query": "What are the most important tables for tracking rentals?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order, sale_order_line, res_partner"],
+      "expected_artifacts": ["rental, customer, inventory, payment"],
       "difficulty": "medium"
     },
     {
       "id": "cross_003",
       "category": "cross_entity",
-      "query": "How is order pricing stored in the database?",
+      "query": "How is payment information stored in the database?",
       "language": "postgresql",
-      "expected_artifacts": ["sale_order.amount_total, sale_order_line.price_unit"],
+      "expected_artifacts": ["payment.amount, rental reference"],
+      "difficulty": "hard"
+    },
+    {
+      "id": "relationship_005",
+      "category": "relationship_query",
+      "query": "How is the geographic hierarchy structured?",
+      "language": "postgresql",
+      "expected_artifacts": ["address, city, country tables and their foreign keys"],
       "difficulty": "hard"
     }
   ]

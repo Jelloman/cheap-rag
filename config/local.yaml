@@ -76,36 +76,40 @@ retrieval:
 indexing:
   # Source directories to scan (for code metadata)
   source_paths:
-    - "../cheap-core/src/main/java"
-    - "../cheap-ts/src"
+    - "../cheap"
     - "../cheap-py/src"
-    - "../cheap-rust/src"
 
   # Database connections (for database metadata)
   databases:
-    # Example Odoo eCommerce database
-    odoo_ecommerce:
-      enabled: true  # Odoo is now running in Docker
+    # Pagila DVD rental sample database
+    pagila:
+      enabled: true  # Pagila is running in Docker (postgres:17)
       type: "postgresql"
       connection:
         host: "localhost"
         port: 5432
-        database: "odoo"  # Odoo creates its own database
-        user: "odoo"
-        password: "${ODOO_DB_PASSWORD}"  # From environment variable
+        database: "postgres"  # Pagila uses the default postgres database
+        user: "postgres"
+        password: "${PAGILA_DB_PASSWORD}"  # From environment variable
       schema: "public"
-      # Optional: Limit to specific tables (omit to extract all tables)
+      # Core Pagila tables (excludes partitioned payment tables)
       include_tables:
-        - "sale_order"
-        - "sale_order_line"
-        - "product_product"
-        - "product_template"
-        - "product_category"
-        - "res_partner"
-        - "res_partner_category"
-        - "account_move"
-        - "account_move_line"
-      tags: ["odoo", "ecommerce", "sales"]
+        - "actor"
+        - "film"
+        - "film_actor"
+        - "film_category"
+        - "category"
+        - "language"
+        - "customer"
+        - "address"
+        - "city"
+        - "country"
+        - "inventory"
+        - "rental"
+        - "payment"
+        - "staff"
+        - "store"
+      tags: ["pagila", "dvd-rental", "sample"]
 
     # Example SQLite test database
     test_sqlite:
@@ -119,7 +123,7 @@ indexing:
   extractors:
     # Database extractors
     postgresql:
-      enabled: true  # Enabled for Odoo database
+      enabled: true  # Enabled for Pagila database
 
     sqlite:
       enabled: false  # Enable when databases are configured

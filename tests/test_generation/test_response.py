@@ -68,9 +68,7 @@ class TestArtifactSummary:
 
     def test_artifact_summary_from_artifact(self, sample_artifact: MetadataArtifact):
         """Test creating summary from artifact."""
-        summary = ArtifactSummary.from_artifact(
-            sample_artifact, similarity=0.85, rank=1
-        )
+        summary = ArtifactSummary.from_artifact(sample_artifact, similarity=0.85, rank=1)
 
         assert summary.id == sample_artifact.id
         assert summary.name == sample_artifact.name
@@ -338,7 +336,9 @@ class TestQueryResponse:
             description="Test",
             metadata={},
         )
-        low_similarity_result = SearchResult(artifact=artifact, similarity=0.3, distance=0.7, rank=1)
+        low_similarity_result = SearchResult(
+            artifact=artifact, similarity=0.3, distance=0.7, rank=1
+        )
 
         search_metadata = SearchMetadata(
             query="Test",

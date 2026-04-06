@@ -63,7 +63,7 @@ class ErrorTracker:
         """
         self.window_seconds = window_seconds
         self._errors: list[ErrorRecord] = []
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()  # Reentrant: get_summary() calls other locked methods
         self._logger = StructuredLogger("error_tracker")
 
     def record_error(

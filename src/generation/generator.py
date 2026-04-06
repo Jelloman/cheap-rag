@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 import time
 from typing import Any, Protocol, runtime_checkable
 
@@ -11,9 +10,16 @@ import requests
 
 from src.config import AnthropicConfig, OllamaConfig
 from src.generation.prompts import get_system_message, build_qa_prompt
+from src.observability import (
+    StructuredLogger,
+    get_correlation_id,
+    record_error,
+    record_operation,
+    trace_function,
+)
 from src.retrieval.semantic_search import SearchResult
 
-logger = logging.getLogger(__name__)
+logger = StructuredLogger("cheap_rag.generation")
 
 
 @runtime_checkable
@@ -58,16 +64,15 @@ class OllamaProvider:
         self.base_url = config.base_url
         self.model = config.model
 
-        logger.info(f"Initialized Ollama provider: {self.model}")
-        logger.info(f"  Base URL: {self.base_url}")
+        logger.info("Initialized Ollama provider", model=self.model, base_url=self.base_url)
 
         # Verify Ollama is running
         try:
             response = requests.get(f"{self.base_url}/api/tags", timeout=5)
             response.raise_for_status()
-            logger.info("  Ollama server is reachable")
+            logger.info("Ollama server is reachable")
         except Exception as e:
-            logger.warning(f"  Ollama server may not be running: {e}")
+            logger.warning("Ollama server may not be running", error=str(e))
 
     def generate(
         self,
@@ -112,9 +117,9 @@ class OllamaProvider:
             },
         }
 
-        logger.debug(f"Ollama request: model={self.model}, temp={temperature}")
+        logger.debug("Ollama request", model=self.model, temperature=temperature)
 
-        start_time = time.time()
+        start_time = time.perf_counter()
 
         try:
             response = requests.post(
@@ -124,22 +129,37 @@ class OllamaProvider:
             )
             response.raise_for_status()
 
-            elapsed = time.time() - start_time
+            duration_ms = (time.perf_counter() - start_time) * 1000
             result = response.json()
 
             answer = result.get("message", {}).get("content", "")
-            logger.info(f"Ollama generation completed in {elapsed:.2f}s")
+            record_operation(
+                "llm_generate",
+                duration_ms,
+                {"provider": "ollama", "model": self.model},
+            )
+            logger.info(
+                "Ollama generation completed",
+                duration_ms=round(duration_ms, 1),
+                model=self.model,
+            )
 
             return answer.strip()
 
         except requests.exceptions.Timeout:
-            logger.error(f"Ollama request timed out after {self.config.timeout_seconds}s")
+            record_error(
+                "generation",
+                requests.exceptions.Timeout(
+                    f"Ollama request timed out after {self.config.timeout_seconds}s"
+                ),
+                get_correlation_id(),
+            )
             raise
         except requests.exceptions.RequestException as e:
-            logger.error(f"Ollama request failed: {e}")
+            record_error("generation", e, get_correlation_id())
             raise
         except Exception as e:
-            logger.error(f"Ollama generation error: {e}")
+            record_error("generation", e, get_correlation_id())
             raise
 
     def provider_name(self) -> str:
@@ -160,7 +180,7 @@ class AnthropicProvider:
         self.config = config
         self.model = config.model
 
-        logger.info(f"Initialized Anthropic provider: {self.model}")
+        logger.info("Initialized Anthropic provider", model=self.model)
 
         # Initialize Anthropic client
         self.client = anthropic.Anthropic(api_key=api_key)
@@ -194,9 +214,9 @@ class AnthropicProvider:
         if max_tokens is None:
             max_tokens = self.config.max_tokens
 
-        logger.debug(f"Anthropic request: model={self.model}, temp={temperature}")
+        logger.debug("Anthropic request", model=self.model, temperature=temperature)
 
-        start_time = time.time()
+        start_time = time.perf_counter()
 
         try:
             # Build message request
@@ -212,7 +232,7 @@ class AnthropicProvider:
 
             response = self.client.messages.create(**kwargs)  # type: ignore[reportUnknownVariableType]  # anthropic
 
-            elapsed = time.time() - start_time
+            duration_ms = (time.perf_counter() - start_time) * 1000
 
             # Extract answer
             answer = response.content[0].text  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
@@ -228,18 +248,35 @@ class AnthropicProvider:
             cost = self._calculate_cost(input_tokens, output_tokens)  # type: ignore[reportUnknownArgumentType]  # anthropic
             self.total_cost_usd += cost
 
-            logger.info(f"Anthropic generation completed in {elapsed:.2f}s")
-            logger.info(f"  Tokens: {input_tokens} input, {output_tokens} output")
+            record_operation(
+                "llm_generate",
+                duration_ms,
+                {
+                    "provider": "anthropic",
+                    "model": self.model,
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost_usd": cost,
+                },
+            )
+            logger.info(
+                "Anthropic generation completed",
+                duration_ms=round(duration_ms, 1),
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+            )
             if self.config.track_costs:
-                logger.info(f"  Cost: ${cost:.4f} (total: ${self.total_cost_usd:.4f})")
+                logger.info(
+                    "Cost tracking", cost_usd=f"{cost:.4f}", total_usd=f"{self.total_cost_usd:.4f}"
+                )
 
             return answer.strip()  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]  # anthropic
 
         except anthropic.APIError as e:
-            logger.error(f"Anthropic API error: {e}")
+            record_error("generation", e, get_correlation_id())
             raise
         except Exception as e:
-            logger.error(f"Anthropic generation error: {e}")
+            record_error("generation", e, get_correlation_id())
             raise
 
     def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
@@ -301,8 +338,9 @@ class Generator:
             provider: LLM provider instance.
         """
         self.provider = provider
-        logger.info(f"Generator initialized with provider: {provider.provider_name()}")
+        logger.info("Generator initialized", provider=provider.provider_name())
 
+    @trace_function("generate_answer")
     def generate_answer(
         self,
         query: str,
@@ -321,8 +359,11 @@ class Generator:
         Returns:
             Generated answer with citations.
         """
-        logger.info(f"Generating answer for query: '{query}'")
-        logger.info(f"  Using {len(search_results)} retrieved artifacts")
+        logger.info(
+            "Generating answer",
+            query=query,
+            num_artifacts=len(search_results),
+        )
 
         # Build prompt from query and search results
         prompt = build_qa_prompt(query, search_results)
@@ -337,6 +378,7 @@ class Generator:
             system_message = get_system_message("base")
 
         # Generate answer
+        start = time.perf_counter()
         try:
             answer = self.provider.generate(
                 prompt=prompt,
@@ -344,11 +386,17 @@ class Generator:
                 temperature=temperature,
                 max_tokens=max_tokens,
             )
-            logger.info("Answer generated successfully")
+            duration_ms = (time.perf_counter() - start) * 1000
+            record_operation(
+                "generate_answer",
+                duration_ms,
+                {"query_length": len(query), "num_artifacts": len(search_results)},
+            )
+            logger.info("Answer generated successfully", duration_ms=round(duration_ms, 1))
             return answer
 
         except Exception as e:
-            logger.error(f"Answer generation failed: {e}")
+            record_error("generation", e, get_correlation_id())
             raise
 
     def get_provider_stats(self) -> dict[str, Any]:

@@ -1,4 +1,4 @@
-"""Extract metadata from Odoo PostgreSQL database."""
+"""Extract metadata from Pagila PostgreSQL database."""
 
 import json
 import os
@@ -18,9 +18,9 @@ load_dotenv()
 
 
 def main():
-    """Extract Odoo metadata."""
+    """Extract Pagila metadata."""
     print("=" * 80)
-    print("Odoo Database Metadata Extraction")
+    print("Pagila Database Metadata Extraction")
     print("=" * 80)
 
     # Load configuration
@@ -28,25 +28,25 @@ def main():
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
-    db_config = config["indexing"]["databases"]["odoo_ecommerce"]
+    db_config = config["indexing"]["databases"]["pagila"]
 
     if not db_config["enabled"]:
-        print("\n[ERROR] odoo_ecommerce database is not enabled in config/local.yaml")
+        print("\n[ERROR] pagila database is not enabled in config/local.yaml")
         print("Please set 'enabled: true' in the configuration.")
         return 1
 
     # Get password from environment
-    password = os.getenv("ODOO_DB_PASSWORD")
+    password = os.getenv("PAGILA_DB_PASSWORD")
     if not password:
-        print("\n[ERROR] ODOO_DB_PASSWORD not found in environment")
-        print("Make sure .env file exists and contains ODOO_DB_PASSWORD")
+        print("\n[ERROR] PAGILA_DB_PASSWORD not found in environment")
+        print("Make sure .env file exists and contains PAGILA_DB_PASSWORD")
         return 1
 
     # Replace environment variable in config
     connection_config = db_config["connection"].copy()
     connection_config["password"] = password
 
-    print(f"\nConnecting to Odoo database...")
+    print(f"\nConnecting to Pagila database...")
     print(f"  Host: {connection_config['host']}")
     print(f"  Port: {connection_config['port']}")
     print(f"  Database: {connection_config['database']}")
@@ -135,7 +135,7 @@ def main():
         # Save to JSON
         output_dir = Path("data/metadata")
         output_dir.mkdir(parents=True, exist_ok=True)
-        output_path = output_dir / "odoo_ecommerce_metadata.json"
+        output_path = output_dir / "pagila_metadata.json"
 
         with open(output_path, "w") as f:
             json.dump([a.to_dict() for a in artifacts], f, indent=2)
@@ -166,10 +166,9 @@ def main():
         print("Extraction Complete!")
         print("=" * 80)
         print("\nNext steps:")
-        print("1. Review metadata in data/metadata/odoo_ecommerce_metadata.json")
-        print("2. Generate embeddings (Week 2, Day 1)")
-        print("3. Index in ChromaDB (Week 2, Day 2)")
-        print("4. Query the schema (Week 2, Day 3+)")
+        print("1. Review metadata in data/metadata/pagila_metadata.json")
+        print("2. Generate embeddings: python generate_embeddings.py")
+        print("3. Query the schema: python scripts/query_example.py")
 
         return 0
 

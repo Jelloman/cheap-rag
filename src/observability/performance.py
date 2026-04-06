@@ -100,7 +100,7 @@ class PerformanceProfiler:
         """
         self.window_seconds = window_seconds
         self._records: defaultdict[str, list[LatencyRecord]] = defaultdict(list)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()  # Reentrant: get_all_stats() calls get_stats() while locked
         self._logger = StructuredLogger("performance")
 
     def record_latency(

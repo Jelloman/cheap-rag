@@ -13,7 +13,7 @@ from src.embeddings.service import EmbeddingService
 from src.extractors.base import MetadataArtifact, MetadataExtractor
 from src.extractors.database_extractor import DatabaseExtractor
 from src.extractors.postgres_extractor import PostgresExtractor
-from src.extractors.sqlite_extractor import SQLiteExtractor  # type: ignore[reportAttributeAccessIssue,reportUnknownVariableType]
+from src.extractors.sqlite_extractor import SqliteExtractor as SQLiteExtractor  # type: ignore[reportAttributeAccessIssue,reportUnknownVariableType]
 from src.indexing.schema import validate_artifact
 from src.vectorstore.chroma_store import ChromaVectorStore
 

@@ -1,4 +1,4 @@
-"""Generate embeddings and index Odoo metadata in ChromaDB."""
+"""Generate embeddings and index Pagila metadata in ChromaDB."""
 
 import json
 import logging
@@ -39,10 +39,10 @@ def main():
         config = yaml.safe_load(f)
 
     # Load extracted metadata
-    metadata_path = Path("data/metadata/odoo_ecommerce_metadata.json")
+    metadata_path = Path("data/metadata/pagila_metadata.json")
     if not metadata_path.exists():
         print(f"\n[ERROR] Metadata file not found: {metadata_path}")
-        print("Please run extract_odoo_metadata.py first")
+        print("Please run extract_pagila_metadata.py first")
         return 1
 
     print(f"\n1. Loading metadata from: {metadata_path}")

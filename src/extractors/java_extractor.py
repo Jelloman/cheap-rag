@@ -1,8 +1,10 @@
-"""Java code metadata extractor.
+"""Java code metadata extractor (RETIRED).
 
-Simplified extractor focusing on class and field metadata from CHEAP core interfaces.
-Uses javalang library for pure Python AST parsing.
+This module is retired. Use src.extractors.java_extractor_jar.JavaExtractorJar instead,
+which delegates to the Java-based extractor JAR for full-fidelity JavaParser analysis.
 """
+
+# ruff: noqa
 
 import hashlib
 from pathlib import Path
@@ -35,8 +37,11 @@ class JavaExtractor:
             if source_path.suffix == ".java":
                 artifacts.extend(self._extract_from_file(source_path))
         elif source_path.is_dir():
-            # Recursively find all .java files
+            # Recursively find all .java files, skipping test/build directories
+            _exclude = {"test", "build", "generated", "target"}
             for java_file in source_path.rglob("*.java"):
+                if any(part in _exclude for part in java_file.parts):
+                    continue
                 try:
                     artifacts.extend(self._extract_from_file(java_file))
                 except Exception as e:

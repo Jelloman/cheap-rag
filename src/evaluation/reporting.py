@@ -314,9 +314,12 @@ def generate_trend_report(
         metrics = result.get("metrics", {})
 
         if metric_name == "precision_at_k":
-            value = metrics.get("precision_at_k", {}).get(k, 0.0)
+            # JSON serializes integer keys as strings, so check both
+            pk = metrics.get("precision_at_k", {})
+            value = pk.get(k, pk.get(str(k), 0.0))  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
         elif metric_name == "recall_at_k":
-            value = metrics.get("recall_at_k", {}).get(k, 0.0)
+            rk = metrics.get("recall_at_k", {})
+            value = rk.get(k, rk.get(str(k), 0.0))  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
         elif metric_name == "mrr":
             value = metrics.get("mrr", 0.0)
         elif metric_name == "map":
