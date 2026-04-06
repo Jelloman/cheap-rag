@@ -35,8 +35,11 @@ class JavaExtractor:
             if source_path.suffix == ".java":
                 artifacts.extend(self._extract_from_file(source_path))
         elif source_path.is_dir():
-            # Recursively find all .java files
+            # Recursively find all .java files, skipping test/build directories
+            _exclude = {"test", "build", "generated", "target"}
             for java_file in source_path.rglob("*.java"):
+                if any(part in _exclude for part in java_file.parts):
+                    continue
                 try:
                     artifacts.extend(self._extract_from_file(java_file))
                 except Exception as e:

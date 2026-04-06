@@ -110,7 +110,7 @@ def main():
 
     overall_stats = pipeline.discover_and_index(
         source_paths=sources,
-        extractors_config=config.indexing.extractors,
+        _extractors_config=config.indexing.extractors,
     )
 
     # Print summary

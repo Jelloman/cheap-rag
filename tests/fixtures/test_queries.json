@@ -132,6 +132,86 @@
       "difficulty": "medium"
     },
     {
+      "id": "java_003",
+      "category": "entity_lookup",
+      "query": "What is the AspectDef interface in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["AspectDef interface"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_004",
+      "category": "entity_lookup",
+      "query": "What hierarchy types exist in CHEAP and what are they used for?",
+      "language": "java",
+      "expected_artifacts": ["HierarchyType enum", "Hierarchy interface"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_005",
+      "category": "constraint_query",
+      "query": "What property types are supported in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["PropertyType enum"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_006",
+      "category": "entity_lookup",
+      "query": "What is CatalogSpecies and what values does it have?",
+      "language": "java",
+      "expected_artifacts": ["CatalogSpecies enum"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_007",
+      "category": "relationship_query",
+      "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["Aspect interface", "AspectDef interface", "Entity interface"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "java_008",
+      "category": "entity_lookup",
+      "query": "What is a TagDefinition and what fields does it have?",
+      "language": "java",
+      "expected_artifacts": ["TagDefinition class"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_009",
+      "category": "entity_lookup",
+      "query": "What standard tags are built into CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["StandardTags class"],
+      "difficulty": "medium"
+    },
+    {
+      "id": "java_010",
+      "category": "constraint_query",
+      "query": "What element types can tags be applied to in CHEAP?",
+      "language": "java",
+      "expected_artifacts": ["ElementType enum"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "java_011",
+      "category": "cross_entity",
+      "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
+      "language": "java",
+      "expected_artifacts": ["ImmutablePojoAspect", "MutablePojoAspect", "RecordAspect"],
+      "difficulty": "hard"
+    },
+    {
+      "id": "java_012",
+      "category": "relationship_query",
+      "query": "What does CheapFactory provide and how is it used to create catalogs?",
+      "language": "java",
+      "expected_artifacts": ["CheapFactory class", "Catalog interface"],
+      "difficulty": "medium"
+    },
+    {
       "id": "multi_001",
       "category": "multi_language",
       "query": "What metadata entities exist across all languages?",

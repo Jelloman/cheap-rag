@@ -76,10 +76,8 @@ retrieval:
 indexing:
   # Source directories to scan (for code metadata)
   source_paths:
-    - "../cheap-core/src/main/java"
-    - "../cheap-ts/src"
+    - "../cheap"
     - "../cheap-py/src"
-    - "../cheap-rust/src"
 
   # Database connections (for database metadata)
   databases:

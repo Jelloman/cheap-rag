@@ -101,7 +101,7 @@ class ChromaVectorStore:
         for i in range(0, len(artifacts), batch_size):
             end_idx = min(i + batch_size, len(artifacts))
 
-            self.collection.add(
+            self.collection.upsert(
                 ids=ids[i:end_idx],
                 documents=documents[i:end_idx],
                 metadatas=metadatas[i:end_idx],  # type: ignore[reportArgumentType]  # chromadb
