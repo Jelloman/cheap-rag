@@ -173,12 +173,20 @@ class TestNDCG:
 class TestEvaluateRetrieval:
     @pytest.fixture
     def gold_query(self):
+        from src.evaluation.gold_dataset import ArtifactIdentifier
+
         return GoldQuery(
             id="q1",
             category="entity_lookup",
             query="What is sale_order?",
             language="postgresql",
-            relevant_artifact_ids=["id1", "id2", "id3"],
+            relevant_artifacts={
+                "table": [
+                    ArtifactIdentifier(name="id1", artifact_id="id1"),
+                    ArtifactIdentifier(name="id2", artifact_id="id2"),
+                    ArtifactIdentifier(name="id3", artifact_id="id3"),
+                ]
+            },
             difficulty="easy",
         )
 

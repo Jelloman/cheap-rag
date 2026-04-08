@@ -13,13 +13,41 @@
       "category": "entity_lookup",
       "query": "What is the film table?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_e5f19fb863d1fa62",
-        "pg_column_bc27f24fe2fd21d7",
-        "pg_table_27a130f53257a313",
-        "pg_index_595f8d938fa1c47c",
-        "pg_column_5c9884461ff957e9"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313"
+          }
+        ],
+        "index": [
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5"
+          }
+        ],
+        "view": [
+          {
+            "name": "nicer_but_slower_film_list",
+            "component": "nicer_but_slower_film_list",
+            "artifact_id": "pg_view_5828ba0dd2c9aebe"
+          }
+        ],
+        "column": [
+          {
+            "name": "length",
+            "component": "film",
+            "artifact_id": "pg_column_bc27f24fe2fd21d7"
+          }
+        ]
+      },
       "difficulty": "easy",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -27,28 +55,88 @@
           "film table"
         ],
         "all_candidates": [
-          "pg_table_e5f19fb863d1fa62",
-          "pg_column_bc27f24fe2fd21d7",
-          "pg_table_27a130f53257a313",
-          "pg_index_595f8d938fa1c47c",
-          "pg_column_5c9884461ff957e9",
-          "pg_table_62b453d1a523600d",
-          "pg_column_98a7f32ec96303ac",
-          "pg_column_56c28104cd13be0f",
-          "pg_column_236e09908013a32d",
-          "pg_column_9cc287d6fc271df8"
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
+            "type": "table",
+            "similarity": 0.8044247627258301
+          },
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5",
+            "type": "index",
+            "similarity": 0.7635740637779236
+          },
+          {
+            "name": "nicer_but_slower_film_list",
+            "component": "nicer_but_slower_film_list",
+            "artifact_id": "pg_view_5828ba0dd2c9aebe",
+            "type": "view",
+            "similarity": 0.7606028616428375
+          },
+          {
+            "name": "length",
+            "component": "film",
+            "artifact_id": "pg_column_bc27f24fe2fd21d7",
+            "type": "column",
+            "similarity": 0.7576948404312134
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313",
+            "type": "table",
+            "similarity": 0.7500690221786499
+          },
+          {
+            "name": "film_list",
+            "component": "film_list",
+            "artifact_id": "pg_view_7b18483390e991e4",
+            "type": "view",
+            "similarity": 0.7487683296203613
+          },
+          {
+            "name": "film_fulltext_idx",
+            "component": "film",
+            "artifact_id": "pg_index_595f8d938fa1c47c",
+            "type": "index",
+            "similarity": 0.7457802593708038
+          },
+          {
+            "name": "description",
+            "component": "film",
+            "artifact_id": "pg_column_5c9884461ff957e9",
+            "type": "column",
+            "similarity": 0.7432482242584229
+          },
+          {
+            "name": "film_category",
+            "component": "film_category",
+            "artifact_id": "pg_table_62b453d1a523600d",
+            "type": "table",
+            "similarity": 0.7415070235729218
+          },
+          {
+            "name": "film_film_id_seq",
+            "component": "film_film_id_seq",
+            "artifact_id": "pg_sequence_da5900e71ee82bb0",
+            "type": "sequence",
+            "similarity": 0.7398078739643097
+          }
         ],
         "candidate_scores": [
-          0.8044247031211853,
+          0.8044247627258301,
+          0.7635740637779236,
+          0.7606028616428375,
           0.7576948404312134,
-          0.7500689923763275,
-          0.7457802891731262,
+          0.7500690221786499,
+          0.7487683296203613,
+          0.7457802593708038,
           0.7432482242584229,
-          0.7415070533752441,
-          0.739120215177536,
-          0.7389830648899078,
-          0.7368949055671692,
-          0.7293205261230469
+          0.7415070235729218,
+          0.7398078739643097
         ],
         "requires_manual_review": true
       }
@@ -58,13 +146,41 @@
       "category": "entity_lookup",
       "query": "Tell me about the customer table",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_13d9004cb041690a",
-        "pg_column_0497b7182f24789d",
-        "pg_column_56510315972d27f3",
-        "pg_column_70a23b337164ba23",
-        "pg_column_c1dd05051c0f7c37"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a"
+          }
+        ],
+        "column": [
+          {
+            "name": "customer_id",
+            "component": "customer",
+            "artifact_id": "pg_column_0497b7182f24789d"
+          },
+          {
+            "name": "customer_id",
+            "component": "payment",
+            "artifact_id": "pg_column_56510315972d27f3"
+          }
+        ],
+        "view": [
+          {
+            "name": "customer_list",
+            "component": "customer_list",
+            "artifact_id": "pg_view_65bb6af695537047"
+          }
+        ],
+        "index": [
+          {
+            "name": "customer_pkey",
+            "component": "customer",
+            "artifact_id": "pg_index_543d0d08175bcfde"
+          }
+        ]
+      },
       "difficulty": "easy",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -72,28 +188,88 @@
           "customer table"
         ],
         "all_candidates": [
-          "pg_table_13d9004cb041690a",
-          "pg_column_0497b7182f24789d",
-          "pg_column_56510315972d27f3",
-          "pg_column_70a23b337164ba23",
-          "pg_column_c1dd05051c0f7c37",
-          "pg_table_a44bc3185418eae9",
-          "pg_column_02a08afe2f1a6a3a",
-          "pg_table_7c76cbb31743ce50",
-          "pg_relationship_01e0b93385dbbebb",
-          "pg_column_68ef72bea609537c"
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a",
+            "type": "table",
+            "similarity": 0.8181230425834656
+          },
+          {
+            "name": "customer_id",
+            "component": "customer",
+            "artifact_id": "pg_column_0497b7182f24789d",
+            "type": "column",
+            "similarity": 0.7602440416812897
+          },
+          {
+            "name": "customer_list",
+            "component": "customer_list",
+            "artifact_id": "pg_view_65bb6af695537047",
+            "type": "view",
+            "similarity": 0.754111260175705
+          },
+          {
+            "name": "customer_pkey",
+            "component": "customer",
+            "artifact_id": "pg_index_543d0d08175bcfde",
+            "type": "index",
+            "similarity": 0.7477366626262665
+          },
+          {
+            "name": "customer_id",
+            "component": "payment",
+            "artifact_id": "pg_column_56510315972d27f3",
+            "type": "column",
+            "similarity": 0.7387787997722626
+          },
+          {
+            "name": "active",
+            "component": "customer",
+            "artifact_id": "pg_column_70a23b337164ba23",
+            "type": "column",
+            "similarity": 0.7334202229976654
+          },
+          {
+            "name": "activebool",
+            "component": "customer",
+            "artifact_id": "pg_column_c1dd05051c0f7c37",
+            "type": "column",
+            "similarity": 0.7293352484703064
+          },
+          {
+            "name": "staff",
+            "component": "staff",
+            "artifact_id": "pg_table_a44bc3185418eae9",
+            "type": "table",
+            "similarity": 0.7286365628242493
+          },
+          {
+            "name": "first_name",
+            "component": "customer",
+            "artifact_id": "pg_column_02a08afe2f1a6a3a",
+            "type": "column",
+            "similarity": 0.7275338768959045
+          },
+          {
+            "name": "payment",
+            "component": "payment",
+            "artifact_id": "pg_table_7c76cbb31743ce50",
+            "type": "table",
+            "similarity": 0.7271815538406372
+          }
         ],
         "candidate_scores": [
-          0.8181231617927551,
-          0.7602440118789673,
+          0.8181230425834656,
+          0.7602440416812897,
+          0.754111260175705,
+          0.7477366626262665,
           0.7387787997722626,
           0.7334202229976654,
           0.7293352484703064,
-          0.7286365330219269,
+          0.7286365628242493,
           0.7275338768959045,
-          0.7271815538406372,
-          0.7235998213291168,
-          0.7213970422744751
+          0.7271815538406372
         ],
         "requires_manual_review": true
       }
@@ -103,13 +279,39 @@
       "category": "constraint_query",
       "query": "What columns are in the film table?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_e5f19fb863d1fa62",
-        "pg_column_bc27f24fe2fd21d7",
-        "pg_column_5c9884461ff957e9",
-        "pg_column_9cc287d6fc271df8",
-        "pg_column_98a7f32ec96303ac"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          }
+        ],
+        "column": [
+          {
+            "name": "length",
+            "component": "film",
+            "artifact_id": "pg_column_bc27f24fe2fd21d7"
+          },
+          {
+            "name": "description",
+            "component": "film",
+            "artifact_id": "pg_column_5c9884461ff957e9"
+          },
+          {
+            "name": "rating",
+            "component": "film",
+            "artifact_id": "pg_column_9cc287d6fc271df8"
+          }
+        ],
+        "index": [
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -117,28 +319,88 @@
           "film columns"
         ],
         "all_candidates": [
-          "pg_table_e5f19fb863d1fa62",
-          "pg_column_bc27f24fe2fd21d7",
-          "pg_column_5c9884461ff957e9",
-          "pg_column_9cc287d6fc271df8",
-          "pg_column_98a7f32ec96303ac",
-          "pg_column_56c28104cd13be0f",
-          "pg_column_236e09908013a32d",
-          "pg_table_27a130f53257a313",
-          "pg_index_595f8d938fa1c47c",
-          "pg_table_62b453d1a523600d"
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
+            "type": "table",
+            "similarity": 0.7899112403392792
+          },
+          {
+            "name": "length",
+            "component": "film",
+            "artifact_id": "pg_column_bc27f24fe2fd21d7",
+            "type": "column",
+            "similarity": 0.7698056697845459
+          },
+          {
+            "name": "description",
+            "component": "film",
+            "artifact_id": "pg_column_5c9884461ff957e9",
+            "type": "column",
+            "similarity": 0.766932338476181
+          },
+          {
+            "name": "rating",
+            "component": "film",
+            "artifact_id": "pg_column_9cc287d6fc271df8",
+            "type": "column",
+            "similarity": 0.7620997428894043
+          },
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5",
+            "type": "index",
+            "similarity": 0.7584933340549469
+          },
+          {
+            "name": "film_id",
+            "component": "film",
+            "artifact_id": "pg_column_98a7f32ec96303ac",
+            "type": "column",
+            "similarity": 0.7498713135719299
+          },
+          {
+            "name": "title",
+            "component": "film",
+            "artifact_id": "pg_column_56c28104cd13be0f",
+            "type": "column",
+            "similarity": 0.7494134306907654
+          },
+          {
+            "name": "special_features",
+            "component": "film",
+            "artifact_id": "pg_column_236e09908013a32d",
+            "type": "column",
+            "similarity": 0.7475384175777435
+          },
+          {
+            "name": "nicer_but_slower_film_list",
+            "component": "nicer_but_slower_film_list",
+            "artifact_id": "pg_view_5828ba0dd2c9aebe",
+            "type": "view",
+            "similarity": 0.7466486096382141
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313",
+            "type": "table",
+            "similarity": 0.7428958714008331
+          }
         ],
         "candidate_scores": [
-          0.7899112105369568,
-          0.7698056995868683,
-          0.7669323980808258,
+          0.7899112403392792,
+          0.7698056697845459,
+          0.766932338476181,
           0.7620997428894043,
+          0.7584933340549469,
           0.7498713135719299,
-          0.7494135499000549,
-          0.7475384473800659,
-          0.7428959012031555,
-          0.7380024194717407,
-          0.7344900667667389
+          0.7494134306907654,
+          0.7475384175777435,
+          0.7466486096382141,
+          0.7428958714008331
         ],
         "requires_manual_review": true
       }
@@ -148,13 +410,39 @@
       "category": "constraint_query",
       "query": "What is the data type of the rental_rate column in film?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_column_b619d28e78887a12",
-        "pg_table_e5f19fb863d1fa62",
-        "pg_table_a2de30f831562c03",
-        "pg_column_9cc287d6fc271df8",
-        "pg_column_f720f61684d2ad03"
-      ],
+      "relevant_artifacts": {
+        "type": [
+          {
+            "name": "mpaa_rating",
+            "component": "mpaa_rating",
+            "artifact_id": "pg_type_a667f3c1db219e96"
+          }
+        ],
+        "column": [
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12"
+          },
+          {
+            "name": "rating",
+            "component": "film",
+            "artifact_id": "pg_column_9cc287d6fc271df8"
+          }
+        ],
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -162,28 +450,88 @@
           "film.rental_rate column"
         ],
         "all_candidates": [
-          "pg_column_b619d28e78887a12",
-          "pg_table_e5f19fb863d1fa62",
-          "pg_table_a2de30f831562c03",
-          "pg_column_9cc287d6fc271df8",
-          "pg_column_f720f61684d2ad03",
-          "pg_table_27a130f53257a313",
-          "pg_column_236e09908013a32d",
-          "pg_column_98a7f32ec96303ac",
-          "pg_column_5c9884461ff957e9",
-          "pg_table_62b453d1a523600d"
+          {
+            "name": "mpaa_rating",
+            "component": "mpaa_rating",
+            "artifact_id": "pg_type_a667f3c1db219e96",
+            "type": "type",
+            "similarity": 0.8017600774765015
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12",
+            "type": "column",
+            "similarity": 0.8005448281764984
+          },
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
+            "type": "table",
+            "similarity": 0.7846475541591644
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03",
+            "type": "table",
+            "similarity": 0.7802556157112122
+          },
+          {
+            "name": "rating",
+            "component": "film",
+            "artifact_id": "pg_column_9cc287d6fc271df8",
+            "type": "column",
+            "similarity": 0.7739439904689789
+          },
+          {
+            "name": "rental_duration",
+            "component": "film",
+            "artifact_id": "pg_column_f720f61684d2ad03",
+            "type": "column",
+            "similarity": 0.7586606740951538
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313",
+            "type": "table",
+            "similarity": 0.748662680387497
+          },
+          {
+            "name": "special_features",
+            "component": "film",
+            "artifact_id": "pg_column_236e09908013a32d",
+            "type": "column",
+            "similarity": 0.7430481910705566
+          },
+          {
+            "name": "film_id",
+            "component": "film",
+            "artifact_id": "pg_column_98a7f32ec96303ac",
+            "type": "column",
+            "similarity": 0.7417882084846497
+          },
+          {
+            "name": "description",
+            "component": "film",
+            "artifact_id": "pg_column_5c9884461ff957e9",
+            "type": "column",
+            "similarity": 0.7382144331932068
+          }
         ],
         "candidate_scores": [
+          0.8017600774765015,
           0.8005448281764984,
-          0.784647524356842,
+          0.7846475541591644,
           0.7802556157112122,
-          0.7739439606666565,
+          0.7739439904689789,
           0.7586606740951538,
           0.748662680387497,
           0.7430481910705566,
           0.7417882084846497,
-          0.7382144033908844,
-          0.736915647983551
+          0.7382144331932068
         ],
         "requires_manual_review": true
       }
@@ -193,13 +541,35 @@
       "category": "constraint_query",
       "query": "Which columns in the rental table are required (not nullable)?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_column_716484d3d6e50ee7",
-        "pg_column_4fa672e7041c4053",
-        "pg_column_b619d28e78887a12",
-        "pg_column_008a013e0fed40d2",
-        "pg_column_f720f61684d2ad03"
-      ],
+      "relevant_artifacts": {
+        "column": [
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          },
+          {
+            "name": "rental_id",
+            "component": "payment",
+            "artifact_id": "pg_column_4fa672e7041c4053"
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12"
+          },
+          {
+            "name": "rental_date",
+            "component": "rental",
+            "artifact_id": "pg_column_008a013e0fed40d2"
+          },
+          {
+            "name": "rental_duration",
+            "component": "film",
+            "artifact_id": "pg_column_f720f61684d2ad03"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -207,16 +577,76 @@
           "rental columns with nullable=False"
         ],
         "all_candidates": [
-          "pg_column_716484d3d6e50ee7",
-          "pg_column_4fa672e7041c4053",
-          "pg_column_b619d28e78887a12",
-          "pg_column_008a013e0fed40d2",
-          "pg_column_f720f61684d2ad03",
-          "pg_column_8a6311f2de5dd34d",
-          "pg_table_a2de30f831562c03",
-          "pg_column_f5cfc64af20223a1",
-          "pg_column_4de5e041d3601d55",
-          "pg_column_669069b8b18dc6a5"
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7",
+            "type": "column",
+            "similarity": 0.8349800109863281
+          },
+          {
+            "name": "rental_id",
+            "component": "payment",
+            "artifact_id": "pg_column_4fa672e7041c4053",
+            "type": "column",
+            "similarity": 0.8134410381317139
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12",
+            "type": "column",
+            "similarity": 0.8076395988464355
+          },
+          {
+            "name": "rental_date",
+            "component": "rental",
+            "artifact_id": "pg_column_008a013e0fed40d2",
+            "type": "column",
+            "similarity": 0.8073225617408752
+          },
+          {
+            "name": "rental_duration",
+            "component": "film",
+            "artifact_id": "pg_column_f720f61684d2ad03",
+            "type": "column",
+            "similarity": 0.8046617209911346
+          },
+          {
+            "name": "customer_id",
+            "component": "rental",
+            "artifact_id": "pg_column_8a6311f2de5dd34d",
+            "type": "column",
+            "similarity": 0.7938721477985382
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03",
+            "type": "table",
+            "similarity": 0.793179988861084
+          },
+          {
+            "name": "return_date",
+            "component": "rental",
+            "artifact_id": "pg_column_f5cfc64af20223a1",
+            "type": "column",
+            "similarity": 0.7819050848484039
+          },
+          {
+            "name": "last_update",
+            "component": "rental",
+            "artifact_id": "pg_column_4de5e041d3601d55",
+            "type": "column",
+            "similarity": 0.7780081629753113
+          },
+          {
+            "name": "staff_id",
+            "component": "rental",
+            "artifact_id": "pg_column_669069b8b18dc6a5",
+            "type": "column",
+            "similarity": 0.7696941792964935
+          }
         ],
         "candidate_scores": [
           0.8349800109863281,
@@ -224,8 +654,8 @@
           0.8076395988464355,
           0.8073225617408752,
           0.8046617209911346,
-          0.7938722372055054,
-          0.7931800484657288,
+          0.7938721477985382,
+          0.793179988861084,
           0.7819050848484039,
           0.7780081629753113,
           0.7696941792964935
@@ -238,13 +668,39 @@
       "category": "relationship_query",
       "query": "What is the relationship between rental and customer?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_relationship_c890660670ed10f1",
-        "pg_column_8a6311f2de5dd34d",
-        "pg_table_a2de30f831562c03",
-        "pg_table_13d9004cb041690a",
-        "pg_column_716484d3d6e50ee7"
-      ],
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1"
+          }
+        ],
+        "column": [
+          {
+            "name": "customer_id",
+            "component": "rental",
+            "artifact_id": "pg_column_8a6311f2de5dd34d"
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          }
+        ],
+        "table": [
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -253,28 +709,88 @@
           "customer table"
         ],
         "all_candidates": [
-          "pg_relationship_c890660670ed10f1",
-          "pg_column_8a6311f2de5dd34d",
-          "pg_table_a2de30f831562c03",
-          "pg_table_13d9004cb041690a",
-          "pg_column_716484d3d6e50ee7",
-          "pg_column_4fa672e7041c4053",
-          "pg_column_b619d28e78887a12",
-          "pg_relationship_d9e30bb9e6e84de3",
-          "pg_relationship_6e9629f015a69ade",
-          "pg_column_008a013e0fed40d2"
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1",
+            "type": "relationship",
+            "similarity": 0.7675940692424774
+          },
+          {
+            "name": "customer_id",
+            "component": "rental",
+            "artifact_id": "pg_column_8a6311f2de5dd34d",
+            "type": "column",
+            "similarity": 0.7624756693840027
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03",
+            "type": "table",
+            "similarity": 0.7442463338375092
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a",
+            "type": "table",
+            "similarity": 0.7164667844772339
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7",
+            "type": "column",
+            "similarity": 0.7158352732658386
+          },
+          {
+            "name": "rental_id",
+            "component": "payment",
+            "artifact_id": "pg_column_4fa672e7041c4053",
+            "type": "column",
+            "similarity": 0.7041033506393433
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12",
+            "type": "column",
+            "similarity": 0.6865922808647156
+          },
+          {
+            "name": "customer_store_id_fkey",
+            "component": "customer",
+            "artifact_id": "pg_relationship_d9e30bb9e6e84de3",
+            "type": "relationship",
+            "similarity": 0.6838937699794769
+          },
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69",
+            "type": "index",
+            "similarity": 0.6818377375602722
+          },
+          {
+            "name": "rental_staff_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_6e9629f015a69ade",
+            "type": "relationship",
+            "similarity": 0.6795835793018341
+          }
         ],
         "candidate_scores": [
           0.7675940692424774,
-          0.7624757289886475,
-          0.7442463934421539,
-          0.7164669036865234,
+          0.7624756693840027,
+          0.7442463338375092,
+          0.7164667844772339,
           0.7158352732658386,
           0.7041033506393433,
           0.6865922808647156,
-          0.6838937103748322,
-          0.6795836091041565,
-          0.6765589118003845
+          0.6838937699794769,
+          0.6818377375602722,
+          0.6795835793018341
         ],
         "requires_manual_review": true
       }
@@ -284,13 +800,41 @@
       "category": "relationship_query",
       "query": "What tables have foreign keys to film?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_e5f19fb863d1fa62",
-        "pg_column_f14a06d8682a606d",
-        "pg_relationship_381bc048794daf41",
-        "pg_column_f6ad91f725ccbaa9",
-        "pg_relationship_6dc5b16b2001eaf3"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          }
+        ],
+        "index": [
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5"
+          }
+        ],
+        "column": [
+          {
+            "name": "film_id",
+            "component": "film_actor",
+            "artifact_id": "pg_column_f14a06d8682a606d"
+          },
+          {
+            "name": "film_id",
+            "component": "film_category",
+            "artifact_id": "pg_column_f6ad91f725ccbaa9"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41"
+          }
+        ]
+      },
       "difficulty": "hard",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -298,28 +842,88 @@
           "relationships to film"
         ],
         "all_candidates": [
-          "pg_table_e5f19fb863d1fa62",
-          "pg_column_f14a06d8682a606d",
-          "pg_relationship_381bc048794daf41",
-          "pg_column_f6ad91f725ccbaa9",
-          "pg_relationship_6dc5b16b2001eaf3",
-          "pg_column_8df6409a098a0526",
-          "pg_column_98a7f32ec96303ac",
-          "pg_column_ebd6a2a998a1694c",
-          "pg_relationship_b88c868c78cfff19",
-          "pg_table_27a130f53257a313"
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
+            "type": "table",
+            "similarity": 0.8216140866279602
+          },
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5",
+            "type": "index",
+            "similarity": 0.8025878965854645
+          },
+          {
+            "name": "film_id",
+            "component": "film_actor",
+            "artifact_id": "pg_column_f14a06d8682a606d",
+            "type": "column",
+            "similarity": 0.7998473644256592
+          },
+          {
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41",
+            "type": "relationship",
+            "similarity": 0.7965716421604156
+          },
+          {
+            "name": "film_id",
+            "component": "film_category",
+            "artifact_id": "pg_column_f6ad91f725ccbaa9",
+            "type": "column",
+            "similarity": 0.7964849174022675
+          },
+          {
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3",
+            "type": "relationship",
+            "similarity": 0.7957605123519897
+          },
+          {
+            "name": "language_id",
+            "component": "film",
+            "artifact_id": "pg_column_8df6409a098a0526",
+            "type": "column",
+            "similarity": 0.7902069091796875
+          },
+          {
+            "name": "film_id",
+            "component": "film",
+            "artifact_id": "pg_column_98a7f32ec96303ac",
+            "type": "column",
+            "similarity": 0.7875483632087708
+          },
+          {
+            "name": "original_language_id",
+            "component": "film",
+            "artifact_id": "pg_column_ebd6a2a998a1694c",
+            "type": "column",
+            "similarity": 0.7868744134902954
+          },
+          {
+            "name": "film_category_film_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_b88c868c78cfff19",
+            "type": "relationship",
+            "similarity": 0.7867563366889954
+          }
         ],
         "candidate_scores": [
-          0.8216140270233154,
-          0.799847275018692,
+          0.8216140866279602,
+          0.8025878965854645,
+          0.7998473644256592,
           0.7965716421604156,
           0.7964849174022675,
           0.7957605123519897,
           0.7902069091796875,
           0.7875483632087708,
-          0.7868745028972626,
-          0.7867563366889954,
-          0.786605566740036
+          0.7868744134902954,
+          0.7867563366889954
         ],
         "requires_manual_review": true
       }
@@ -329,13 +933,41 @@
       "category": "relationship_query",
       "query": "How are rentals linked to customers?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_relationship_c890660670ed10f1",
-        "pg_table_a2de30f831562c03",
-        "pg_column_8a6311f2de5dd34d",
-        "pg_column_716484d3d6e50ee7",
-        "pg_table_13d9004cb041690a"
-      ],
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1"
+          }
+        ],
+        "table": [
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ],
+        "column": [
+          {
+            "name": "customer_id",
+            "component": "rental",
+            "artifact_id": "pg_column_8a6311f2de5dd34d"
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          }
+        ],
+        "index": [
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -345,28 +977,88 @@
           "customer table"
         ],
         "all_candidates": [
-          "pg_relationship_c890660670ed10f1",
-          "pg_table_a2de30f831562c03",
-          "pg_column_8a6311f2de5dd34d",
-          "pg_column_716484d3d6e50ee7",
-          "pg_table_13d9004cb041690a",
-          "pg_relationship_6e9629f015a69ade",
-          "pg_column_4fa672e7041c4053",
-          "pg_relationship_1e7ee1468c84919e",
-          "pg_relationship_d9e30bb9e6e84de3",
-          "pg_column_b619d28e78887a12"
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1",
+            "type": "relationship",
+            "similarity": 0.7459754049777985
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03",
+            "type": "table",
+            "similarity": 0.7445284724235535
+          },
+          {
+            "name": "customer_id",
+            "component": "rental",
+            "artifact_id": "pg_column_8a6311f2de5dd34d",
+            "type": "column",
+            "similarity": 0.7270805239677429
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7",
+            "type": "column",
+            "similarity": 0.7039705514907837
+          },
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69",
+            "type": "index",
+            "similarity": 0.689691960811615
+          },
+          {
+            "name": "rental_by_category",
+            "component": "rental_by_category",
+            "artifact_id": "pg_materialized_view_a2a8e230ecb5f454",
+            "type": "materialized_view",
+            "similarity": 0.6864206194877625
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a",
+            "type": "table",
+            "similarity": 0.6858324408531189
+          },
+          {
+            "name": "rental_staff_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_6e9629f015a69ade",
+            "type": "relationship",
+            "similarity": 0.6803874671459198
+          },
+          {
+            "name": "rental_id",
+            "component": "payment",
+            "artifact_id": "pg_column_4fa672e7041c4053",
+            "type": "column",
+            "similarity": 0.6739049851894379
+          },
+          {
+            "name": "rental_inventory_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_1e7ee1468c84919e",
+            "type": "relationship",
+            "similarity": 0.6670154333114624
+          }
         ],
         "candidate_scores": [
           0.7459754049777985,
           0.7445284724235535,
           0.7270805239677429,
           0.7039705514907837,
-          0.6858325898647308,
-          0.6803874969482422,
+          0.689691960811615,
+          0.6864206194877625,
+          0.6858324408531189,
+          0.6803874671459198,
           0.6739049851894379,
-          0.6670154333114624,
-          0.6657860279083252,
-          0.6630476117134094
+          0.6670154333114624
         ],
         "requires_manual_review": true
       }
@@ -376,13 +1068,41 @@
       "category": "cross_entity",
       "query": "What information is stored about films and actors?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_e5f19fb863d1fa62",
-        "pg_table_27a130f53257a313",
-        "pg_column_f14a06d8682a606d",
-        "pg_table_62b453d1a523600d",
-        "pg_column_98a7f32ec96303ac"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313"
+          }
+        ],
+        "index": [
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5"
+          }
+        ],
+        "view": [
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd"
+          }
+        ],
+        "column": [
+          {
+            "name": "film_id",
+            "component": "film_actor",
+            "artifact_id": "pg_column_f14a06d8682a606d"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -392,28 +1112,88 @@
           "film_actor table"
         ],
         "all_candidates": [
-          "pg_table_e5f19fb863d1fa62",
-          "pg_table_27a130f53257a313",
-          "pg_column_f14a06d8682a606d",
-          "pg_table_62b453d1a523600d",
-          "pg_column_98a7f32ec96303ac",
-          "pg_relationship_b88c868c78cfff19",
-          "pg_relationship_6dc5b16b2001eaf3",
-          "pg_relationship_381bc048794daf41",
-          "pg_column_f6ad91f725ccbaa9",
-          "pg_relationship_a06e2c24cf1da308"
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
+            "type": "table",
+            "similarity": 0.7209399938583374
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313",
+            "type": "table",
+            "similarity": 0.6983116865158081
+          },
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5",
+            "type": "index",
+            "similarity": 0.6798283457756042
+          },
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd",
+            "type": "view",
+            "similarity": 0.6775781214237213
+          },
+          {
+            "name": "film_id",
+            "component": "film_actor",
+            "artifact_id": "pg_column_f14a06d8682a606d",
+            "type": "column",
+            "similarity": 0.6759875416755676
+          },
+          {
+            "name": "mpaa_rating",
+            "component": "mpaa_rating",
+            "artifact_id": "pg_type_a667f3c1db219e96",
+            "type": "type",
+            "similarity": 0.6727479696273804
+          },
+          {
+            "name": "film_actor_pkey",
+            "component": "film_actor",
+            "artifact_id": "pg_index_bc138f24082d9ad1",
+            "type": "index",
+            "similarity": 0.6702871322631836
+          },
+          {
+            "name": "film_category",
+            "component": "film_category",
+            "artifact_id": "pg_table_62b453d1a523600d",
+            "type": "table",
+            "similarity": 0.6699391007423401
+          },
+          {
+            "name": "film_id",
+            "component": "film",
+            "artifact_id": "pg_column_98a7f32ec96303ac",
+            "type": "column",
+            "similarity": 0.6690976917743683
+          },
+          {
+            "name": "film_category_film_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_b88c868c78cfff19",
+            "type": "relationship",
+            "similarity": 0.6685993373394012
+          }
         ],
         "candidate_scores": [
-          0.7209400236606598,
+          0.7209399938583374,
           0.6983116865158081,
-          0.6759874820709229,
+          0.6798283457756042,
+          0.6775781214237213,
+          0.6759875416755676,
+          0.6727479696273804,
+          0.6702871322631836,
           0.6699391007423401,
           0.6690976917743683,
-          0.6685993373394012,
-          0.6682648956775665,
-          0.6680987179279327,
-          0.665268063545227,
-          0.6649537086486816
+          0.6685993373394012
         ],
         "requires_manual_review": true
       }
@@ -423,13 +1203,39 @@
       "category": "cross_entity",
       "query": "What indexes exist on the rental table?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_a2de30f831562c03",
-        "pg_index_406b8ab206c4cfd1",
-        "pg_index_24cf894771093a5d",
-        "pg_column_716484d3d6e50ee7",
-        "pg_column_b619d28e78887a12"
-      ],
+      "relevant_artifacts": {
+        "index": [
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69"
+          },
+          {
+            "name": "idx_unq_rental_rental_date_inventory_id_customer_id",
+            "component": "rental",
+            "artifact_id": "pg_index_406b8ab206c4cfd1"
+          },
+          {
+            "name": "idx_fk_inventory_id",
+            "component": "rental",
+            "artifact_id": "pg_index_24cf894771093a5d"
+          }
+        ],
+        "table": [
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ],
+        "column": [
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -437,28 +1243,88 @@
           "rental indexes"
         ],
         "all_candidates": [
-          "pg_table_a2de30f831562c03",
-          "pg_index_406b8ab206c4cfd1",
-          "pg_index_24cf894771093a5d",
-          "pg_column_716484d3d6e50ee7",
-          "pg_column_b619d28e78887a12",
-          "pg_column_f720f61684d2ad03",
-          "pg_index_c484197446857311",
-          "pg_index_595f8d938fa1c47c",
-          "pg_table_0dd32e57eff261c4",
-          "pg_index_3a6447ba3ff156c6"
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69",
+            "type": "index",
+            "similarity": 0.8323336541652679
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03",
+            "type": "table",
+            "similarity": 0.8172634541988373
+          },
+          {
+            "name": "idx_unq_rental_rental_date_inventory_id_customer_id",
+            "component": "rental",
+            "artifact_id": "pg_index_406b8ab206c4cfd1",
+            "type": "index",
+            "similarity": 0.7953721880912781
+          },
+          {
+            "name": "idx_fk_inventory_id",
+            "component": "rental",
+            "artifact_id": "pg_index_24cf894771093a5d",
+            "type": "index",
+            "similarity": 0.7826421856880188
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7",
+            "type": "column",
+            "similarity": 0.7698484659194946
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12",
+            "type": "column",
+            "similarity": 0.7411800622940063
+          },
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5",
+            "type": "index",
+            "similarity": 0.7379511892795563
+          },
+          {
+            "name": "rental_duration",
+            "component": "film",
+            "artifact_id": "pg_column_f720f61684d2ad03",
+            "type": "column",
+            "similarity": 0.7369865775108337
+          },
+          {
+            "name": "idx_store_id_film_id",
+            "component": "inventory",
+            "artifact_id": "pg_index_c484197446857311",
+            "type": "index",
+            "similarity": 0.7352801263332367
+          },
+          {
+            "name": "address_pkey",
+            "component": "address",
+            "artifact_id": "pg_index_08cda6a4550924e3",
+            "type": "index",
+            "similarity": 0.7336628139019012
+          }
         ],
         "candidate_scores": [
-          0.8172634840011597,
+          0.8323336541652679,
+          0.8172634541988373,
           0.7953721880912781,
           0.7826421856880188,
-          0.769848495721817,
+          0.7698484659194946,
           0.7411800622940063,
+          0.7379511892795563,
           0.7369865775108337,
           0.7352801263332367,
-          0.7326004505157471,
-          0.7295699715614319,
-          0.7286913394927979
+          0.7336628139019012
         ],
         "requires_manual_review": true
       }
@@ -468,13 +1334,35 @@
       "category": "schema_exploration",
       "query": "What tables are in the public schema?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_f195d08ca1229d82",
-        "pg_table_69ef272f10ed5c5f",
-        "pg_table_ab969cd77dd2e0a4",
-        "pg_table_13d9004cb041690a",
-        "pg_table_d5710663729b3430"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "category",
+            "component": "category",
+            "artifact_id": "pg_table_f195d08ca1229d82"
+          },
+          {
+            "name": "address",
+            "component": "address",
+            "artifact_id": "pg_table_69ef272f10ed5c5f"
+          },
+          {
+            "name": "store",
+            "component": "store",
+            "artifact_id": "pg_table_ab969cd77dd2e0a4"
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a"
+          },
+          {
+            "name": "language",
+            "component": "language",
+            "artifact_id": "pg_table_d5710663729b3430"
+          }
+        ]
+      },
       "difficulty": "easy",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -482,28 +1370,88 @@
           "public schema tables"
         ],
         "all_candidates": [
-          "pg_table_f195d08ca1229d82",
-          "pg_table_69ef272f10ed5c5f",
-          "pg_table_ab969cd77dd2e0a4",
-          "pg_table_13d9004cb041690a",
-          "pg_table_d5710663729b3430",
-          "pg_table_a44bc3185418eae9",
-          "pg_table_0dd32e57eff261c4",
-          "pg_table_7b5a5ca66500bd78",
-          "pg_table_efa617532130eb82",
-          "pg_table_7c76cbb31743ce50"
+          {
+            "name": "category",
+            "component": "category",
+            "artifact_id": "pg_table_f195d08ca1229d82",
+            "type": "table",
+            "similarity": 0.7614750564098358
+          },
+          {
+            "name": "address",
+            "component": "address",
+            "artifact_id": "pg_table_69ef272f10ed5c5f",
+            "type": "table",
+            "similarity": 0.7531559467315674
+          },
+          {
+            "name": "store",
+            "component": "store",
+            "artifact_id": "pg_table_ab969cd77dd2e0a4",
+            "type": "table",
+            "similarity": 0.7434305548667908
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a",
+            "type": "table",
+            "similarity": 0.7347036600112915
+          },
+          {
+            "name": "language",
+            "component": "language",
+            "artifact_id": "pg_table_d5710663729b3430",
+            "type": "table",
+            "similarity": 0.7330052852630615
+          },
+          {
+            "name": "staff",
+            "component": "staff",
+            "artifact_id": "pg_table_a44bc3185418eae9",
+            "type": "table",
+            "similarity": 0.7287960052490234
+          },
+          {
+            "name": "year",
+            "component": "year",
+            "artifact_id": "pg_type_2582b814108e0985",
+            "type": "type",
+            "similarity": 0.727973461151123
+          },
+          {
+            "name": "inventory",
+            "component": "inventory",
+            "artifact_id": "pg_table_0dd32e57eff261c4",
+            "type": "table",
+            "similarity": 0.7166058123111725
+          },
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78",
+            "type": "table",
+            "similarity": 0.714408814907074
+          },
+          {
+            "name": "city",
+            "component": "city",
+            "artifact_id": "pg_table_efa617532130eb82",
+            "type": "table",
+            "similarity": 0.7134355902671814
+          }
         ],
         "candidate_scores": [
-          0.7614750862121582,
-          0.753155916929245,
-          0.7434304356575012,
-          0.7347036004066467,
-          0.7330053150653839,
+          0.7614750564098358,
+          0.7531559467315674,
+          0.7434305548667908,
+          0.7347036600112915,
+          0.7330052852630615,
           0.7287960052490234,
-          0.7166057825088501,
+          0.727973461151123,
+          0.7166058123111725,
           0.714408814907074,
-          0.7134355902671814,
-          0.710192084312439
+          0.7134355902671814
         ],
         "requires_manual_review": true
       }
@@ -513,13 +1461,37 @@
       "category": "schema_exploration",
       "query": "What are the main entities in the Pagila database?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_a44bc3185418eae9",
-        "pg_table_f195d08ca1229d82",
-        "pg_table_7b5a5ca66500bd78",
-        "pg_table_d5710663729b3430",
-        "pg_table_0dd32e57eff261c4"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "staff",
+            "component": "staff",
+            "artifact_id": "pg_table_a44bc3185418eae9"
+          },
+          {
+            "name": "category",
+            "component": "category",
+            "artifact_id": "pg_table_f195d08ca1229d82"
+          },
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78"
+          },
+          {
+            "name": "language",
+            "component": "language",
+            "artifact_id": "pg_table_d5710663729b3430"
+          }
+        ],
+        "view": [
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -527,28 +1499,88 @@
           "tables: film, customer, rental, actor, etc."
         ],
         "all_candidates": [
-          "pg_table_a44bc3185418eae9",
-          "pg_table_f195d08ca1229d82",
-          "pg_table_7b5a5ca66500bd78",
-          "pg_table_d5710663729b3430",
-          "pg_table_0dd32e57eff261c4",
-          "pg_table_7c76cbb31743ce50",
-          "pg_table_13d9004cb041690a",
-          "pg_table_ab969cd77dd2e0a4",
-          "pg_table_69ef272f10ed5c5f",
-          "pg_table_efa617532130eb82"
+          {
+            "name": "staff",
+            "component": "staff",
+            "artifact_id": "pg_table_a44bc3185418eae9",
+            "type": "table",
+            "similarity": 0.7003708481788635
+          },
+          {
+            "name": "category",
+            "component": "category",
+            "artifact_id": "pg_table_f195d08ca1229d82",
+            "type": "table",
+            "similarity": 0.699155330657959
+          },
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78",
+            "type": "table",
+            "similarity": 0.6977798938751221
+          },
+          {
+            "name": "language",
+            "component": "language",
+            "artifact_id": "pg_table_d5710663729b3430",
+            "type": "table",
+            "similarity": 0.6941867172718048
+          },
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd",
+            "type": "view",
+            "similarity": 0.6939348578453064
+          },
+          {
+            "name": "inventory",
+            "component": "inventory",
+            "artifact_id": "pg_table_0dd32e57eff261c4",
+            "type": "table",
+            "similarity": 0.6910783648490906
+          },
+          {
+            "name": "payment",
+            "component": "payment",
+            "artifact_id": "pg_table_7c76cbb31743ce50",
+            "type": "table",
+            "similarity": 0.6906555891036987
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a",
+            "type": "table",
+            "similarity": 0.6807346045970917
+          },
+          {
+            "name": "store",
+            "component": "store",
+            "artifact_id": "pg_table_ab969cd77dd2e0a4",
+            "type": "table",
+            "similarity": 0.6778234541416168
+          },
+          {
+            "name": "address",
+            "component": "address",
+            "artifact_id": "pg_table_69ef272f10ed5c5f",
+            "type": "table",
+            "similarity": 0.6744269132614136
+          }
         ],
         "candidate_scores": [
           0.7003708481788635,
-          0.6991552710533142,
+          0.699155330657959,
           0.6977798938751221,
-          0.6941866874694824,
+          0.6941867172718048,
+          0.6939348578453064,
           0.6910783648490906,
           0.6906555891036987,
-          0.6807346343994141,
-          0.6778233647346497,
-          0.6744268536567688,
-          0.6597312986850739
+          0.6807346045970917,
+          0.6778234541416168,
+          0.6744269132614136
         ],
         "requires_manual_review": true
       }
@@ -558,13 +1590,43 @@
       "category": "schema_exploration",
       "query": "Tell me about the inventory-related tables",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_0dd32e57eff261c4",
-        "pg_column_62681d3629f3ff53",
-        "pg_relationship_233f9aeeb2c3a696",
-        "pg_relationship_1e7ee1468c84919e",
-        "pg_column_11ccf3a8de4557b4"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "inventory",
+            "component": "inventory",
+            "artifact_id": "pg_table_0dd32e57eff261c4"
+          }
+        ],
+        "index": [
+          {
+            "name": "inventory_pkey",
+            "component": "inventory",
+            "artifact_id": "pg_index_3bdbb8d72aba99ad"
+          }
+        ],
+        "column": [
+          {
+            "name": "inventory_id",
+            "component": "inventory",
+            "artifact_id": "pg_column_62681d3629f3ff53"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "inventory_store_id_fkey",
+            "component": "inventory",
+            "artifact_id": "pg_relationship_233f9aeeb2c3a696"
+          }
+        ],
+        "sequence": [
+          {
+            "name": "inventory_inventory_id_seq",
+            "component": "inventory_inventory_id_seq",
+            "artifact_id": "pg_sequence_1346e63b4f67538f"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -572,28 +1634,88 @@
           "inventory, store, film tables"
         ],
         "all_candidates": [
-          "pg_table_0dd32e57eff261c4",
-          "pg_column_62681d3629f3ff53",
-          "pg_relationship_233f9aeeb2c3a696",
-          "pg_relationship_1e7ee1468c84919e",
-          "pg_column_11ccf3a8de4557b4",
-          "pg_relationship_bae8120114ec01fa",
-          "pg_column_fe4e7b8c2e49b0da",
-          "pg_index_24cf894771093a5d",
-          "pg_column_715e2bf119239996",
-          "pg_column_442132eb49297bd2"
+          {
+            "name": "inventory",
+            "component": "inventory",
+            "artifact_id": "pg_table_0dd32e57eff261c4",
+            "type": "table",
+            "similarity": 0.8446696400642395
+          },
+          {
+            "name": "inventory_pkey",
+            "component": "inventory",
+            "artifact_id": "pg_index_3bdbb8d72aba99ad",
+            "type": "index",
+            "similarity": 0.8138056993484497
+          },
+          {
+            "name": "inventory_id",
+            "component": "inventory",
+            "artifact_id": "pg_column_62681d3629f3ff53",
+            "type": "column",
+            "similarity": 0.7975806891918182
+          },
+          {
+            "name": "inventory_store_id_fkey",
+            "component": "inventory",
+            "artifact_id": "pg_relationship_233f9aeeb2c3a696",
+            "type": "relationship",
+            "similarity": 0.767626166343689
+          },
+          {
+            "name": "inventory_inventory_id_seq",
+            "component": "inventory_inventory_id_seq",
+            "artifact_id": "pg_sequence_1346e63b4f67538f",
+            "type": "sequence",
+            "similarity": 0.7516003251075745
+          },
+          {
+            "name": "rental_inventory_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_1e7ee1468c84919e",
+            "type": "relationship",
+            "similarity": 0.7453340888023376
+          },
+          {
+            "name": "inventory_held_by_customer",
+            "component": "inventory_held_by_customer",
+            "artifact_id": "pg_function_6ce9b32b10e841d2",
+            "type": "function",
+            "similarity": 0.7448242604732513
+          },
+          {
+            "name": "inventory_in_stock",
+            "component": "inventory_in_stock",
+            "artifact_id": "pg_function_4ae4a0fdfe5943f0",
+            "type": "function",
+            "similarity": 0.7357032001018524
+          },
+          {
+            "name": "store_id",
+            "component": "inventory",
+            "artifact_id": "pg_column_11ccf3a8de4557b4",
+            "type": "column",
+            "similarity": 0.7335638701915741
+          },
+          {
+            "name": "inventory_film_id_fkey",
+            "component": "inventory",
+            "artifact_id": "pg_relationship_bae8120114ec01fa",
+            "type": "relationship",
+            "similarity": 0.7324943542480469
+          }
         ],
         "candidate_scores": [
-          0.8446696698665619,
+          0.8446696400642395,
+          0.8138056993484497,
           0.7975806891918182,
-          0.7676261365413666,
+          0.767626166343689,
+          0.7516003251075745,
           0.7453340888023376,
+          0.7448242604732513,
+          0.7357032001018524,
           0.7335638701915741,
-          0.7324942946434021,
-          0.7312934398651123,
-          0.7267778515815735,
-          0.725748211145401,
-          0.7041976153850555
+          0.7324943542480469
         ],
         "requires_manual_review": true
       }
@@ -603,15 +1725,129 @@
       "category": "entity_lookup",
       "query": "What is the Catalog interface in CHEAP?",
       "language": "java",
-      "relevant_artifact_ids": [],
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09"
+          },
+          {
+            "name": "CatalogDef",
+            "component": "CatalogDef",
+            "artifact_id": "java_interface_4cdc18267c875ff1"
+          }
+        ],
+        "class": [
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f"
+          },
+          {
+            "name": "CatalogDefImpl",
+            "component": "CatalogDefImpl",
+            "artifact_id": "java_class_6b1dbd2266c5bcfc"
+          }
+        ],
+        "enum": [
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8"
+          }
+        ]
+      },
       "difficulty": "easy",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
         "original_expected": [
           "Catalog interface"
         ],
-        "all_candidates": [],
-        "candidate_scores": [],
+        "all_candidates": [
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09",
+            "type": "interface",
+            "similarity": 0.8354995846748352
+          },
+          {
+            "name": "CatalogDef",
+            "component": "CatalogDef",
+            "artifact_id": "java_interface_4cdc18267c875ff1",
+            "type": "interface",
+            "similarity": 0.8350874185562134
+          },
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f",
+            "type": "class",
+            "similarity": 0.8211267590522766
+          },
+          {
+            "name": "CatalogDefImpl",
+            "component": "CatalogDefImpl",
+            "artifact_id": "java_class_6b1dbd2266c5bcfc",
+            "type": "class",
+            "similarity": 0.812073290348053
+          },
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8",
+            "type": "enum",
+            "similarity": 0.7992271184921265
+          },
+          {
+            "name": "catalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_field_bae926360bfa1797",
+            "type": "field",
+            "similarity": 0.7922980785369873
+          },
+          {
+            "name": "uri",
+            "component": "CatalogImpl",
+            "artifact_id": "java_method_b41711096050bfe2",
+            "type": "method",
+            "similarity": 0.7850315570831299
+          },
+          {
+            "name": "Hierarchy",
+            "component": "Hierarchy",
+            "artifact_id": "java_interface_0ce8cfadfcb738d8",
+            "type": "interface",
+            "similarity": 0.7789286971092224
+          },
+          {
+            "name": "CatalogService",
+            "component": "CatalogService",
+            "artifact_id": "java_class_4f5f0567b2077639",
+            "type": "class",
+            "similarity": 0.7778715789318085
+          },
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_62b554b2a7a4fdd9",
+            "type": "method",
+            "similarity": 0.7751276195049286
+          }
+        ],
+        "candidate_scores": [
+          0.8354995846748352,
+          0.8350874185562134,
+          0.8211267590522766,
+          0.812073290348053,
+          0.7992271184921265,
+          0.7922980785369873,
+          0.7850315570831299,
+          0.7789286971092224,
+          0.7778715789318085,
+          0.7751276195049286
+        ],
         "requires_manual_review": true
       }
     },
@@ -620,15 +1856,1447 @@
       "category": "constraint_query",
       "query": "What fields does the Entity class have?",
       "language": "java",
-      "relevant_artifact_ids": [],
+      "relevant_artifacts": {
+        "field": [
+          {
+            "name": "entities",
+            "component": "EntityListHierarchyImpl",
+            "artifact_id": "java_field_2c8d813268675d04"
+          },
+          {
+            "name": "value",
+            "component": "EntityTreeHierarchyImpl",
+            "artifact_id": "java_field_4afbf2f86b3074c4"
+          },
+          {
+            "name": "entity",
+            "component": "AspectBaseImpl",
+            "artifact_id": "java_field_8960ca01763689ba"
+          }
+        ],
+        "interface": [
+          {
+            "name": "Entity",
+            "component": "Entity",
+            "artifact_id": "java_interface_d4f3c4004c3b17d3"
+          }
+        ],
+        "method": [
+          {
+            "name": "entity",
+            "component": "RecordAspect",
+            "artifact_id": "java_method_a99464679e8fde0f"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
         "original_expected": [
           "Entity class fields"
         ],
-        "all_candidates": [],
-        "candidate_scores": [],
+        "all_candidates": [
+          {
+            "name": "entities",
+            "component": "EntityListHierarchyImpl",
+            "artifact_id": "java_field_2c8d813268675d04",
+            "type": "field",
+            "similarity": 0.8381445407867432
+          },
+          {
+            "name": "Entity",
+            "component": "Entity",
+            "artifact_id": "java_interface_d4f3c4004c3b17d3",
+            "type": "interface",
+            "similarity": 0.8020905554294586
+          },
+          {
+            "name": "value",
+            "component": "EntityTreeHierarchyImpl",
+            "artifact_id": "java_field_4afbf2f86b3074c4",
+            "type": "field",
+            "similarity": 0.8009850382804871
+          },
+          {
+            "name": "entity",
+            "component": "AspectBaseImpl",
+            "artifact_id": "java_field_8960ca01763689ba",
+            "type": "field",
+            "similarity": 0.7950190305709839
+          },
+          {
+            "name": "entity",
+            "component": "RecordAspect",
+            "artifact_id": "java_method_a99464679e8fde0f",
+            "type": "method",
+            "similarity": 0.7862982153892517
+          },
+          {
+            "name": "entity",
+            "component": "RecordAspect",
+            "artifact_id": "java_field_e4ca644b749d532b",
+            "type": "field",
+            "similarity": 0.784320205450058
+          },
+          {
+            "name": "entity3",
+            "component": "EntitySetHierarchyImplTest",
+            "artifact_id": "java_field_c26084c78b428585",
+            "type": "field",
+            "similarity": 0.78326615691185
+          },
+          {
+            "name": "entity",
+            "component": "AspectPropertyMapImplTest",
+            "artifact_id": "java_field_d103c163f189e687",
+            "type": "field",
+            "similarity": 0.7803539037704468
+          },
+          {
+            "name": "entity1",
+            "component": "EntitySetHierarchyImplTest",
+            "artifact_id": "java_field_5517623ba4867bc7",
+            "type": "field",
+            "similarity": 0.780068576335907
+          },
+          {
+            "name": "value",
+            "component": "EntityTreeHierarchyImpl",
+            "artifact_id": "java_field_65f9390354562e7d",
+            "type": "field",
+            "similarity": 0.7800070345401764
+          }
+        ],
+        "candidate_scores": [
+          0.8381445407867432,
+          0.8020905554294586,
+          0.8009850382804871,
+          0.7950190305709839,
+          0.7862982153892517,
+          0.784320205450058,
+          0.78326615691185,
+          0.7803539037704468,
+          0.780068576335907,
+          0.7800070345401764
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_003",
+      "category": "entity_lookup",
+      "query": "What is the AspectDef interface in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "method": [
+          {
+            "name": "getAspectDef",
+            "component": "AspectBuilderBase",
+            "artifact_id": "java_method_fd26424b54a7f055"
+          },
+          {
+            "name": "registerAspectDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_b8f3e589b8c02541"
+          },
+          {
+            "name": "aspectDef_SetsAspectDef",
+            "component": "AspectObjectMapBuilderTest",
+            "artifact_id": "java_method_6262af651b7a78eb"
+          },
+          {
+            "name": "createAspectBuilder",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_a4f2f7e5caa165c4"
+          }
+        ],
+        "field": [
+          {
+            "name": "aspectDef",
+            "component": "AspectMapImpl",
+            "artifact_id": "java_field_5e2f66d43055150e"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "AspectDef interface"
+        ],
+        "all_candidates": [
+          {
+            "name": "getAspectDef",
+            "component": "AspectBuilderBase",
+            "artifact_id": "java_method_fd26424b54a7f055",
+            "type": "method",
+            "similarity": 0.8444245457649231
+          },
+          {
+            "name": "registerAspectDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_b8f3e589b8c02541",
+            "type": "method",
+            "similarity": 0.8411292135715485
+          },
+          {
+            "name": "aspectDef_SetsAspectDef",
+            "component": "AspectObjectMapBuilderTest",
+            "artifact_id": "java_method_6262af651b7a78eb",
+            "type": "method",
+            "similarity": 0.8389970064163208
+          },
+          {
+            "name": "createAspectBuilder",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_a4f2f7e5caa165c4",
+            "type": "method",
+            "similarity": 0.8383038640022278
+          },
+          {
+            "name": "aspectDef",
+            "component": "AspectMapImpl",
+            "artifact_id": "java_field_5e2f66d43055150e",
+            "type": "field",
+            "similarity": 0.8357202708721161
+          },
+          {
+            "name": "getAspectDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_a65b3e650dba7b69",
+            "type": "method",
+            "similarity": 0.8357108235359192
+          },
+          {
+            "name": "def",
+            "component": "AspectBaseImpl",
+            "artifact_id": "java_field_92a64ab148612a82",
+            "type": "field",
+            "similarity": 0.8346864581108093
+          },
+          {
+            "name": "aspectDef",
+            "component": "AspectMap",
+            "artifact_id": "java_method_e531725851229e33",
+            "type": "method",
+            "similarity": 0.8343831300735474
+          },
+          {
+            "name": "aspectDef",
+            "component": "AspectMapImpl",
+            "artifact_id": "java_method_7a23948c8e221c6d",
+            "type": "method",
+            "similarity": 0.8343496918678284
+          },
+          {
+            "name": "aspectDef",
+            "component": "AspectObjectMapBuilderTest",
+            "artifact_id": "java_field_65277283aed52b06",
+            "type": "field",
+            "similarity": 0.8339308500289917
+          }
+        ],
+        "candidate_scores": [
+          0.8444245457649231,
+          0.8411292135715485,
+          0.8389970064163208,
+          0.8383038640022278,
+          0.8357202708721161,
+          0.8357108235359192,
+          0.8346864581108093,
+          0.8343831300735474,
+          0.8343496918678284,
+          0.8339308500289917
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_004",
+      "category": "entity_lookup",
+      "query": "What hierarchy types exist in CHEAP and what are they used for?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "HierarchyType",
+            "component": "HierarchyType",
+            "artifact_id": "java_enum_519cfd61e31266a5"
+          }
+        ],
+        "interface": [
+          {
+            "name": "HierarchyDef",
+            "component": "HierarchyDef",
+            "artifact_id": "java_interface_186a7958674807cf"
+          },
+          {
+            "name": "Hierarchy",
+            "component": "Hierarchy",
+            "artifact_id": "java_interface_0ce8cfadfcb738d8"
+          }
+        ],
+        "method": [
+          {
+            "name": "type",
+            "component": "Hierarchy",
+            "artifact_id": "java_method_5bdcaad01a361f54"
+          },
+          {
+            "name": "type",
+            "component": "HierarchyDef",
+            "artifact_id": "java_method_51a746f6b84a5932"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "HierarchyType enum",
+          "Hierarchy interface"
+        ],
+        "all_candidates": [
+          {
+            "name": "HierarchyType",
+            "component": "HierarchyType",
+            "artifact_id": "java_enum_519cfd61e31266a5",
+            "type": "enum",
+            "similarity": 0.8659316301345825
+          },
+          {
+            "name": "HierarchyDef",
+            "component": "HierarchyDef",
+            "artifact_id": "java_interface_186a7958674807cf",
+            "type": "interface",
+            "similarity": 0.8634514808654785
+          },
+          {
+            "name": "Hierarchy",
+            "component": "Hierarchy",
+            "artifact_id": "java_interface_0ce8cfadfcb738d8",
+            "type": "interface",
+            "similarity": 0.8628109097480774
+          },
+          {
+            "name": "type",
+            "component": "Hierarchy",
+            "artifact_id": "java_method_5bdcaad01a361f54",
+            "type": "method",
+            "similarity": 0.835847020149231
+          },
+          {
+            "name": "type",
+            "component": "HierarchyDef",
+            "artifact_id": "java_method_51a746f6b84a5932",
+            "type": "method",
+            "similarity": 0.8346464335918427
+          },
+          {
+            "name": "EntityTreeHierarchy",
+            "component": "EntityTreeHierarchy",
+            "artifact_id": "java_interface_1dd1a8668977de02",
+            "type": "interface",
+            "similarity": 0.8156050443649292
+          },
+          {
+            "name": "createHierarchyDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_8d3b8dad3fbf5543",
+            "type": "method",
+            "similarity": 0.8011236786842346
+          },
+          {
+            "name": "AspectMapHierarchy",
+            "component": "AspectMapHierarchy",
+            "artifact_id": "java_interface_f9fb539de73464dc",
+            "type": "interface",
+            "similarity": 0.7956610918045044
+          },
+          {
+            "name": "EntityTreeHierarchyImpl",
+            "component": "EntityTreeHierarchyImpl",
+            "artifact_id": "java_class_6d5accecf788c3a2",
+            "type": "class",
+            "similarity": 0.7940157651901245
+          },
+          {
+            "name": "typeCode",
+            "component": "HierarchyType",
+            "artifact_id": "java_method_efb8fe48390e7fa0",
+            "type": "method",
+            "similarity": 0.7899650633335114
+          }
+        ],
+        "candidate_scores": [
+          0.8659316301345825,
+          0.8634514808654785,
+          0.8628109097480774,
+          0.835847020149231,
+          0.8346464335918427,
+          0.8156050443649292,
+          0.8011236786842346,
+          0.7956610918045044,
+          0.7940157651901245,
+          0.7899650633335114
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_005",
+      "category": "constraint_query",
+      "query": "What property types are supported in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "PropertyType",
+            "component": "PropertyType",
+            "artifact_id": "java_enum_846686c4f1989705"
+          }
+        ],
+        "class": [
+          {
+            "name": "PropertyValueAdapter",
+            "component": "PropertyValueAdapter",
+            "artifact_id": "java_class_8dc19de715363153"
+          },
+          {
+            "name": "PropertyDefImpl",
+            "component": "PropertyDefImpl",
+            "artifact_id": "java_class_bfc5c77bc0bc38f2"
+          }
+        ],
+        "interface": [
+          {
+            "name": "PropertyDef",
+            "component": "PropertyDef",
+            "artifact_id": "java_interface_8963bb39753bc97b"
+          }
+        ],
+        "method": [
+          {
+            "name": "type",
+            "component": "PropertyDef",
+            "artifact_id": "java_method_ba39061906d68ebf"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "PropertyType enum"
+        ],
+        "all_candidates": [
+          {
+            "name": "PropertyType",
+            "component": "PropertyType",
+            "artifact_id": "java_enum_846686c4f1989705",
+            "type": "enum",
+            "similarity": 0.8350919783115387
+          },
+          {
+            "name": "PropertyValueAdapter",
+            "component": "PropertyValueAdapter",
+            "artifact_id": "java_class_8dc19de715363153",
+            "type": "class",
+            "similarity": 0.8242221772670746
+          },
+          {
+            "name": "PropertyDef",
+            "component": "PropertyDef",
+            "artifact_id": "java_interface_8963bb39753bc97b",
+            "type": "interface",
+            "similarity": 0.8208049535751343
+          },
+          {
+            "name": "PropertyDefImpl",
+            "component": "PropertyDefImpl",
+            "artifact_id": "java_class_bfc5c77bc0bc38f2",
+            "type": "class",
+            "similarity": 0.7896282374858856
+          },
+          {
+            "name": "type",
+            "component": "PropertyDef",
+            "artifact_id": "java_method_ba39061906d68ebf",
+            "type": "method",
+            "similarity": 0.7880806028842926
+          },
+          {
+            "name": "CLASS_PROPERTY_TYPE_MAP",
+            "component": "CheapReflectionUtil",
+            "artifact_id": "java_field_cd3ae25706cbba33",
+            "type": "field",
+            "similarity": 0.7853639721870422
+          },
+          {
+            "name": "Property",
+            "component": "Property",
+            "artifact_id": "java_interface_09a4bdb47969465c",
+            "type": "interface",
+            "similarity": 0.7851791083812714
+          },
+          {
+            "name": "AspectDef",
+            "component": "AspectDef",
+            "artifact_id": "java_interface_591522556672e73d",
+            "type": "interface",
+            "similarity": 0.7808693051338196
+          },
+          {
+            "name": "MutableAspectDef",
+            "component": "MutableAspectDef",
+            "artifact_id": "java_interface_cb727c57cb5f8edd",
+            "type": "interface",
+            "similarity": 0.7783796787261963
+          },
+          {
+            "name": "typeOf",
+            "component": "CheapReflectionUtil",
+            "artifact_id": "java_method_02be27f40cb611eb",
+            "type": "method",
+            "similarity": 0.7776729166507721
+          }
+        ],
+        "candidate_scores": [
+          0.8350919783115387,
+          0.8242221772670746,
+          0.8208049535751343,
+          0.7896282374858856,
+          0.7880806028842926,
+          0.7853639721870422,
+          0.7851791083812714,
+          0.7808693051338196,
+          0.7783796787261963,
+          0.7776729166507721
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_006",
+      "category": "entity_lookup",
+      "query": "What is CatalogSpecies and what values does it have?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "CatalogDef",
+            "component": "CatalogDef",
+            "artifact_id": "java_interface_4cdc18267c875ff1"
+          }
+        ],
+        "enum": [
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8"
+          }
+        ],
+        "class": [
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f"
+          },
+          {
+            "name": "CatalogDefImpl",
+            "component": "CatalogDefImpl",
+            "artifact_id": "java_class_6b1dbd2266c5bcfc"
+          }
+        ],
+        "method": [
+          {
+            "name": "catalogs",
+            "component": "LocalEntityOneCatalogImpl",
+            "artifact_id": "java_method_a1782c3b136d8b53"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "CatalogSpecies enum"
+        ],
+        "all_candidates": [
+          {
+            "name": "CatalogDef",
+            "component": "CatalogDef",
+            "artifact_id": "java_interface_4cdc18267c875ff1",
+            "type": "interface",
+            "similarity": 0.8445979654788971
+          },
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8",
+            "type": "enum",
+            "similarity": 0.8212853670120239
+          },
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f",
+            "type": "class",
+            "similarity": 0.8208370804786682
+          },
+          {
+            "name": "CatalogDefImpl",
+            "component": "CatalogDefImpl",
+            "artifact_id": "java_class_6b1dbd2266c5bcfc",
+            "type": "class",
+            "similarity": 0.8192371129989624
+          },
+          {
+            "name": "catalogs",
+            "component": "LocalEntityOneCatalogImpl",
+            "artifact_id": "java_method_a1782c3b136d8b53",
+            "type": "method",
+            "similarity": 0.8107564151287079
+          },
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09",
+            "type": "interface",
+            "similarity": 0.8063931167125702
+          },
+          {
+            "name": "catalogs",
+            "component": "LocalEntityMultiCatalogImpl",
+            "artifact_id": "java_method_a2e90620c48a6e1c",
+            "type": "method",
+            "similarity": 0.8001179397106171
+          },
+          {
+            "name": "constructor_WithHierarchyAndAspectDefs_CreatesCatalogDef",
+            "component": "CatalogDefImplTest",
+            "artifact_id": "java_method_8c6968d684b35f39",
+            "type": "method",
+            "similarity": 0.7946928143501282
+          },
+          {
+            "name": "catalog",
+            "component": "AspectMapHierarchyImpl",
+            "artifact_id": "java_field_f2da36036885927d",
+            "type": "field",
+            "similarity": 0.7868713140487671
+          },
+          {
+            "name": "catalog",
+            "component": "EntityListHierarchyImpl",
+            "artifact_id": "java_field_11cded51a0d1f3d1",
+            "type": "field",
+            "similarity": 0.7797099649906158
+          }
+        ],
+        "candidate_scores": [
+          0.8445979654788971,
+          0.8212853670120239,
+          0.8208370804786682,
+          0.8192371129989624,
+          0.8107564151287079,
+          0.8063931167125702,
+          0.8001179397106171,
+          0.7946928143501282,
+          0.7868713140487671,
+          0.7797099649906158
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_007",
+      "category": "relationship_query",
+      "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "AspectDef",
+            "component": "AspectDef",
+            "artifact_id": "java_interface_591522556672e73d"
+          }
+        ],
+        "method": [
+          {
+            "name": "aspectDef",
+            "component": "AspectMap",
+            "artifact_id": "java_method_e531725851229e33"
+          },
+          {
+            "name": "def",
+            "component": "Aspect",
+            "artifact_id": "java_method_fd1777ecaddf9601"
+          },
+          {
+            "name": "createObjectMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_c9936ef426196810"
+          }
+        ],
+        "field": [
+          {
+            "name": "entity",
+            "component": "AspectBuilderBase",
+            "artifact_id": "java_field_f267a2a491e5ce1a"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "Aspect interface",
+          "AspectDef interface",
+          "Entity interface"
+        ],
+        "all_candidates": [
+          {
+            "name": "AspectDef",
+            "component": "AspectDef",
+            "artifact_id": "java_interface_591522556672e73d",
+            "type": "interface",
+            "similarity": 0.9003661870956421
+          },
+          {
+            "name": "aspectDef",
+            "component": "AspectMap",
+            "artifact_id": "java_method_e531725851229e33",
+            "type": "method",
+            "similarity": 0.8642067313194275
+          },
+          {
+            "name": "def",
+            "component": "Aspect",
+            "artifact_id": "java_method_fd1777ecaddf9601",
+            "type": "method",
+            "similarity": 0.8614851832389832
+          },
+          {
+            "name": "createObjectMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_c9936ef426196810",
+            "type": "method",
+            "similarity": 0.8603549599647522
+          },
+          {
+            "name": "entity",
+            "component": "AspectBuilderBase",
+            "artifact_id": "java_field_f267a2a491e5ce1a",
+            "type": "field",
+            "similarity": 0.8603462278842926
+          },
+          {
+            "name": "AspectMapHierarchy",
+            "component": "AspectMapHierarchy",
+            "artifact_id": "java_interface_f9fb539de73464dc",
+            "type": "interface",
+            "similarity": 0.8600454330444336
+          },
+          {
+            "name": "Aspect",
+            "component": "Aspect",
+            "artifact_id": "java_interface_2c38fb423fc3034f",
+            "type": "interface",
+            "similarity": 0.8595772981643677
+          },
+          {
+            "name": "createPropertyMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_e6ac8cfb255ef58c",
+            "type": "method",
+            "similarity": 0.8582391142845154
+          },
+          {
+            "name": "Entity",
+            "component": "Entity",
+            "artifact_id": "java_interface_d4f3c4004c3b17d3",
+            "type": "interface",
+            "similarity": 0.8567501902580261
+          },
+          {
+            "name": "createObjectMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_5741a01d3807f030",
+            "type": "method",
+            "similarity": 0.8559650778770447
+          }
+        ],
+        "candidate_scores": [
+          0.9003661870956421,
+          0.8642067313194275,
+          0.8614851832389832,
+          0.8603549599647522,
+          0.8603462278842926,
+          0.8600454330444336,
+          0.8595772981643677,
+          0.8582391142845154,
+          0.8567501902580261,
+          0.8559650778770447
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_008",
+      "category": "entity_lookup",
+      "query": "What is a TagDefinition and what fields does it have?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd"
+          },
+          {
+            "name": "TagSource",
+            "component": "TagSource",
+            "artifact_id": "java_enum_6ef30dc7525793bc"
+          }
+        ],
+        "field": [
+          {
+            "name": "DESCRIPTION_FIELD",
+            "component": "StandardTags",
+            "artifact_id": "java_field_1895b8bf18891cb7"
+          },
+          {
+            "name": "tagDef",
+            "component": "TagDefinitionAspectTest",
+            "artifact_id": "java_field_b7adcd026426f937"
+          }
+        ],
+        "method": [
+          {
+            "name": "defineTag",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_cd1a883b36c2a6f6"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "TagDefinition class"
+        ],
+        "all_candidates": [
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd",
+            "type": "enum",
+            "similarity": 0.8304547667503357
+          },
+          {
+            "name": "TagSource",
+            "component": "TagSource",
+            "artifact_id": "java_enum_6ef30dc7525793bc",
+            "type": "enum",
+            "similarity": 0.8248036503791809
+          },
+          {
+            "name": "DESCRIPTION_FIELD",
+            "component": "StandardTags",
+            "artifact_id": "java_field_1895b8bf18891cb7",
+            "type": "field",
+            "similarity": 0.8190296292304993
+          },
+          {
+            "name": "defineTag",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_cd1a883b36c2a6f6",
+            "type": "method",
+            "similarity": 0.8174344003200531
+          },
+          {
+            "name": "tagDef",
+            "component": "TagDefinitionAspectTest",
+            "artifact_id": "java_field_b7adcd026426f937",
+            "type": "field",
+            "similarity": 0.8147680163383484
+          },
+          {
+            "name": "initializeStandardTags",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_671dbb0e4d35766d",
+            "type": "method",
+            "similarity": 0.8120133578777313
+          },
+          {
+            "name": "tagDefinitionAspectDef",
+            "component": "TagRegistryImpl",
+            "artifact_id": "java_field_bfeec8c5c10cff7a",
+            "type": "field",
+            "similarity": 0.8110053837299347
+          },
+          {
+            "name": "defineTag",
+            "component": "TagRegistryImpl",
+            "artifact_id": "java_method_bdacce7a045ede5a",
+            "type": "method",
+            "similarity": 0.8109205961227417
+          },
+          {
+            "name": "description",
+            "component": "TagDefinition",
+            "artifact_id": "java_field_c7e665f9802db7d3",
+            "type": "field",
+            "similarity": 0.8093003630638123
+          },
+          {
+            "name": "TAG_REGISTRY",
+            "component": "StandardTags",
+            "artifact_id": "java_field_240559a30de5c8be",
+            "type": "field",
+            "similarity": 0.8072413206100464
+          }
+        ],
+        "candidate_scores": [
+          0.8304547667503357,
+          0.8248036503791809,
+          0.8190296292304993,
+          0.8174344003200531,
+          0.8147680163383484,
+          0.8120133578777313,
+          0.8110053837299347,
+          0.8109205961227417,
+          0.8093003630638123,
+          0.8072413206100464
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_009",
+      "category": "entity_lookup",
+      "query": "What standard tags are built into CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd"
+          }
+        ],
+        "method": [
+          {
+            "name": "getStandardTags",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_705b594fb8c828e9"
+          },
+          {
+            "name": "allStandardTags",
+            "component": "StandardTags",
+            "artifact_id": "java_method_9827644c8c332117"
+          }
+        ],
+        "class": [
+          {
+            "name": "StandardTagsTest",
+            "component": "StandardTagsTest",
+            "artifact_id": "java_class_21876eb94c698b1f"
+          }
+        ],
+        "interface": [
+          {
+            "name": "TagRegistry",
+            "component": "TagRegistry",
+            "artifact_id": "java_interface_2832f0557544ea7c"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "StandardTags class"
+        ],
+        "all_candidates": [
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd",
+            "type": "enum",
+            "similarity": 0.8016846179962158
+          },
+          {
+            "name": "getStandardTags",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_705b594fb8c828e9",
+            "type": "method",
+            "similarity": 0.7942741811275482
+          },
+          {
+            "name": "StandardTagsTest",
+            "component": "StandardTagsTest",
+            "artifact_id": "java_class_21876eb94c698b1f",
+            "type": "class",
+            "similarity": 0.7868265807628632
+          },
+          {
+            "name": "allStandardTags",
+            "component": "StandardTags",
+            "artifact_id": "java_method_9827644c8c332117",
+            "type": "method",
+            "similarity": 0.7754927277565002
+          },
+          {
+            "name": "TagRegistry",
+            "component": "TagRegistry",
+            "artifact_id": "java_interface_2832f0557544ea7c",
+            "type": "interface",
+            "similarity": 0.774091899394989
+          },
+          {
+            "name": "getStandardTagCount",
+            "component": "StandardTags",
+            "artifact_id": "java_method_0fcb0ca4125665f1",
+            "type": "method",
+            "similarity": 0.7650000154972076
+          },
+          {
+            "name": "StandardTags",
+            "component": "StandardTags",
+            "artifact_id": "java_class_a7cf0f9d997a81f1",
+            "type": "class",
+            "similarity": 0.7649605572223663
+          },
+          {
+            "name": "initializeStandardTags",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_671dbb0e4d35766d",
+            "type": "method",
+            "similarity": 0.7643744647502899
+          },
+          {
+            "name": "TagRegistryStandardTagsTest",
+            "component": "TagRegistryStandardTagsTest",
+            "artifact_id": "java_class_3846fa4e1f377acc",
+            "type": "class",
+            "similarity": 0.7602281868457794
+          },
+          {
+            "name": "TagDefinition",
+            "component": "TagDefinition",
+            "artifact_id": "java_class_471d8e8c7eea8433",
+            "type": "class",
+            "similarity": 0.7534859776496887
+          }
+        ],
+        "candidate_scores": [
+          0.8016846179962158,
+          0.7942741811275482,
+          0.7868265807628632,
+          0.7754927277565002,
+          0.774091899394989,
+          0.7650000154972076,
+          0.7649605572223663,
+          0.7643744647502899,
+          0.7602281868457794,
+          0.7534859776496887
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_010",
+      "category": "constraint_query",
+      "query": "What element types can tags be applied to in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "method": [
+          {
+            "name": "isApplicableTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_method_e4c14e23facb34f7"
+          },
+          {
+            "name": "getAppliesTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_method_8916090dd8d7f923"
+          },
+          {
+            "name": "isApplicableTo",
+            "component": "TagDefinitionAspect",
+            "artifact_id": "java_method_69be4a19fa2943dc"
+          }
+        ],
+        "class": [
+          {
+            "name": "TagDefinition",
+            "component": "TagDefinition",
+            "artifact_id": "java_class_471d8e8c7eea8433"
+          },
+          {
+            "name": "ElementTypeTest",
+            "component": "ElementTypeTest",
+            "artifact_id": "java_class_8602f2c837398018"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "ElementType enum"
+        ],
+        "all_candidates": [
+          {
+            "name": "isApplicableTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_method_e4c14e23facb34f7",
+            "type": "method",
+            "similarity": 0.8333732485771179
+          },
+          {
+            "name": "getAppliesTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_method_8916090dd8d7f923",
+            "type": "method",
+            "similarity": 0.8139722347259521
+          },
+          {
+            "name": "TagDefinition",
+            "component": "TagDefinition",
+            "artifact_id": "java_class_471d8e8c7eea8433",
+            "type": "class",
+            "similarity": 0.8118897378444672
+          },
+          {
+            "name": "ElementTypeTest",
+            "component": "ElementTypeTest",
+            "artifact_id": "java_class_8602f2c837398018",
+            "type": "class",
+            "similarity": 0.8104137480258942
+          },
+          {
+            "name": "isApplicableTo",
+            "component": "TagDefinitionAspect",
+            "artifact_id": "java_method_69be4a19fa2943dc",
+            "type": "method",
+            "similarity": 0.8086751997470856
+          },
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd",
+            "type": "enum",
+            "similarity": 0.8069449961185455
+          },
+          {
+            "name": "getAppliesTo",
+            "component": "TagDefinitionAspect",
+            "artifact_id": "java_method_1c89caf5493ecd51",
+            "type": "method",
+            "similarity": 0.8028852641582489
+          },
+          {
+            "name": "ElementType",
+            "component": "ElementType",
+            "artifact_id": "java_enum_b4129d37013dbf4f",
+            "type": "enum",
+            "similarity": 0.8018373847007751
+          },
+          {
+            "name": "appliesTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_field_34979d8cf444d5d0",
+            "type": "field",
+            "similarity": 0.7974129021167755
+          },
+          {
+            "name": "TagRegistry",
+            "component": "TagRegistry",
+            "artifact_id": "java_interface_2832f0557544ea7c",
+            "type": "interface",
+            "similarity": 0.7967522144317627
+          }
+        ],
+        "candidate_scores": [
+          0.8333732485771179,
+          0.8139722347259521,
+          0.8118897378444672,
+          0.8104137480258942,
+          0.8086751997470856,
+          0.8069449961185455,
+          0.8028852641582489,
+          0.8018373847007751,
+          0.7974129021167755,
+          0.7967522144317627
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_011",
+      "category": "cross_entity",
+      "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "AspectDef",
+            "component": "AspectDef",
+            "artifact_id": "java_interface_591522556672e73d"
+          },
+          {
+            "name": "AspectMapHierarchy",
+            "component": "AspectMapHierarchy",
+            "artifact_id": "java_interface_f9fb539de73464dc"
+          },
+          {
+            "name": "MutableAspectDef",
+            "component": "MutableAspectDef",
+            "artifact_id": "java_interface_cb727c57cb5f8edd"
+          }
+        ],
+        "class": [
+          {
+            "name": "AspectMapDeserializer",
+            "component": "AspectMapDeserializer",
+            "artifact_id": "java_class_f35e37d10f29dab3"
+          }
+        ],
+        "method": [
+          {
+            "name": "createPropertyMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_b31a73bc6ddff612"
+          }
+        ]
+      },
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "ImmutablePojoAspect",
+          "MutablePojoAspect",
+          "RecordAspect"
+        ],
+        "all_candidates": [
+          {
+            "name": "AspectDef",
+            "component": "AspectDef",
+            "artifact_id": "java_interface_591522556672e73d",
+            "type": "interface",
+            "similarity": 0.8662468194961548
+          },
+          {
+            "name": "AspectMapDeserializer",
+            "component": "AspectMapDeserializer",
+            "artifact_id": "java_class_f35e37d10f29dab3",
+            "type": "class",
+            "similarity": 0.8476172089576721
+          },
+          {
+            "name": "AspectMapHierarchy",
+            "component": "AspectMapHierarchy",
+            "artifact_id": "java_interface_f9fb539de73464dc",
+            "type": "interface",
+            "similarity": 0.847344309091568
+          },
+          {
+            "name": "MutableAspectDef",
+            "component": "MutableAspectDef",
+            "artifact_id": "java_interface_cb727c57cb5f8edd",
+            "type": "interface",
+            "similarity": 0.8388746380805969
+          },
+          {
+            "name": "createPropertyMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_b31a73bc6ddff612",
+            "type": "method",
+            "similarity": 0.8367397487163544
+          },
+          {
+            "name": "createPropertyMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_3bb9ac499d5cb8ff",
+            "type": "method",
+            "similarity": 0.8365015685558319
+          },
+          {
+            "name": "createPropertyMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_e6ac8cfb255ef58c",
+            "type": "method",
+            "similarity": 0.8363056778907776
+          },
+          {
+            "name": "createObjectMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_5741a01d3807f030",
+            "type": "method",
+            "similarity": 0.83491450548172
+          },
+          {
+            "name": "createObjectMapAspect",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_c1681104e3e9206f",
+            "type": "method",
+            "similarity": 0.834672749042511
+          },
+          {
+            "name": "MutablePojoAspectBuilder",
+            "component": "MutablePojoAspectBuilder",
+            "artifact_id": "java_class_626a96cfb0745424",
+            "type": "class",
+            "similarity": 0.8325245380401611
+          }
+        ],
+        "candidate_scores": [
+          0.8662468194961548,
+          0.8476172089576721,
+          0.847344309091568,
+          0.8388746380805969,
+          0.8367397487163544,
+          0.8365015685558319,
+          0.8363056778907776,
+          0.83491450548172,
+          0.834672749042511,
+          0.8325245380401611
+        ],
+        "requires_manual_review": true
+      }
+    },
+    {
+      "id": "java_012",
+      "category": "relationship_query",
+      "query": "What does CheapFactory provide and how is it used to create catalogs?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09"
+          }
+        ],
+        "method": [
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_62b554b2a7a4fdd9"
+          },
+          {
+            "name": "createCatalogDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_21c2fc4889a95738"
+          },
+          {
+            "name": "getFactory",
+            "component": "CheapTestFactory",
+            "artifact_id": "java_method_2ca3e76456f45a47"
+          }
+        ],
+        "field": [
+          {
+            "name": "catalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_field_bae926360bfa1797"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "CheapFactory class",
+          "Catalog interface"
+        ],
+        "all_candidates": [
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09",
+            "type": "interface",
+            "similarity": 0.8260058462619781
+          },
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_62b554b2a7a4fdd9",
+            "type": "method",
+            "similarity": 0.8248753547668457
+          },
+          {
+            "name": "catalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_field_bae926360bfa1797",
+            "type": "field",
+            "similarity": 0.8161886632442474
+          },
+          {
+            "name": "createCatalogDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_21c2fc4889a95738",
+            "type": "method",
+            "similarity": 0.8089553117752075
+          },
+          {
+            "name": "getFactory",
+            "component": "CheapTestFactory",
+            "artifact_id": "java_method_2ca3e76456f45a47",
+            "type": "method",
+            "similarity": 0.8073848485946655
+          },
+          {
+            "name": "getCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_40d5d6324c7e039f",
+            "type": "method",
+            "similarity": 0.8049292862415314
+          },
+          {
+            "name": "factory",
+            "component": "CatalogService",
+            "artifact_id": "java_field_5349e1d3447bd5d8",
+            "type": "field",
+            "similarity": 0.8003900349140167
+          },
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8",
+            "type": "enum",
+            "similarity": 0.7961336970329285
+          },
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f",
+            "type": "class",
+            "similarity": 0.7960256040096283
+          },
+          {
+            "name": "factory",
+            "component": "CheapJdbcAdapter",
+            "artifact_id": "java_field_a159971d07c17a34",
+            "type": "field",
+            "similarity": 0.7946644127368927
+          }
+        ],
+        "candidate_scores": [
+          0.8260058462619781,
+          0.8248753547668457,
+          0.8161886632442474,
+          0.8089553117752075,
+          0.8073848485946655,
+          0.8049292862415314,
+          0.8003900349140167,
+          0.7961336970329285,
+          0.7960256040096283,
+          0.7946644127368927
+        ],
         "requires_manual_review": true
       }
     },
@@ -637,13 +3305,37 @@
       "category": "multi_language",
       "query": "What metadata entities exist across all languages?",
       "language": "multi",
-      "relevant_artifact_ids": [
-        "pg_table_d5710663729b3430",
-        "pg_column_7d5ca802b6c9f58e",
-        "pg_relationship_6dc5b16b2001eaf3",
-        "pg_relationship_381bc048794daf41",
-        "pg_table_f195d08ca1229d82"
-      ],
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "ElementType",
+            "component": "ElementType",
+            "artifact_id": "java_enum_b4129d37013dbf4f"
+          },
+          {
+            "name": "TagSource",
+            "component": "TagSource",
+            "artifact_id": "java_enum_6ef30dc7525793bc"
+          },
+          {
+            "name": "ArtifactType",
+            "component": "ArtifactType",
+            "artifact_id": "java_enum_47ca953b700453f3"
+          }
+        ],
+        "method": [
+          {
+            "name": "getMetadata",
+            "component": "TagApplicationAspect",
+            "artifact_id": "java_method_8c4fa914e3fd049a"
+          },
+          {
+            "name": "getMetadata",
+            "component": "TagApplication",
+            "artifact_id": "java_method_3130fd7717b6e6d3"
+          }
+        ]
+      },
       "difficulty": "hard",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -651,28 +3343,88 @@
           "tables, classes, interfaces from multiple languages"
         ],
         "all_candidates": [
-          "pg_table_d5710663729b3430",
-          "pg_column_7d5ca802b6c9f58e",
-          "pg_relationship_6dc5b16b2001eaf3",
-          "pg_relationship_381bc048794daf41",
-          "pg_table_f195d08ca1229d82",
-          "pg_column_ebd6a2a998a1694c",
-          "pg_column_87d4a66899dd1dab",
-          "pg_table_a0c6a0dc1f573fb8",
-          "pg_table_ab969cd77dd2e0a4",
-          "pg_column_8df6409a098a0526"
+          {
+            "name": "ElementType",
+            "component": "ElementType",
+            "artifact_id": "java_enum_b4129d37013dbf4f",
+            "type": "enum",
+            "similarity": 0.7373859882354736
+          },
+          {
+            "name": "getMetadata",
+            "component": "TagApplicationAspect",
+            "artifact_id": "java_method_8c4fa914e3fd049a",
+            "type": "method",
+            "similarity": 0.7302803993225098
+          },
+          {
+            "name": "getMetadata",
+            "component": "TagApplication",
+            "artifact_id": "java_method_3130fd7717b6e6d3",
+            "type": "method",
+            "similarity": 0.7233434915542603
+          },
+          {
+            "name": "TagSource",
+            "component": "TagSource",
+            "artifact_id": "java_enum_6ef30dc7525793bc",
+            "type": "enum",
+            "similarity": 0.7126613259315491
+          },
+          {
+            "name": "ArtifactType",
+            "component": "ArtifactType",
+            "artifact_id": "java_enum_47ca953b700453f3",
+            "type": "enum",
+            "similarity": 0.7112308740615845
+          },
+          {
+            "name": "MetadataArtifact",
+            "component": "MetadataArtifact",
+            "artifact_id": "java_class_f4470e7b5ab9c117",
+            "type": "class",
+            "similarity": 0.7085312902927399
+          },
+          {
+            "name": "StandardTags",
+            "component": "StandardTags",
+            "artifact_id": "java_class_a7cf0f9d997a81f1",
+            "type": "class",
+            "similarity": 0.7084940671920776
+          },
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd",
+            "type": "enum",
+            "similarity": 0.706013947725296
+          },
+          {
+            "name": "LocalEntityType",
+            "component": "LocalEntityType",
+            "artifact_id": "java_enum_55a26eeb4c2ac72b",
+            "type": "enum",
+            "similarity": 0.7042313814163208
+          },
+          {
+            "name": "LocalEntity",
+            "component": "LocalEntity",
+            "artifact_id": "java_interface_40f2b382c6009cc5",
+            "type": "interface",
+            "similarity": 0.6998508870601654
+          }
         ],
         "candidate_scores": [
-          0.699810802936554,
-          0.6486160159111023,
-          0.639047235250473,
-          0.6380464434623718,
-          0.6377754807472229,
-          0.6251586377620697,
-          0.6187417209148407,
-          0.6176376044750214,
-          0.6175681054592133,
-          0.6165089905261993
+          0.7373859882354736,
+          0.7302803993225098,
+          0.7233434915542603,
+          0.7126613259315491,
+          0.7112308740615845,
+          0.7085312902927399,
+          0.7084940671920776,
+          0.706013947725296,
+          0.7042313814163208,
+          0.6998508870601654
         ],
         "requires_manual_review": true
       }
@@ -682,13 +3434,35 @@
       "category": "constraint_query",
       "query": "What are the primary keys in the database?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_column_a27c154e036188a1",
-        "pg_column_c389ad063eeda406",
-        "pg_column_8fc8b4d9834f25f2",
-        "pg_column_7d5ca802b6c9f58e",
-        "pg_column_5ea8efcadc044579"
-      ],
+      "relevant_artifacts": {
+        "index": [
+          {
+            "name": "address_pkey",
+            "component": "address",
+            "artifact_id": "pg_index_08cda6a4550924e3"
+          },
+          {
+            "name": "store_pkey",
+            "component": "store",
+            "artifact_id": "pg_index_9707dec18d157501"
+          },
+          {
+            "name": "category_pkey",
+            "component": "category",
+            "artifact_id": "pg_index_b10c2cc4fd530aa2"
+          },
+          {
+            "name": "language_pkey",
+            "component": "language",
+            "artifact_id": "pg_index_bfe9e713ebe41c2a"
+          },
+          {
+            "name": "customer_pkey",
+            "component": "customer",
+            "artifact_id": "pg_index_543d0d08175bcfde"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -696,28 +3470,88 @@
           "columns with primary_key=True"
         ],
         "all_candidates": [
-          "pg_column_a27c154e036188a1",
-          "pg_column_c389ad063eeda406",
-          "pg_column_8fc8b4d9834f25f2",
-          "pg_column_7d5ca802b6c9f58e",
-          "pg_column_5ea8efcadc044579",
-          "pg_column_0497b7182f24789d",
-          "pg_column_62681d3629f3ff53",
-          "pg_relationship_01e0b93385dbbebb",
-          "pg_column_577bc4d36b19f798",
-          "pg_column_21617a5e95e4528a"
+          {
+            "name": "address_pkey",
+            "component": "address",
+            "artifact_id": "pg_index_08cda6a4550924e3",
+            "type": "index",
+            "similarity": 0.7892662882804871
+          },
+          {
+            "name": "store_pkey",
+            "component": "store",
+            "artifact_id": "pg_index_9707dec18d157501",
+            "type": "index",
+            "similarity": 0.7840321063995361
+          },
+          {
+            "name": "category_pkey",
+            "component": "category",
+            "artifact_id": "pg_index_b10c2cc4fd530aa2",
+            "type": "index",
+            "similarity": 0.7766077518463135
+          },
+          {
+            "name": "language_pkey",
+            "component": "language",
+            "artifact_id": "pg_index_bfe9e713ebe41c2a",
+            "type": "index",
+            "similarity": 0.7750880718231201
+          },
+          {
+            "name": "customer_pkey",
+            "component": "customer",
+            "artifact_id": "pg_index_543d0d08175bcfde",
+            "type": "index",
+            "similarity": 0.7729595005512238
+          },
+          {
+            "name": "inventory_pkey",
+            "component": "inventory",
+            "artifact_id": "pg_index_3bdbb8d72aba99ad",
+            "type": "index",
+            "similarity": 0.7665759027004242
+          },
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69",
+            "type": "index",
+            "similarity": 0.7594059407711029
+          },
+          {
+            "name": "staff_pkey",
+            "component": "staff",
+            "artifact_id": "pg_index_44e0bf006e64f988",
+            "type": "index",
+            "similarity": 0.7573162615299225
+          },
+          {
+            "name": "actor_pkey",
+            "component": "actor",
+            "artifact_id": "pg_index_63f73416c3763205",
+            "type": "index",
+            "similarity": 0.7539443969726562
+          },
+          {
+            "name": "payment_pkey",
+            "component": "payment",
+            "artifact_id": "pg_index_3a0e28f4168e135f",
+            "type": "index",
+            "similarity": 0.7483929395675659
+          }
         ],
         "candidate_scores": [
-          0.733786940574646,
-          0.7236311733722687,
-          0.7191912233829498,
-          0.7165753841400146,
-          0.7160576581954956,
-          0.7158486247062683,
-          0.7100529968738556,
-          0.705707311630249,
-          0.7050937712192535,
-          0.7018251121044159
+          0.7892662882804871,
+          0.7840321063995361,
+          0.7766077518463135,
+          0.7750880718231201,
+          0.7729595005512238,
+          0.7665759027004242,
+          0.7594059407711029,
+          0.7573162615299225,
+          0.7539443969726562,
+          0.7483929395675659
         ],
         "requires_manual_review": true
       }
@@ -727,13 +3561,35 @@
       "category": "relationship_query",
       "query": "Show me all foreign key relationships",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_relationship_a06e2c24cf1da308",
-        "pg_relationship_d39277b7a16d53f1",
-        "pg_relationship_381bc048794daf41",
-        "pg_relationship_6dc5b16b2001eaf3",
-        "pg_relationship_b88c868c78cfff19"
-      ],
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "film_actor_film_id_fkey",
+            "component": "film_actor",
+            "artifact_id": "pg_relationship_a06e2c24cf1da308"
+          },
+          {
+            "name": "film_actor_actor_id_fkey",
+            "component": "film_actor",
+            "artifact_id": "pg_relationship_d39277b7a16d53f1"
+          },
+          {
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41"
+          },
+          {
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3"
+          },
+          {
+            "name": "film_category_film_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_b88c868c78cfff19"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -741,24 +3597,84 @@
           "relationship artifacts"
         ],
         "all_candidates": [
-          "pg_relationship_a06e2c24cf1da308",
-          "pg_relationship_d39277b7a16d53f1",
-          "pg_relationship_381bc048794daf41",
-          "pg_relationship_6dc5b16b2001eaf3",
-          "pg_relationship_b88c868c78cfff19",
-          "pg_relationship_881d1d07707c9cee",
-          "pg_relationship_01e0b93385dbbebb",
-          "pg_relationship_d8adfd576257c17b",
-          "pg_relationship_c890660670ed10f1",
-          "pg_relationship_6e9629f015a69ade"
+          {
+            "name": "film_actor_film_id_fkey",
+            "component": "film_actor",
+            "artifact_id": "pg_relationship_a06e2c24cf1da308",
+            "type": "relationship",
+            "similarity": 0.7690775990486145
+          },
+          {
+            "name": "film_actor_actor_id_fkey",
+            "component": "film_actor",
+            "artifact_id": "pg_relationship_d39277b7a16d53f1",
+            "type": "relationship",
+            "similarity": 0.7612105309963226
+          },
+          {
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41",
+            "type": "relationship",
+            "similarity": 0.7528982162475586
+          },
+          {
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3",
+            "type": "relationship",
+            "similarity": 0.7517429292201996
+          },
+          {
+            "name": "film_category_film_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_b88c868c78cfff19",
+            "type": "relationship",
+            "similarity": 0.7502550184726715
+          },
+          {
+            "name": "city_country_id_fkey",
+            "component": "city",
+            "artifact_id": "pg_relationship_881d1d07707c9cee",
+            "type": "relationship",
+            "similarity": 0.7484984993934631
+          },
+          {
+            "name": "customer_address_id_fkey",
+            "component": "customer",
+            "artifact_id": "pg_relationship_01e0b93385dbbebb",
+            "type": "relationship",
+            "similarity": 0.7387878894805908
+          },
+          {
+            "name": "film_category_category_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_d8adfd576257c17b",
+            "type": "relationship",
+            "similarity": 0.73792964220047
+          },
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1",
+            "type": "relationship",
+            "similarity": 0.7353362143039703
+          },
+          {
+            "name": "rental_staff_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_6e9629f015a69ade",
+            "type": "relationship",
+            "similarity": 0.7329291105270386
+          }
         ],
         "candidate_scores": [
-          0.7690776288509369,
+          0.7690775990486145,
           0.7612105309963226,
           0.7528982162475586,
           0.7517429292201996,
           0.7502550184726715,
-          0.7484984695911407,
+          0.7484984993934631,
           0.7387878894805908,
           0.73792964220047,
           0.7353362143039703,
@@ -772,13 +3688,43 @@
       "category": "entity_lookup",
       "query": "What is the actor table used for?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_7b5a5ca66500bd78",
-        "pg_column_5ea8efcadc044579",
-        "pg_column_efbc8a76c9b06c61",
-        "pg_column_082b95d50c3e2a4d",
-        "pg_table_27a130f53257a313"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78"
+          }
+        ],
+        "view": [
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd"
+          }
+        ],
+        "column": [
+          {
+            "name": "actor_id",
+            "component": "actor",
+            "artifact_id": "pg_column_5ea8efcadc044579"
+          }
+        ],
+        "index": [
+          {
+            "name": "actor_pkey",
+            "component": "actor",
+            "artifact_id": "pg_index_63f73416c3763205"
+          }
+        ],
+        "sequence": [
+          {
+            "name": "actor_actor_id_seq",
+            "component": "actor_actor_id_seq",
+            "artifact_id": "pg_sequence_1dbdd7e9547e6ded"
+          }
+        ]
+      },
       "difficulty": "easy",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -786,28 +3732,88 @@
           "actor table"
         ],
         "all_candidates": [
-          "pg_table_7b5a5ca66500bd78",
-          "pg_column_5ea8efcadc044579",
-          "pg_column_efbc8a76c9b06c61",
-          "pg_column_082b95d50c3e2a4d",
-          "pg_table_27a130f53257a313",
-          "pg_index_474c80d5be40e0f9",
-          "pg_column_64f0260f1689fc23",
-          "pg_table_e5f19fb863d1fa62",
-          "pg_table_a44bc3185418eae9",
-          "pg_column_f14a06d8682a606d"
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78",
+            "type": "table",
+            "similarity": 0.7979572713375092
+          },
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd",
+            "type": "view",
+            "similarity": 0.7615029811859131
+          },
+          {
+            "name": "actor_id",
+            "component": "actor",
+            "artifact_id": "pg_column_5ea8efcadc044579",
+            "type": "column",
+            "similarity": 0.7444747984409332
+          },
+          {
+            "name": "actor_pkey",
+            "component": "actor",
+            "artifact_id": "pg_index_63f73416c3763205",
+            "type": "index",
+            "similarity": 0.7434216141700745
+          },
+          {
+            "name": "actor_actor_id_seq",
+            "component": "actor_actor_id_seq",
+            "artifact_id": "pg_sequence_1dbdd7e9547e6ded",
+            "type": "sequence",
+            "similarity": 0.7311215102672577
+          },
+          {
+            "name": "last_name",
+            "component": "actor",
+            "artifact_id": "pg_column_efbc8a76c9b06c61",
+            "type": "column",
+            "similarity": 0.7238350510597229
+          },
+          {
+            "name": "first_name",
+            "component": "actor",
+            "artifact_id": "pg_column_082b95d50c3e2a4d",
+            "type": "column",
+            "similarity": 0.7216626405715942
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313",
+            "type": "table",
+            "similarity": 0.719548225402832
+          },
+          {
+            "name": "idx_actor_last_name",
+            "component": "actor",
+            "artifact_id": "pg_index_474c80d5be40e0f9",
+            "type": "index",
+            "similarity": 0.7122467160224915
+          },
+          {
+            "name": "actor_id",
+            "component": "film_actor",
+            "artifact_id": "pg_column_64f0260f1689fc23",
+            "type": "column",
+            "similarity": 0.7076408267021179
+          }
         ],
         "candidate_scores": [
-          0.7979573011398315,
+          0.7979572713375092,
+          0.7615029811859131,
           0.7444747984409332,
-          0.7238350212574005,
-          0.7216626703739166,
-          0.7195482850074768,
+          0.7434216141700745,
+          0.7311215102672577,
+          0.7238350510597229,
+          0.7216626405715942,
+          0.719548225402832,
           0.7122467160224915,
-          0.7076408267021179,
-          0.6992186009883881,
-          0.6951268315315247,
-          0.681950569152832
+          0.7076408267021179
         ],
         "requires_manual_review": true
       }
@@ -817,13 +3823,39 @@
       "category": "constraint_query",
       "query": "What columns in the customer table store email addresses?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_column_4cdea9dcf357c1f9",
-        "pg_column_1fdb0d71655c15cc",
-        "pg_relationship_01e0b93385dbbebb",
-        "pg_index_08d0a0c0f724765d",
-        "pg_column_5fc2b7332b51f2ef"
-      ],
+      "relevant_artifacts": {
+        "column": [
+          {
+            "name": "email",
+            "component": "customer",
+            "artifact_id": "pg_column_4cdea9dcf357c1f9"
+          },
+          {
+            "name": "email",
+            "component": "staff",
+            "artifact_id": "pg_column_1fdb0d71655c15cc"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "customer_address_id_fkey",
+            "component": "customer",
+            "artifact_id": "pg_relationship_01e0b93385dbbebb"
+          }
+        ],
+        "index": [
+          {
+            "name": "address_pkey",
+            "component": "address",
+            "artifact_id": "pg_index_08cda6a4550924e3"
+          },
+          {
+            "name": "idx_fk_address_id",
+            "component": "customer",
+            "artifact_id": "pg_index_08d0a0c0f724765d"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -831,28 +3863,88 @@
           "customer.email column"
         ],
         "all_candidates": [
-          "pg_column_4cdea9dcf357c1f9",
-          "pg_column_1fdb0d71655c15cc",
-          "pg_relationship_01e0b93385dbbebb",
-          "pg_index_08d0a0c0f724765d",
-          "pg_column_5fc2b7332b51f2ef",
-          "pg_column_a27c154e036188a1",
-          "pg_table_13d9004cb041690a",
-          "pg_column_68ef72bea609537c",
-          "pg_column_0497b7182f24789d",
-          "pg_column_63715e957f19427f"
+          {
+            "name": "email",
+            "component": "customer",
+            "artifact_id": "pg_column_4cdea9dcf357c1f9",
+            "type": "column",
+            "similarity": 0.8015267252922058
+          },
+          {
+            "name": "email",
+            "component": "staff",
+            "artifact_id": "pg_column_1fdb0d71655c15cc",
+            "type": "column",
+            "similarity": 0.7634825706481934
+          },
+          {
+            "name": "customer_address_id_fkey",
+            "component": "customer",
+            "artifact_id": "pg_relationship_01e0b93385dbbebb",
+            "type": "relationship",
+            "similarity": 0.7460529506206512
+          },
+          {
+            "name": "address_pkey",
+            "component": "address",
+            "artifact_id": "pg_index_08cda6a4550924e3",
+            "type": "index",
+            "similarity": 0.7241407930850983
+          },
+          {
+            "name": "idx_fk_address_id",
+            "component": "customer",
+            "artifact_id": "pg_index_08d0a0c0f724765d",
+            "type": "index",
+            "similarity": 0.7204473912715912
+          },
+          {
+            "name": "customer_pkey",
+            "component": "customer",
+            "artifact_id": "pg_index_543d0d08175bcfde",
+            "type": "index",
+            "similarity": 0.7146384119987488
+          },
+          {
+            "name": "address_id",
+            "component": "customer",
+            "artifact_id": "pg_column_5fc2b7332b51f2ef",
+            "type": "column",
+            "similarity": 0.7114740014076233
+          },
+          {
+            "name": "address_id",
+            "component": "address",
+            "artifact_id": "pg_column_a27c154e036188a1",
+            "type": "column",
+            "similarity": 0.7097757160663605
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a",
+            "type": "table",
+            "similarity": 0.7090292572975159
+          },
+          {
+            "name": "last_name",
+            "component": "customer",
+            "artifact_id": "pg_column_68ef72bea609537c",
+            "type": "column",
+            "similarity": 0.7087596356868744
+          }
         ],
         "candidate_scores": [
           0.8015267252922058,
-          0.7634826004505157,
+          0.7634825706481934,
           0.7460529506206512,
+          0.7241407930850983,
           0.7204473912715912,
-          0.7114740312099457,
-          0.7097756862640381,
-          0.7090293169021606,
-          0.7087596356868744,
-          0.7041482329368591,
-          0.7020289301872253
+          0.7146384119987488,
+          0.7114740014076233,
+          0.7097757160663605,
+          0.7090292572975159,
+          0.7087596356868744
         ],
         "requires_manual_review": true
       }
@@ -862,13 +3954,39 @@
       "category": "schema_exploration",
       "query": "What are the most important tables for tracking rentals?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_a2de30f831562c03",
-        "pg_column_716484d3d6e50ee7",
-        "pg_column_b619d28e78887a12",
-        "pg_column_f5cfc64af20223a1",
-        "pg_column_008a013e0fed40d2"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ],
+        "index": [
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69"
+          }
+        ],
+        "column": [
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12"
+          },
+          {
+            "name": "return_date",
+            "component": "rental",
+            "artifact_id": "pg_column_f5cfc64af20223a1"
+          }
+        ]
+      },
       "difficulty": "medium",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -876,28 +3994,88 @@
           "rental, customer, inventory, payment"
         ],
         "all_candidates": [
-          "pg_table_a2de30f831562c03",
-          "pg_column_716484d3d6e50ee7",
-          "pg_column_b619d28e78887a12",
-          "pg_column_f5cfc64af20223a1",
-          "pg_column_008a013e0fed40d2",
-          "pg_column_4fa672e7041c4053",
-          "pg_column_f720f61684d2ad03",
-          "pg_table_e5f19fb863d1fa62",
-          "pg_relationship_c890660670ed10f1",
-          "pg_table_7c76cbb31743ce50"
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03",
+            "type": "table",
+            "similarity": 0.7839495241641998
+          },
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69",
+            "type": "index",
+            "similarity": 0.7250225841999054
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7",
+            "type": "column",
+            "similarity": 0.7213679850101471
+          },
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12",
+            "type": "column",
+            "similarity": 0.710180252790451
+          },
+          {
+            "name": "return_date",
+            "component": "rental",
+            "artifact_id": "pg_column_f5cfc64af20223a1",
+            "type": "column",
+            "similarity": 0.7060981392860413
+          },
+          {
+            "name": "rental_date",
+            "component": "rental",
+            "artifact_id": "pg_column_008a013e0fed40d2",
+            "type": "column",
+            "similarity": 0.7030640840530396
+          },
+          {
+            "name": "rental_id",
+            "component": "payment",
+            "artifact_id": "pg_column_4fa672e7041c4053",
+            "type": "column",
+            "similarity": 0.7011410593986511
+          },
+          {
+            "name": "rental_duration",
+            "component": "film",
+            "artifact_id": "pg_column_f720f61684d2ad03",
+            "type": "column",
+            "similarity": 0.6992798447608948
+          },
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
+            "type": "table",
+            "similarity": 0.6986311376094818
+          },
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1",
+            "type": "relationship",
+            "similarity": 0.6985696256160736
+          }
         ],
         "candidate_scores": [
-          0.7839495837688446,
+          0.7839495241641998,
+          0.7250225841999054,
           0.7213679850101471,
           0.710180252790451,
           0.7060981392860413,
           0.7030640840530396,
           0.7011410593986511,
           0.6992798447608948,
-          0.6986311078071594,
-          0.6985696256160736,
-          0.6959863603115082
+          0.6986311376094818,
+          0.6985696256160736
         ],
         "requires_manual_review": true
       }
@@ -907,13 +4085,39 @@
       "category": "cross_entity",
       "query": "How is payment information stored in the database?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_table_7c76cbb31743ce50",
-        "pg_column_256ebdd4c3ad9aa9",
-        "pg_column_5ee81dab020338eb",
-        "pg_column_56510315972d27f3",
-        "pg_column_019dd83afb933c6c"
-      ],
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "payment",
+            "component": "payment",
+            "artifact_id": "pg_table_7c76cbb31743ce50"
+          }
+        ],
+        "index": [
+          {
+            "name": "payment_pkey",
+            "component": "payment",
+            "artifact_id": "pg_index_3a0e28f4168e135f"
+          }
+        ],
+        "column": [
+          {
+            "name": "payment_id",
+            "component": "payment",
+            "artifact_id": "pg_column_256ebdd4c3ad9aa9"
+          },
+          {
+            "name": "payment_date",
+            "component": "payment",
+            "artifact_id": "pg_column_5ee81dab020338eb"
+          },
+          {
+            "name": "customer_id",
+            "component": "payment",
+            "artifact_id": "pg_column_56510315972d27f3"
+          }
+        ]
+      },
       "difficulty": "hard",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -921,28 +4125,88 @@
           "payment.amount, rental reference"
         ],
         "all_candidates": [
-          "pg_table_7c76cbb31743ce50",
-          "pg_column_256ebdd4c3ad9aa9",
-          "pg_column_5ee81dab020338eb",
-          "pg_column_56510315972d27f3",
-          "pg_column_019dd83afb933c6c",
-          "pg_column_0590927b145937b1",
-          "pg_column_4fa672e7041c4053",
-          "pg_table_ab969cd77dd2e0a4",
-          "pg_table_13d9004cb041690a",
-          "pg_relationship_d9e30bb9e6e84de3"
+          {
+            "name": "payment",
+            "component": "payment",
+            "artifact_id": "pg_table_7c76cbb31743ce50",
+            "type": "table",
+            "similarity": 0.7708771228790283
+          },
+          {
+            "name": "payment_pkey",
+            "component": "payment",
+            "artifact_id": "pg_index_3a0e28f4168e135f",
+            "type": "index",
+            "similarity": 0.7248132824897766
+          },
+          {
+            "name": "payment_id",
+            "component": "payment",
+            "artifact_id": "pg_column_256ebdd4c3ad9aa9",
+            "type": "column",
+            "similarity": 0.7199227809906006
+          },
+          {
+            "name": "payment_date",
+            "component": "payment",
+            "artifact_id": "pg_column_5ee81dab020338eb",
+            "type": "column",
+            "similarity": 0.6995903253555298
+          },
+          {
+            "name": "customer_id",
+            "component": "payment",
+            "artifact_id": "pg_column_56510315972d27f3",
+            "type": "column",
+            "similarity": 0.6872360408306122
+          },
+          {
+            "name": "payment_payment_id_seq",
+            "component": "payment_payment_id_seq",
+            "artifact_id": "pg_sequence_19e0e36f11ea921e",
+            "type": "sequence",
+            "similarity": 0.6860415041446686
+          },
+          {
+            "name": "amount",
+            "component": "payment",
+            "artifact_id": "pg_column_019dd83afb933c6c",
+            "type": "column",
+            "similarity": 0.674167662858963
+          },
+          {
+            "name": "staff_id",
+            "component": "payment",
+            "artifact_id": "pg_column_0590927b145937b1",
+            "type": "column",
+            "similarity": 0.666693776845932
+          },
+          {
+            "name": "rental_id",
+            "component": "payment",
+            "artifact_id": "pg_column_4fa672e7041c4053",
+            "type": "column",
+            "similarity": 0.6464092433452606
+          },
+          {
+            "name": "store",
+            "component": "store",
+            "artifact_id": "pg_table_ab969cd77dd2e0a4",
+            "type": "table",
+            "similarity": 0.6452144384384155
+          }
         ],
         "candidate_scores": [
-          0.7708771824836731,
-          0.7199227511882782,
+          0.7708771228790283,
+          0.7248132824897766,
+          0.7199227809906006,
           0.6995903253555298,
           0.6872360408306122,
+          0.6860415041446686,
           0.674167662858963,
           0.666693776845932,
           0.6464092433452606,
-          0.6452144086360931,
-          0.6370279788970947,
-          0.6206163167953491
+          0.6452144384384155
         ],
         "requires_manual_review": true
       }
@@ -952,13 +4216,39 @@
       "category": "relationship_query",
       "query": "How is the geographic hierarchy structured?",
       "language": "postgresql",
-      "relevant_artifact_ids": [
-        "pg_relationship_881d1d07707c9cee",
-        "pg_relationship_772e38f6cc4cf68c",
-        "pg_table_a0c6a0dc1f573fb8",
-        "pg_table_efa617532130eb82",
-        "pg_relationship_2cd32ea9a0a30887"
-      ],
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "city_country_id_fkey",
+            "component": "city",
+            "artifact_id": "pg_relationship_881d1d07707c9cee"
+          },
+          {
+            "name": "address_city_id_fkey",
+            "component": "address",
+            "artifact_id": "pg_relationship_772e38f6cc4cf68c"
+          }
+        ],
+        "table": [
+          {
+            "name": "country",
+            "component": "country",
+            "artifact_id": "pg_table_a0c6a0dc1f573fb8"
+          },
+          {
+            "name": "city",
+            "component": "city",
+            "artifact_id": "pg_table_efa617532130eb82"
+          }
+        ],
+        "index": [
+          {
+            "name": "country_pkey",
+            "component": "country",
+            "artifact_id": "pg_index_3bcc081b4b93e8bc"
+          }
+        ]
+      },
       "difficulty": "hard",
       "notes": "Auto-generated from top candidates. Requires manual review.",
       "metadata": {
@@ -966,28 +4256,88 @@
           "address, city, country tables and their foreign keys"
         ],
         "all_candidates": [
-          "pg_relationship_881d1d07707c9cee",
-          "pg_relationship_772e38f6cc4cf68c",
-          "pg_table_a0c6a0dc1f573fb8",
-          "pg_table_efa617532130eb82",
-          "pg_relationship_2cd32ea9a0a30887",
-          "pg_index_f4346cef243d4757",
-          "pg_relationship_d9e30bb9e6e84de3",
-          "pg_table_f195d08ca1229d82",
-          "pg_relationship_01e0b93385dbbebb",
-          "pg_column_da7c809a8d91438f"
+          {
+            "name": "city_country_id_fkey",
+            "component": "city",
+            "artifact_id": "pg_relationship_881d1d07707c9cee",
+            "type": "relationship",
+            "similarity": 0.6410577297210693
+          },
+          {
+            "name": "address_city_id_fkey",
+            "component": "address",
+            "artifact_id": "pg_relationship_772e38f6cc4cf68c",
+            "type": "relationship",
+            "similarity": 0.6393480598926544
+          },
+          {
+            "name": "country",
+            "component": "country",
+            "artifact_id": "pg_table_a0c6a0dc1f573fb8",
+            "type": "table",
+            "similarity": 0.6236510276794434
+          },
+          {
+            "name": "country_pkey",
+            "component": "country",
+            "artifact_id": "pg_index_3bcc081b4b93e8bc",
+            "type": "index",
+            "similarity": 0.6155200600624084
+          },
+          {
+            "name": "city",
+            "component": "city",
+            "artifact_id": "pg_table_efa617532130eb82",
+            "type": "table",
+            "similarity": 0.6079486310482025
+          },
+          {
+            "name": "store_address_id_fkey",
+            "component": "store",
+            "artifact_id": "pg_relationship_2cd32ea9a0a30887",
+            "type": "relationship",
+            "similarity": 0.6076436340808868
+          },
+          {
+            "name": "city_pkey",
+            "component": "city",
+            "artifact_id": "pg_index_1f87a3abbad9de87",
+            "type": "index",
+            "similarity": 0.6049931645393372
+          },
+          {
+            "name": "country_country_id_seq",
+            "component": "country_country_id_seq",
+            "artifact_id": "pg_sequence_534ed5dc799936d6",
+            "type": "sequence",
+            "similarity": 0.6046382486820221
+          },
+          {
+            "name": "idx_fk_country_id",
+            "component": "city",
+            "artifact_id": "pg_index_f4346cef243d4757",
+            "type": "index",
+            "similarity": 0.6026256084442139
+          },
+          {
+            "name": "customer_store_id_fkey",
+            "component": "customer",
+            "artifact_id": "pg_relationship_d9e30bb9e6e84de3",
+            "type": "relationship",
+            "similarity": 0.59956955909729
+          }
         ],
         "candidate_scores": [
           0.6410577297210693,
-          0.6393480896949768,
-          0.6236510872840881,
+          0.6393480598926544,
+          0.6236510276794434,
+          0.6155200600624084,
           0.6079486310482025,
-          0.6076436638832092,
+          0.6076436340808868,
+          0.6049931645393372,
+          0.6046382486820221,
           0.6026256084442139,
-          0.5995694994926453,
-          0.5988706350326538,
-          0.5983885824680328,
-          0.5967780649662018
+          0.59956955909729
         ],
         "requires_manual_review": true
       }

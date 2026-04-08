@@ -277,7 +277,7 @@ def evaluate_retrieval(
     if k_values is None:
         k_values = [1, 3, 5, 10]
 
-    relevant_ids = set(gold_query.relevant_artifact_ids)
+    relevant_ids = gold_query.relevant_ids
 
     metrics = RetrievalMetrics()
 

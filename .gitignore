@@ -62,3 +62,5 @@ htmlcov/
 Thumbs.db
 coverage.xml
 .claude/
+*.csv#
+*.ods#

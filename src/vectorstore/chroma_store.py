@@ -239,7 +239,91 @@ class ChromaVectorStore:
                 elif value is not None:
                     metadata[key] = str(value)
 
+        # Compute and store component grouping key so it can be used as a WHERE filter
+        # during gold dataset ID resolution (see find_artifact_id).
+        lang = artifact.language
+        atype = artifact.type
+        if lang == "java" and artifact.source_file:
+            metadata["component"] = Path(artifact.source_file).stem
+        elif lang == "postgresql":
+            if atype in {"column", "index", "constraint", "trigger"}:
+                metadata["component"] = str(artifact.metadata.get("table_name", ""))
+            elif atype == "relationship":
+                metadata["component"] = str(artifact.metadata.get("from_table", ""))
+            else:
+                metadata["component"] = artifact.name
+
         return metadata
+
+    def find_artifact_id(
+        self,
+        name: str,
+        artifact_type: str,
+        language: str,
+        component: str | None = None,
+    ) -> str | None:
+        """Look up a single artifact ID by human-readable identifiers.
+
+        Intended for resolving gold dataset entries that were hand-authored without
+        an explicit ``artifact_id``.
+
+        For PostgreSQL child types (column, index, constraint, trigger) ``component``
+        maps to the ``table_name`` ChromaDB field; for relationships it maps to
+        ``from_table``.  For Java members ``component`` maps to the ``component``
+        field (stored as the source-file stem).  Top-level artifacts need only
+        ``name`` and ``artifact_type``.
+
+        Note: requires that the index was built with a version of the pipeline that
+        stores the ``component`` field (i.e. re-indexing is needed for older indexes).
+
+        Args:
+            name: Artifact name (e.g. "film", "customer_id", "Catalog").
+            artifact_type: ChromaDB type string (e.g. "table", "column", "class").
+            language: Source language (e.g. "postgresql", "java").
+            component: Owning table (Postgres) or class name (Java) for child artifacts.
+
+        Returns:
+            Artifact ID string, or None if not found or ambiguous.
+        """
+        conditions: list[dict[str, Any]] = [
+            {"name": name},
+            {"type": artifact_type},
+            {"language": language},
+        ]
+
+        if component:
+            if language == "postgresql":
+                if artifact_type in {"column", "index", "constraint", "trigger"}:
+                    conditions.append({"table_name": component})
+                elif artifact_type == "relationship":
+                    conditions.append({"from_table": component})
+                # for top-level postgres types component == name, no extra filter needed
+            else:
+                # Java and others: component is stored directly
+                conditions.append({"component": component})
+
+        where: dict[str, Any] = {"$and": conditions} if len(conditions) > 1 else conditions[0]
+
+        try:
+            results = self.collection.get(where=where, include=["metadatas"])
+            ids: list[str] = results["ids"]  # type: ignore[assignment]
+            if not ids:
+                return None
+            if len(ids) > 1:
+                logger.warning(
+                    "Ambiguous artifact lookup: %s/%s/%s%s matched %d artifacts — using first",
+                    language,
+                    artifact_type,
+                    name,
+                    f"/{component}" if component else "",
+                    len(ids),
+                )
+            return ids[0]
+        except Exception as exc:
+            logger.error(
+                "Error looking up artifact %s/%s/%s: %s", language, artifact_type, name, exc
+            )
+            return None
 
     def _build_where_clause(self, filters: dict[str, Any]) -> dict[str, Any]:
         """Build ChromaDB where clause from filter dict.

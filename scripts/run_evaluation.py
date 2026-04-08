@@ -46,6 +46,35 @@ def main() -> None:
     print(f"Loaded {len(gold_dataset)} gold queries")
     print()
 
+    # Resolve any artifact identifiers that were hand-authored without an explicit artifact_id
+    unresolved_total = sum(
+        1
+        for q in gold_dataset
+        for idents in q.relevant_artifacts.values()
+        for ident in idents
+        if not ident.artifact_id
+    )
+    if unresolved_total:
+        print(f"Resolving {unresolved_total} unresolved artifact identifier(s)...")
+        for gold_query in gold_dataset:
+            for artifact_type, idents in gold_query.relevant_artifacts.items():
+                for ident in idents:
+                    if ident.artifact_id:
+                        continue
+                    ident.artifact_id = vector_store.find_artifact_id(
+                        name=ident.name,
+                        artifact_type=artifact_type,
+                        language=gold_query.language,
+                        component=ident.component,
+                    )
+                    if not ident.artifact_id:
+                        print(
+                            f"  WARNING: could not resolve "
+                            f"{gold_query.language}/{artifact_type}/{ident.name}"
+                            + (f" (component={ident.component})" if ident.component else "")
+                        )
+        print()
+
     # Evaluate each query
     print("Running evaluation...")
     all_metrics = []

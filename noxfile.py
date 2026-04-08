@@ -19,6 +19,7 @@ def tests(session: nox.Session) -> None:
         "pytest-asyncio>=0.21.1",
         "pytest-mock>=3.12.0",
         "pytest-timeout>=2.3.1",
+        "testing-postgresql>=1.3.0",
     )
     session.install("-e", ".", silent=False)
     session.run(

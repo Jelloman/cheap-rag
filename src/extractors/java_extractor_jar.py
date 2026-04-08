@@ -108,11 +108,16 @@ class JavaExtractorJar:
         logger.info(f"Running Java extractor on: {source_path}")
 
         try:
-            subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as exc:
             logger.error(f"Java extractor failed (exit {exc.returncode}): {exc.stderr}")
             tmp_path.unlink(missing_ok=True)
             raise
+
+        if result.stderr:
+            for line in result.stderr.splitlines():
+                if line.strip():
+                    logger.warning(f"Java extractor: {line}")
 
         try:
             raw: list[dict[str, Any]] = json.loads(tmp_path.read_text(encoding="utf-8"))

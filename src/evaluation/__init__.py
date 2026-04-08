@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
-from src.evaluation.gold_dataset import GoldDataset, GoldQuery, build_gold_dataset_from_index
+from src.evaluation.gold_dataset import (
+    ArtifactIdentifier,
+    GoldDataset,
+    GoldQuery,
+    build_gold_dataset_from_index,
+)
 from src.evaluation.metrics import (
     EndToEndMetrics,
     GenerationMetrics,
@@ -24,6 +29,7 @@ from src.evaluation.reporting import (
 
 __all__ = [
     # Gold Dataset
+    "ArtifactIdentifier",
     "GoldDataset",
     "GoldQuery",
     "build_gold_dataset_from_index",
