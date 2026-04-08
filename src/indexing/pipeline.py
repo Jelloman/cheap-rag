@@ -6,12 +6,11 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import create_engine
+from urllib.parse import urlparse
 
 from src.config import Config, ExtractorConfig
 from src.embeddings.service import EmbeddingService
 from src.extractors.base import MetadataArtifact, MetadataExtractor
-from src.extractors.database_extractor import DatabaseExtractor
 from src.extractors.postgres_extractor import PostgresExtractor
 from src.extractors.sqlite_extractor import SqliteExtractor as SQLiteExtractor  # type: ignore[reportAttributeAccessIssue,reportUnknownVariableType]
 from src.indexing.schema import validate_artifact
@@ -108,15 +107,15 @@ class IndexingPipeline:
     def extract_from_database(
         self,
         db_url: str,
-        _extractor_name: str = "database",
         schema: str | None = None,
+        include_tables: list[str] | None = None,
     ) -> list[MetadataArtifact]:
-        """Extract metadata from a database.
+        """Extract metadata from a database URL.
 
         Args:
-            db_url: SQLAlchemy database URL.
-            extractor_name: Database extractor name.
-            schema: Optional schema name to extract.
+            db_url: SQLAlchemy-style database URL (postgresql:// or sqlite://).
+            schema: Schema name to extract (PostgreSQL only, default: "public").
+            include_tables: If provided, only extract these tables.
 
         Returns:
             List of extracted artifacts.
@@ -124,23 +123,39 @@ class IndexingPipeline:
         logger.info(f"Extracting from database: {db_url}")
 
         try:
-            # Create database engine
-            engine = create_engine(db_url)
+            parsed = urlparse(db_url)
 
-            # Get appropriate extractor
-            if "postgresql" in db_url:
-                extractor = PostgresExtractor(engine, schema_name=schema)  # type: ignore[reportCallIssue]
-            elif "sqlite" in db_url:
-                extractor = SQLiteExtractor(engine)  # type: ignore[reportUnknownVariableType]
+            if parsed.scheme.startswith("postgresql"):
+                connection_config = {
+                    "host": parsed.hostname or "localhost",
+                    "port": parsed.port or 5432,
+                    "database": parsed.path.lstrip("/"),
+                    "user": parsed.username or "",
+                    "password": parsed.password or "",
+                }
+                pg_extractor = PostgresExtractor()
+                pg_extractor.connect(connection_config)
+                artifacts = pg_extractor.extract_schema(
+                    schema_name=schema or "public",
+                    include_tables=include_tables,
+                )
+                pg_extractor.disconnect()
+
+            elif parsed.scheme.startswith("sqlite"):
+                db_path = parsed.path
+                sqlite_extractor = SQLiteExtractor()  # type: ignore[reportUnknownVariableType]
+                sqlite_extractor.connect({"path": db_path})  # type: ignore[reportUnknownMemberType]
+                artifacts = sqlite_extractor.extract_schema()  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]
+                sqlite_extractor.disconnect()  # type: ignore[reportUnknownMemberType]
+
             else:
-                extractor = DatabaseExtractor(engine)  # type: ignore[reportAbstractUsage,reportCallIssue]
+                raise ExtractionError(f"Unsupported database URL scheme: {parsed.scheme}")
 
-            # Extract metadata
-            artifacts = extractor.extract_metadata()  # type: ignore[reportUnknownMemberType,reportCallIssue,reportUnknownVariableType,reportUnknownArgumentType]
-            logger.info(f"Extracted {len(artifacts)} artifacts from database")  # type: ignore[reportUnknownArgumentType]
+            logger.info(f"Extracted {len(artifacts)} artifacts from database")
+            return artifacts  # type: ignore[reportUnknownVariableType]
 
-            return artifacts  # type: ignore[reportUnknownVariableType]  # database extractors
-
+        except ExtractionError:
+            raise
         except Exception as e:
             error_msg = f"Database extraction failed: {e}"
             logger.error(error_msg)
@@ -279,6 +294,7 @@ class IndexingPipeline:
         self,
         db_url: str,
         schema: str | None = None,
+        include_tables: list[str] | None = None,
         validate: bool = True,
     ) -> dict[str, int]:
         """Extract and index metadata from a database.
@@ -286,6 +302,7 @@ class IndexingPipeline:
         Args:
             db_url: Database connection URL.
             schema: Optional schema name.
+            include_tables: If provided, only extract these tables.
             validate: Whether to validate artifacts.
 
         Returns:
@@ -294,7 +311,7 @@ class IndexingPipeline:
         logger.info(f"Indexing database: {db_url}")
 
         # Extract
-        artifacts = self.extract_from_database(db_url, schema=schema)
+        artifacts = self.extract_from_database(db_url, schema=schema, include_tables=include_tables)
 
         # Run pipeline
         return self.run_pipeline(artifacts, validate=validate)

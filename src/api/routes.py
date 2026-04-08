@@ -66,6 +66,7 @@ def get_embedding_service() -> EmbeddingService:
             device=config.embedding.device,
             cache_dir=config.embedding.cache_dir,
             batch_size=config.embedding.batch_size,
+            local_files_only=config.embedding.local_files_only,
         )
     return _embedding_service
 

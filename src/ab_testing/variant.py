@@ -92,6 +92,7 @@ class EmbeddingVariant:
             device=self._base_config.embedding.device,
             cache_dir=self._base_config.embedding.cache_dir,
             batch_size=self._base_config.embedding.batch_size,
+            local_files_only=self._base_config.embedding.local_files_only,
         )
 
         # Initialize vector store with variant-specific collection

@@ -6,6 +6,7 @@ embedding:
   device: "cuda"  # Use "cpu" if no GPU available
   batch_size: 32
   cache_dir: "./models/embeddings"
+  local_files_only: true  # Skip HuggingFace Hub version checks; requires model already downloaded
   dimension: 768
 
 vectorstore:
@@ -77,7 +78,7 @@ indexing:
   # Source directories to scan (for code metadata)
   source_paths:
     - "../cheap"
-    - "../cheap-py/src"
+    #- "../cheap-py/src"
 
   # Database connections (for database metadata)
   databases:

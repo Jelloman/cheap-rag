@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # Load environment variables
@@ -22,6 +23,7 @@ class EmbeddingConfig(BaseModel):
     device: str = "cuda"
     batch_size: int = 32
     cache_dir: str = "./models/embeddings"
+    local_files_only: bool = False
     dimension: int = 768
 
 
@@ -94,10 +96,35 @@ class ExtractorConfig(BaseModel):
     exclude_patterns: list[str] = Field(default_factory=list)
 
 
+class DatabaseConnectionConfig(BaseModel):
+    """Database connection parameters."""
+
+    host: str = "localhost"
+    port: int = 5432
+    database: str = ""
+    user: str = ""
+    password: str = ""
+    path: str | None = None  # SQLite only
+
+
+class DatabaseConfig(BaseModel):
+    """Configuration for a single database source."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    enabled: bool = True
+    type: str  # "postgresql" or "sqlite"
+    connection: DatabaseConnectionConfig
+    schema_name: str = Field(default="public", alias="schema")
+    include_tables: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+
+
 class IndexingConfig(BaseModel):
     """Indexing pipeline configuration."""
 
     source_paths: list[str] = Field(default_factory=list)
+    databases: dict[str, DatabaseConfig] = Field(default_factory=dict)
     extractors: dict[str, ExtractorConfig] = Field(default_factory=dict)
     batch_size: int = 100
     max_workers: int = 4
@@ -144,6 +171,38 @@ class Config(BaseModel):
     routing_metrics: dict[str, Any] | None = None
 
 
+def _expand_env_vars(obj: Any) -> Any:
+    """Recursively expand ${VAR_NAME} references in string values.
+
+    Args:
+        obj: YAML-parsed object (dict, list, or scalar).
+
+    Returns:
+        Object with env var references replaced by their values.
+
+    Raises:
+        ValueError: If a referenced environment variable is not set.
+    """
+    if isinstance(obj, str):
+
+        def _replace(m: re.Match[str]) -> str:
+            var_name = m.group(1)
+            value = os.getenv(var_name)
+            if value is None:
+                raise ValueError(
+                    f"Environment variable '{var_name}' is not set. "
+                    f"Add it to your .env file or shell environment."
+                )
+            return value
+
+        return re.sub(r"\$\{([^}]+)\}", _replace, obj)
+    elif isinstance(obj, dict):
+        return {k: _expand_env_vars(v) for k, v in cast(dict[str, Any], obj).items()}
+    elif isinstance(obj, list):
+        return [_expand_env_vars(item) for item in cast(list[Any], obj)]
+    return obj
+
+
 def load_config(config_path: str | Path | None = None) -> Config:
     """Load configuration from YAML file.
 
@@ -165,6 +224,7 @@ def load_config(config_path: str | Path | None = None) -> Config:
     with open(config_path) as f:
         config_dict = yaml.safe_load(f)
 
+    config_dict = _expand_env_vars(config_dict)
     return Config(**config_dict)
 
 

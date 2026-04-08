@@ -11,17 +11,100 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+# Postgres artifact types whose component is the owning table (stored in table_name metadata)
+_PG_TABLE_SCOPED: frozenset[str] = frozenset({"column", "index", "constraint", "trigger"})
+
+
+def compute_artifact_component(meta: dict[str, Any]) -> str:
+    """Derive a human-readable component grouping key from artifact metadata.
+
+    Java: plain class/interface name — source filename stem (no path, no .java).
+    PostgreSQL:
+      - column / index / constraint / trigger → owning table name (table_name field)
+      - relationship → from_table field
+      - table / view / function / sequence / … → object name itself
+    All values are schema-free as stored by the extractors.
+
+    Args:
+        meta: Flat metadata dict as stored in (or read from) ChromaDB.
+
+    Returns:
+        Component string, or empty string when not derivable.
+    """
+    language = str(meta.get("language", ""))
+    artifact_type = str(meta.get("type", ""))
+
+    if language == "java":
+        source_file = str(meta.get("source_file", ""))
+        return Path(source_file).stem if source_file else ""
+
+    if language == "postgresql":
+        if artifact_type in _PG_TABLE_SCOPED:
+            return str(meta.get("table_name", ""))
+        if artifact_type == "relationship":
+            return str(meta.get("from_table", ""))
+        return str(meta.get("name", ""))
+
+    return ""
+
+
+@dataclass
+class ArtifactIdentifier:
+    """Minimal human-readable identifier for an artifact in a gold dataset entry.
+
+    Designed for ergonomic hand-editing:
+    - Top-level artifacts (table, view, class, interface) need only ``name``.
+    - Child artifacts (column, field, method) also need ``component`` — the
+      owning table name (PostgreSQL) or class name (Java).
+    - ``artifact_id`` is optional. When omitted, the evaluation runner resolves
+      it via a ChromaDB lookup before computing metrics.
+
+    Attributes:
+        name: Artifact name (e.g. "film", "customer_id", "Catalog")
+        component: Owning table (Postgres child types) or class name (Java members)
+        artifact_id: Pre-resolved ChromaDB ID; may be omitted in hand-authored entries
+    """
+
+    name: str
+    component: str | None = None
+    artifact_id: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize to a JSON-compatible dict, omitting None fields."""
+        d: dict[str, Any] = {"name": self.name}
+        if self.component:
+            d["component"] = self.component
+        if self.artifact_id:
+            d["artifact_id"] = self.artifact_id
+        return d
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> ArtifactIdentifier:
+        """Deserialize from a dict."""
+        return cls(
+            name=data.get("name", ""),
+            component=data.get("component") or None,
+            artifact_id=data.get("artifact_id") or None,
+        )
+
 
 @dataclass
 class GoldQuery:
     """A test query with ground truth relevant artifacts.
+
+    Ground truth is stored as ``relevant_artifacts``: a dict keyed by artifact type
+    (e.g. ``"table"``, ``"column"``, ``"class"``) whose values are lists of
+    :class:`ArtifactIdentifier` objects.  This makes the JSON easy to hand-edit —
+    top-level objects need only a ``name``; child objects (columns, fields, methods)
+    also need a ``component`` (owning table or class).  The ``artifact_id`` field
+    is optional and is resolved at evaluation time when absent.
 
     Attributes:
         id: Unique query identifier
         category: Query category (entity_lookup, relationship_query, etc.)
         query: The natural language question
         language: Target language filter
-        relevant_artifact_ids: Ground truth list of relevant artifact IDs
+        relevant_artifacts: Ground truth, keyed by artifact type
         difficulty: Query difficulty (easy, medium, hard)
         notes: Optional notes about expected behavior
     """
@@ -30,10 +113,25 @@ class GoldQuery:
     category: str
     query: str
     language: str
-    relevant_artifact_ids: list[str]
+    relevant_artifacts: dict[str, list[ArtifactIdentifier]]
     difficulty: str = "medium"
     notes: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def relevant_ids(self) -> set[str]:
+        """Return the set of pre-resolved artifact IDs for metric computation.
+
+        Only includes identifiers whose ``artifact_id`` has been populated.
+        Call the evaluation runner's ``resolve_artifact_ids()`` first to fill
+        in any entries that were hand-authored without an explicit ID.
+        """
+        return {
+            ident.artifact_id
+            for idents in self.relevant_artifacts.values()
+            for ident in idents
+            if ident.artifact_id
+        }
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for serialization."""
@@ -42,7 +140,10 @@ class GoldQuery:
             "category": self.category,
             "query": self.query,
             "language": self.language,
-            "relevant_artifact_ids": self.relevant_artifact_ids,
+            "relevant_artifacts": {
+                artifact_type: [i.to_dict() for i in idents]
+                for artifact_type, idents in self.relevant_artifacts.items()
+            },
             "difficulty": self.difficulty,
             "notes": self.notes,
             "metadata": self.metadata,
@@ -51,12 +152,17 @@ class GoldQuery:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> GoldQuery:
         """Create from dictionary."""
+        relevant_artifacts: dict[str, list[ArtifactIdentifier]] = {
+            artifact_type: [ArtifactIdentifier.from_dict(i) for i in idents]
+            for artifact_type, idents in data.get("relevant_artifacts", {}).items()
+        }
+
         return cls(
             id=data["id"],
             category=data["category"],
             query=data["query"],
             language=data["language"],
-            relevant_artifact_ids=data.get("relevant_artifact_ids", []),
+            relevant_artifacts=relevant_artifacts,
             difficulty=data.get("difficulty", "medium"),
             notes=data.get("notes", ""),
             metadata=data.get("metadata", {}),
@@ -159,6 +265,7 @@ def build_gold_dataset_from_index(
         device=config.embedding.device,
         cache_dir=config.embedding.cache_dir,
         batch_size=config.embedding.batch_size,
+        local_files_only=config.embedding.local_files_only,
     )
 
     gold_queries: list[GoldQuery] = []
@@ -184,8 +291,26 @@ def build_gold_dataset_from_index(
             filters=filters,
         )
 
-        # Extract artifact IDs from top results
-        candidate_ids = [r["artifact"].id for r in results]
+        # results is (ids, metadatas, distances)
+        result_ids, metadatas, distances = results  # type: ignore[misc]
+        similarities = [1.0 - (d / 2.0) for d in distances]
+
+        # Group top-5 by type into relevant_artifacts; record all-K as candidates
+        relevant_artifacts: dict[str, list[ArtifactIdentifier]] = {}
+        all_candidates: list[dict[str, Any]] = []
+        for i, (artifact_id, meta) in enumerate(zip(result_ids, metadatas, strict=False)):
+            artifact_type = str(meta.get("type", "unknown"))
+            component = compute_artifact_component(meta) or None
+            ident = ArtifactIdentifier(
+                name=str(meta.get("name", "")),
+                component=component,
+                artifact_id=artifact_id,
+            )
+            all_candidates.append(
+                {**ident.to_dict(), "type": artifact_type, "similarity": similarities[i]}
+            )
+            if i < 5:
+                relevant_artifacts.setdefault(artifact_type, []).append(ident)
 
         # Create gold query with candidates (manual review needed)
         gold_query = GoldQuery(
@@ -193,13 +318,13 @@ def build_gold_dataset_from_index(
             category=category,
             query=query_text,
             language=language,
-            relevant_artifact_ids=candidate_ids[:5],  # Top 5 as initial candidates
+            relevant_artifacts=relevant_artifacts,
             difficulty=difficulty,
             notes=f"Auto-generated from top {top_k} candidates. Requires manual review.",
             metadata={
                 "original_expected": query_data.get("expected_artifacts", []),
-                "all_candidates": candidate_ids,
-                "candidate_scores": [r["similarity"] for r in results],
+                "all_candidates": all_candidates,
+                "candidate_scores": similarities,
             },
         )
         gold_queries.append(gold_query)

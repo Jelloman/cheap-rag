@@ -188,8 +188,20 @@ def cmd_gold(collection: chromadb.Collection, query_id: str | None, interactive:
         language = query.get("language", "?")
         difficulty = query.get("difficulty", "?")
         notes = query.get("notes", "")
-        relevant_ids: list[str] = query.get("relevant_artifact_ids", [])  # type: ignore[assignment]
-        all_candidates: list[str] = query.get("metadata", {}).get("all_candidates", [])  # type: ignore[assignment,union-attr]
+        def _ident_id(ref: object) -> str:
+            """Extract artifact ID from an ArtifactIdentifier dict or legacy ref."""
+            if isinstance(ref, dict):
+                return str(ref.get("artifact_id") or ref.get("id") or "")
+            return str(ref)
+
+        # New format: relevant_artifacts is dict[type, list[identifier]]
+        relevant_ids: list[str] = [
+            _ident_id(ident)
+            for idents in query.get("relevant_artifacts", {}).values()
+            for ident in idents
+            if _ident_id(ident)
+        ]
+        all_candidates: list[str] = [_ident_id(c) for c in query.get("metadata", {}).get("all_candidates", [])]  # type: ignore[union-attr]
         candidate_scores: list[float] = query.get("metadata", {}).get("candidate_scores", [])  # type: ignore[assignment,union-attr]
 
         # Header

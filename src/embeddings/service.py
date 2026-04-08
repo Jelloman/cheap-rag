@@ -33,6 +33,7 @@ class EmbeddingService:
         device: str = "cpu",
         cache_dir: str | None = None,
         batch_size: int = 32,
+        local_files_only: bool = False,
     ):
         """Initialize the embedding service.
 
@@ -41,13 +42,21 @@ class EmbeddingService:
             device: Device to run on ("cpu", "cuda", "mps")
             cache_dir: Directory to cache downloaded models
             batch_size: Batch size for encoding
+            local_files_only: If True, skip network requests and use only locally
+                cached model files. Set this after the model has been downloaded
+                once to avoid HuggingFace Hub version-check requests on startup.
         """
         self.model_name = model_name
         self.device = device
         self.batch_size = batch_size
         self.cache_dir = Path(cache_dir) if cache_dir else None
 
-        logger.info("Loading embedding model", model=model_name, device=device)
+        logger.info(
+            "Loading embedding model",
+            model=model_name,
+            device=device,
+            local_files_only=local_files_only,
+        )
 
         # Create cache directory if specified
         if self.cache_dir:
@@ -58,6 +67,7 @@ class EmbeddingService:
             model_name,
             device=device,
             cache_folder=str(self.cache_dir) if self.cache_dir else None,
+            local_files_only=local_files_only,
         )
 
         dimension = self.model.get_sentence_embedding_dimension()

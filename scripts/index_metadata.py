@@ -4,6 +4,7 @@ import argparse
 import logging
 import sys
 from pathlib import Path
+from urllib.parse import quote_plus
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -55,7 +56,7 @@ def main():
     logger.info("Loading configuration...")
     config = load_config(args.config)
 
-    logger.info(f"Configuration loaded:")
+    logger.info("Configuration loaded:")
     logger.info(f"  Embedding model: {config.embedding.model_name}")
     logger.info(f"  Vector store: {config.vectorstore.collection_name}")
     logger.info(f"  LLM provider: {config.llm.provider}")
@@ -68,6 +69,7 @@ def main():
         device=config.embedding.device,
         cache_dir=config.embedding.cache_dir,
         batch_size=config.embedding.batch_size,
+        local_files_only=config.embedding.local_files_only,
     )
 
     vector_store = ChromaVectorStore(
@@ -98,20 +100,57 @@ def main():
     if args.source:
         sources.extend(args.source)
 
-    if not sources:
-        logger.warning("No sources configured. Add sources to config.indexing.source_paths")
+    databases = {
+        name: db for name, db in config.indexing.databases.items() if db.enabled
+    }
+
+    if not sources and not databases:
+        logger.warning("No sources configured. Add sources to config.indexing.source_paths or databases to config.indexing.databases")
         logger.info("Example sources:")
-        logger.info("  - Database: postgresql://user:pass@localhost/dbname")
         logger.info("  - Code: /path/to/java/project")
+        logger.info("  - Database: set enabled: true in config.indexing.databases")
         sys.exit(1)
 
-    # Run indexing
-    logger.info(f"Starting indexing of {len(sources)} sources...")
+    # Run indexing for code sources
+    logger.info(f"Starting indexing of {len(sources)} code source(s) and {len(databases)} database(s)...")
 
     overall_stats = pipeline.discover_and_index(
         source_paths=sources,
         _extractors_config=config.indexing.extractors,
     )
+
+    # Run indexing for configured databases
+    for db_name, db_config in databases.items():
+        logger.info(f"Processing database: {db_name} ({db_config.type})")
+        try:
+            conn = db_config.connection
+            if db_config.type == "postgresql":
+                url = f"postgresql://{quote_plus(conn.user)}:{quote_plus(conn.password)}@{conn.host}:{conn.port}/{conn.database}"
+            elif db_config.type == "sqlite" and conn.path:
+                url = f"sqlite:///{conn.path}"
+            else:
+                logger.warning(f"Unsupported database type '{db_config.type}' for {db_name}, skipping")
+                continue
+
+            artifacts = pipeline.extract_from_database(
+                url,
+                schema=db_config.schema_name,
+                include_tables=db_config.include_tables or None,
+            )
+
+            if db_config.tags:
+                for artifact in artifacts:
+                    artifact.tags.extend(db_config.tags)
+
+            db_stats = pipeline.run_pipeline(artifacts, validate=args.validate)
+            overall_stats["sources_processed"] += 1  # type: ignore[reportOperatorIssue]
+            overall_stats["total_artifacts"] += db_stats.get("total_indexed", 0)  # type: ignore[reportOperatorIssue]
+            overall_stats["errors"].extend(db_stats.get("errors", []))  # type: ignore[reportAttributeAccessIssue]
+
+        except Exception as e:
+            error_msg = f"Failed to process database {db_name}: {e}"
+            logger.error(error_msg)
+            overall_stats["errors"].append(error_msg)  # type: ignore[reportAttributeAccessIssue]
 
     # Print summary
     logger.info("\n" + "="*60)

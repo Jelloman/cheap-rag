@@ -20,12 +20,16 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import load_config
 from src.embeddings.service import EmbeddingService
-from src.evaluation.gold_dataset import GoldDataset, GoldQuery
+from src.evaluation.gold_dataset import ArtifactIdentifier, GoldDataset, GoldQuery, compute_artifact_component
+from src.observability.tracing import init_tracing
 from src.vectorstore.chroma_store import ChromaVectorStore
 
 
 def main() -> None:
     """Build gold dataset from test queries."""
+    # Disable console span exporter — trace JSON on stdout is too noisy for a script
+    init_tracing(enable_console=False)
+
     # Load configuration
     config = load_config()
 
@@ -35,6 +39,7 @@ def main() -> None:
         device=config.embedding.device,
         cache_dir=config.embedding.cache_dir,
         batch_size=config.embedding.batch_size,
+        local_files_only=config.embedding.local_files_only,
     )
 
     # Initialize vector store
@@ -87,16 +92,24 @@ def main() -> None:
         # Convert distances to similarities (cosine distance -> similarity)
         similarities = [1.0 - (d / 2.0) for d in distances]
 
-        # Build display info for review
-        candidates_info = []
-        for artifact_id, metadata, similarity in zip(ids, metadatas, similarities):
-            name = metadata.get("name", "unknown") if isinstance(metadata, dict) else "unknown"
-            atype = metadata.get("type", "unknown") if isinstance(metadata, dict) else "unknown"
-            candidates_info.append(f"{name} ({atype}) sim={similarity:.3f}")
+        # Group top-5 candidates by type into relevant_artifacts; record all-K as candidates
+        relevant_artifacts: dict[str, list[ArtifactIdentifier]] = {}
+        all_candidates: list[dict[str, object]] = []
+        for i, (artifact_id, meta) in enumerate(zip(ids, metadatas)):
+            artifact_type = str(meta.get("type", "unknown"))
+            component = compute_artifact_component(meta) or None
+            ident = ArtifactIdentifier(
+                name=str(meta.get("name", "")),
+                component=component,
+                artifact_id=artifact_id,
+            )
+            all_candidates.append({**ident.to_dict(), "type": artifact_type, "similarity": similarities[i]})
+            if i < 5:
+                relevant_artifacts.setdefault(artifact_type, []).append(ident)
 
         print(f"  [{query_id}] {query_text}")
-        for i, info in enumerate(candidates_info[:5]):
-            print(f"    {i+1}. {info}")
+        for i, cand in enumerate(all_candidates[:5]):
+            print(f"    {i+1}. {cand['name']} ({cand['type']}) sim={similarities[i]:.3f}")
 
         # Create gold query with top-5 candidates as initial relevant set
         gold_query = GoldQuery(
@@ -104,12 +117,12 @@ def main() -> None:
             category=category,
             query=query_text,
             language=language,
-            relevant_artifact_ids=list(ids[:5]),
+            relevant_artifacts=relevant_artifacts,
             difficulty=difficulty,
             notes="Auto-generated from top candidates. Requires manual review.",
             metadata={
                 "original_expected": query_data.get("expected_artifacts", []),
-                "all_candidates": list(ids),
+                "all_candidates": all_candidates,
                 "candidate_scores": similarities,
                 "requires_manual_review": True,
             },
@@ -135,7 +148,7 @@ def main() -> None:
     print()
     print("IMPORTANT: This dataset requires manual review!")
     print("Review the output file and:")
-    print("1. Verify that relevant_artifact_ids contains only truly relevant artifacts")
+    print("1. Verify that relevant_artifacts contains only truly relevant artifacts")
     print("2. Remove any false positives")
     print("3. Add any missing relevant artifacts")
     print("4. Set 'requires_manual_review' to false in each query's metadata")

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-"""Download and cache required models."""
+"""Download and cache required models to the local models directory."""
+
+from __future__ import annotations
 
 import sys
 from pathlib import Path
@@ -9,22 +11,26 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sentence_transformers import SentenceTransformer
 
+MODELS_DIR = Path(__file__).parent.parent / "models" / "embeddings"
 
-def download_embedding_model():
-    """Download the embedding model."""
-    print("Downloading sentence-transformers/all-mpnet-base-v2...")
-    model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
-    print(f"Model downloaded successfully: {model}")
-    print(f"Embedding dimension: {model.get_sentence_embedding_dimension()}")
+EMBEDDING_MODEL = "sentence-transformers/all-mpnet-base-v2"
 
-    # Test encoding
-    test_text = "Test embedding generation"
-    embedding = model.encode(test_text)
-    print(f"Test embedding shape: {embedding.shape}")
+
+def download_embedding_model() -> None:
+    """Download the embedding model to the local models directory."""
+    print(f"Downloading {EMBEDDING_MODEL} to {MODELS_DIR} ...")
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+
+    model = SentenceTransformer(EMBEDDING_MODEL, cache_folder=str(MODELS_DIR))
+
+    dim = model.get_sentence_embedding_dimension()
+    embedding = model.encode("Test embedding generation")
+    print(f"  Embedding dimension : {dim}")
+    print(f"  Test embedding shape: {embedding.shape}")
     print("✓ Embedding model ready")
 
 
-def main():
+def main() -> None:
     """Download all required models."""
     print("CHEAP RAG - Model Download")
     print("=" * 50)
