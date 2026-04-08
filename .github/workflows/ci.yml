@@ -24,6 +24,7 @@ on:
 
 env:
   UV_SYSTEM_PYTHON: 1
+  CONFIG_PROFILE: ci
 
 jobs:
   ci:
@@ -47,6 +48,12 @@ jobs:
 
       - name: Sync dependencies with uv
         run: uv sync --locked --all-extras --dev
+
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: models/embeddings
+          key: embedding-model-all-mpnet-base-v2
 
       - name: Install Nox
         run: uv pip install nox

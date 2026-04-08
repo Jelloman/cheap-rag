@@ -186,11 +186,14 @@ def _expand_env_vars(obj: Any) -> Any:
     if isinstance(obj, str):
 
         def _replace(m: re.Match[str]) -> str:
-            var_name = m.group(1)
-            value = os.getenv(var_name)
+            spec = m.group(1)
+            if ":-" in spec:
+                var_name, default = spec.split(":-", 1)
+                return os.getenv(var_name, default)
+            value = os.getenv(spec)
             if value is None:
                 raise ValueError(
-                    f"Environment variable '{var_name}' is not set. "
+                    f"Environment variable '{spec}' is not set. "
                     f"Add it to your .env file or shell environment."
                 )
             return value

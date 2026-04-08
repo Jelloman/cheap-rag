@@ -104,6 +104,13 @@ def semantic_search():
     """Initialize semantic search for testing."""
     config = load_config()
 
+    # Skip if the embedding model isn't cached locally (e.g. in CI)
+    if config.embedding.local_files_only:
+        model_slug = "models--" + config.embedding.model_name.replace("/", "--")
+        cache_path = Path(config.embedding.cache_dir) / model_slug
+        if not cache_path.exists():
+            pytest.skip(f"Embedding model not cached locally at {cache_path} — skipping integration tests")
+
     # Override device to CPU if CUDA is not available
     device = config.embedding.device
     if device == "cuda" and not torch.cuda.is_available():
