@@ -85,6 +85,7 @@ class VariantConfig:
     query_prefix: str = ""
     document_prefix: str = ""
     use_instructor_encoding: bool = False
+    trust_remote_code: bool = False
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -261,6 +262,7 @@ class EmbeddingVariant:
                 cache_dir=self._base_config.embedding.cache_dir,
                 batch_size=self._base_config.embedding.batch_size,
                 local_files_only=self._base_config.embedding.local_files_only,
+                trust_remote_code=self.config.trust_remote_code,
             )
 
         self.vector_store = ChromaVectorStore(
@@ -297,6 +299,7 @@ class EmbeddingVariant:
                 cache_dir=self._base_config.embedding.cache_dir,
                 batch_size=self._base_config.embedding.batch_size,
                 local_files_only=cached,
+                trust_remote_code=self.config.trust_remote_code,
             )
 
         # Open destination collection
