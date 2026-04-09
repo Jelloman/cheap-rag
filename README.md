@@ -309,14 +309,6 @@ nox -s tests -- -v
 
 ### Phase 2.5 — Observability Integration (Current, 2026-02-19)
 
-✅ **Completed (Phase 2.5):**
-- Integrated OpenTelemetry tracing into `EmbeddingService`, `SemanticSearch`, `Generator`, and API routes
-- Integrated `StructuredLogger` (replaces stdlib logging) throughout pipeline
-- Integrated `record_operation()` / `record_error()` throughout pipeline
-- Per-request correlation IDs propagated from API through all downstream calls
-- `GET /health` endpoint now includes live performance stats and memory usage
-- 324 tests passing (unit tests for all Phase 1 + Phase 2 modules)
-
 ✅ **Complete (Phase 1 — Core RAG):**
 - Metadata extraction (PostgreSQL, SQLite, Java)
 - Embedding service (sentence-transformers with CUDA GPU support)
@@ -335,13 +327,51 @@ nox -s tests -- -v
 - Error tracking and rate monitoring
 - Performance profiling (latency percentiles, throughput, memory)
 
-⏳ **Deferred (requires running services / manual work):**
+✅ **Completed (Phase 2.1 - Observability):**
+- Integrated OpenTelemetry tracing into `EmbeddingService`, `SemanticSearch`, `Generator`, and API routes
+- Integrated `StructuredLogger` (replaces stdlib logging) throughout pipeline
+- Integrated `record_operation()` / `record_error()` throughout pipeline
+- Per-request correlation IDs propagated from API through all downstream calls
+- `GET /health` endpoint now includes live performance stats and memory usage
+- 324 tests passing (unit tests for all Phase 1 + Phase 2 modules)
+
+✅ **Complete (Phase 2.2 — Evaluation):**
 - Create and annotate gold evaluation dataset
 - Run initial retrieval evaluation to establish baselines
 - Run A/B test comparing embedding models
+
+⏳ **Upcoming:**
+- Establish performance baselines: p50/p95/p99 latencies, throughput, memory under production-like load
+- End-to-end indexing test: complete pipeline test with all extractors, multi-source, error recovery
 - Configure OTLP exporter (Jaeger / Grafana Tempo)
 - Configure log aggregation (ELK / Loki)
 - Manual API testing with real data
+
+## Phase 3: Runtime Observability & Metrics
+**Goal:** Instrument the RAG pipeline and target applications for deep runtime analysis — collect, store, and visualize execution traces, timings, memory consumption, and object population data.
+- 3.1 Pipeline Instrumentation cont'd
+- 3.2 Memory & Object Population Tracking
+- 3.3 Execution Trace Analysis
+- 3.4 Java Runtime Observability
+- 3.5 Metrics Dashboards & Alerts
+
+## Phase 4: Agent Orchestration + Guardrails
+**Goal:** Build multi-step agentic workflows with safety constraints.
+- 4.1 Agent Framework
+- 4.2 Guardrails
+- 4.3 Workflow Patterns
+
+## Phase 5: CodeRLM Integration
+**Goal:** Integrate with [CodeRLM](https://github.com/JaredStewart/coderlm) to combine CHEAP's semantic metadata understanding with CodeRLM's structural code navigation.
+- 5.1 Synergy Analysis
+- 5.2 Integration Architecture
+- 5.3 Unified Developer Experience
+
+## Phase 6: Frontend + Backend Integration
+**Goal:** Build a production-quality full-stack application.
+- 6.1 Frontend (React)
+- 6.2 Backend (Node.js or FastAPI)
+- 6.3 Deployment
 
 
 ## Quick Reference
