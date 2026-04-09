@@ -40,6 +40,7 @@ ENV/
 # Data directories
 data/vector_db/
 data/metadata/
+data/ab_testing/vector_stores/
 models/
 *.db
 *.sqlite

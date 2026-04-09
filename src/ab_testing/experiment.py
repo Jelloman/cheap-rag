@@ -177,15 +177,12 @@ class ABExperiment:
             for gold_query in gold_dataset:
                 start_time = time.perf_counter()
 
-                # Search with variant
-                search_results = variant.search(gold_query.query)
+                # Search with variant — returns list of artifact IDs
+                retrieved_ids = variant.search(gold_query.query)
 
                 # Record latency
                 latency_ms = (time.perf_counter() - start_time) * 1000
                 latencies.append(latency_ms)
-
-                # Extract retrieved IDs
-                retrieved_ids = [r["artifact"].id for r in search_results]
 
                 # Evaluate retrieval quality
                 retrieval_metrics = evaluate_retrieval(gold_query, retrieved_ids)

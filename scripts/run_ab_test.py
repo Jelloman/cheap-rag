@@ -1,11 +1,20 @@
 """Run A/B test comparing different embedding models.
 
-This script compares multiple embedding models side-by-side
-to determine which provides better retrieval quality.
+Usage:
+    # Run all variants defined in config/ab_variants/
+    uv run scripts/run_ab_test.py
+
+    # Run specific variants by passing their YAML config files
+    uv run scripts/run_ab_test.py config/ab_variants/mpnet_baseline.yaml config/ab_variants/bge_large.yaml
+
+    # Pass a directory to run all variants in it
+    uv run scripts/run_ab_test.py config/ab_variants/
 """
 
 from __future__ import annotations
 
+import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -15,74 +24,104 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.ab_testing import (
     ABExperiment,
     ExperimentConfig,
-    VariantConfig,
 )
+from src.ab_testing.variant import VariantConfig
 from src.evaluation import ABTestReportGenerator
+from src.observability.tracing import init_tracing
+
+init_tracing(enable_console=False)
+
+DEFAULT_VARIANTS_DIR = Path(__file__).parent.parent / "config" / "ab_variants"
+
+
+def load_variant_configs(paths: list[str]) -> list[VariantConfig]:
+    """Load VariantConfig objects from a list of file/directory paths.
+
+    Args:
+        paths: List of YAML file paths or directories containing YAML files
+
+    Returns:
+        List of VariantConfig objects
+    """
+    yaml_paths: list[Path] = []
+    for raw in paths:
+        p = Path(raw)
+        if p.is_dir():
+            yaml_paths.extend(sorted(p.glob("*.yaml")))
+        elif p.is_file():
+            yaml_paths.append(p)
+        else:
+            print(f"Warning: '{p}' is not a file or directory, skipping")
+
+    if not yaml_paths:
+        print(f"No variant YAML files found. Put configs in {DEFAULT_VARIANTS_DIR}/")
+        sys.exit(1)
+
+    configs: list[VariantConfig] = []
+    for path in yaml_paths:
+        print(f"  Loading variant: {path.name}")
+        configs.append(VariantConfig.from_yaml(path))
+    return configs
 
 
 def main() -> None:
     """Run A/B test experiment."""
-    # Define variants to test
-    variants = [
-        VariantConfig(
-            name="baseline_mpnet",
-            embedding_model="sentence-transformers/all-mpnet-base-v2",
-            embedding_dimension=768,
-            top_k=5,
-            metadata={"description": "Current baseline model"},
+    parser = argparse.ArgumentParser(
+        description="Run A/B test comparing embedding models",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=__doc__,
+    )
+    parser.add_argument(
+        "variants",
+        nargs="*",
+        help=(
+            "Variant YAML config files or directories. "
+            f"Defaults to all files in {DEFAULT_VARIANTS_DIR}/"
         ),
-        VariantConfig(
-            name="bge_large",
-            embedding_model="BAAI/bge-large-en-v1.5",
-            embedding_dimension=1024,
-            top_k=5,
-            metadata={"description": "BGE Large - higher quality embeddings"},
-        ),
-        VariantConfig(
-            name="bge_small",
-            embedding_model="BAAI/bge-small-en-v1.5",
-            embedding_dimension=384,
-            top_k=5,
-            metadata={"description": "BGE Small - faster, lower quality"},
-        ),
-    ]
+    )
+    args = parser.parse_args()
+
+    # Default: load all configs from config/ab_variants/
+    variant_paths = args.variants if args.variants else [str(DEFAULT_VARIANTS_DIR)]
+
+    print("Loading variant configs...")
+    variants = load_variant_configs(variant_paths)
+    print(f"Loaded {len(variants)} variant(s): {[v.name for v in variants]}")
+    print()
 
     # Create experiment configuration
     config = ExperimentConfig(
         name="embedding_model_comparison_2026",
-        description="Comparison of sentence-transformers vs BGE models for metadata retrieval",
+        description="Comparison of embedding models for metadata retrieval quality",
         variants=variants,
         gold_dataset_path="tests/fixtures/gold_dataset_review.json",
         vector_store_path="data/ab_testing/vector_stores",
         metadata={
-            "objective": "Determine if BGE models improve retrieval quality over current baseline",
-            "hypothesis": "BGE Large will improve P@5 by at least 10%",
+            "objective": "Determine which embedding model gives best retrieval quality",
+            "hypothesis": "BGE Large will improve P@5 by at least 10% over baseline",
         },
     )
+
+    # Check gold dataset
+    gold_path = Path(config.gold_dataset_path)
+    if not gold_path.exists():
+        print(f"Error: Gold dataset not found at {gold_path}")
+        print("Run scripts/build_gold_dataset.py first to create it.")
+        sys.exit(1)
 
     print(f"Running experiment: {config.name}")
     print(f"Description: {config.description}")
     print(f"Variants: {len(config.variants)}")
     print()
 
-    # Check if gold dataset exists
-    gold_path = Path(config.gold_dataset_path)
-    if not gold_path.exists():
-        print(f"Error: Gold dataset not found at {gold_path}")
-        print("Run scripts/build_gold_dataset.py first to create it.")
-        return
-
     # Create and run experiment
     experiment = ABExperiment(config)
 
-    print("Setting up experiment...")
+    print("Setting up experiment (may download models and re-index data)...")
     experiment.setup()
-
-    print("Note: This script assumes artifacts are already indexed in the baseline vector store.")
-    print("If you need to index artifacts, use scripts/index_metadata.py first.")
     print()
 
-    print("Running experiment (this may take a while)...")
+    print("Running evaluation queries...")
     results = experiment.run()
 
     print()
@@ -105,8 +144,6 @@ def main() -> None:
     experiment.save_results(results, results_path)
 
     # Generate report
-    import json
-
     experiment_data = json.loads(results_path.read_text())
     ABTestReportGenerator.generate_experiment_report(
         experiment_results=experiment_data,
@@ -117,7 +154,7 @@ def main() -> None:
     print(f"Results saved to: {results_path}")
     print(f"Report generated in: {output_dir}")
 
-    # Cleanup
+    # Cleanup variant collections (skips existing/baseline indexes)
     print()
     print("Cleaning up experiment resources...")
     experiment.cleanup()

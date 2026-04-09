@@ -200,6 +200,45 @@ class ChromaVectorStore:
         """
         return self.collection.count()
 
+    def get_all_documents(self) -> tuple[list[str], list[str], list[dict[str, Any]]]:
+        """Retrieve all documents from the collection.
+
+        Returns:
+            Tuple of (ids, documents, metadatas)
+        """
+        results = self.collection.get(include=["documents", "metadatas"])
+        ids: list[str] = results["ids"] or []
+        documents: list[str] = results["documents"] or []  # type: ignore[reportAssignmentType]  # chromadb
+        metadatas: list[dict[str, Any]] = results["metadatas"] or []  # type: ignore[reportAssignmentType]  # chromadb
+        return ids, documents, metadatas
+
+    def add_raw(
+        self,
+        ids: list[str],
+        embeddings: list[list[float]],
+        documents: list[str],
+        metadatas: list[dict[str, Any]],
+    ) -> None:
+        """Add pre-embedded documents directly to the collection.
+
+        Args:
+            ids: Artifact IDs
+            embeddings: Pre-computed embedding vectors
+            documents: Document texts
+            metadatas: Metadata dicts
+        """
+        batch_size = 100
+        for i in range(0, len(ids), batch_size):
+            end_idx = min(i + batch_size, len(ids))
+            self.collection.upsert(
+                ids=ids[i:end_idx],
+                embeddings=embeddings[i:end_idx],
+                documents=documents[i:end_idx],
+                metadatas=metadatas[i:end_idx],  # type: ignore[reportArgumentType]  # chromadb
+            )
+            logger.info(f"  Added batch {i // batch_size + 1} ({i + 1}-{end_idx} of {len(ids)})")
+        logger.info(f"Total items in collection: {self.collection.count()}")
+
     def _artifact_to_metadata(self, artifact: MetadataArtifact) -> dict[str, Any]:
         """Convert artifact to ChromaDB metadata dict.
 
