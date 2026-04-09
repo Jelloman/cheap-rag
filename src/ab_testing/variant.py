@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import yaml
 
 from src.embeddings.service import EmbeddingService
@@ -58,6 +59,15 @@ class VariantConfig:
             re-indexing (only used when use_existing_index=False)
         source_collection_name: Source collection name for re-indexing
             (only used when use_existing_index=False)
+        query_prefix: Text prepended to queries before encoding. For plain
+            string-prefix models (BGE, E5), this is concatenated directly.
+            For INSTRUCTOR models, this is passed as the instruction alongside
+            the query text (requires use_instructor_encoding=True).
+        document_prefix: Text prepended to documents before encoding. Same
+            semantics as query_prefix.
+        use_instructor_encoding: If True, use the INSTRUCTOR encoding API
+            (pass [instruction, text] pairs) instead of plain string
+            concatenation. Requires InstructorEmbedding to be installed.
         metadata: Additional variant configuration
     """
 
@@ -74,6 +84,7 @@ class VariantConfig:
     source_collection_name: str = ""
     query_prefix: str = ""
     document_prefix: str = ""
+    use_instructor_encoding: bool = False
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -101,6 +112,7 @@ class VariantConfig:
             "use_existing_index": self.use_existing_index,
             "query_prefix": self.query_prefix,
             "document_prefix": self.document_prefix,
+            "use_instructor_encoding": self.use_instructor_encoding,
             "metadata": self.metadata,
         }
 
@@ -113,6 +125,13 @@ class EmbeddingVariant:
       No re-indexing is done; the collection is used read-only for search.
     - use_existing_index=False: pulls all documents from a source collection,
       re-embeds them with this variant's model, and indexes into a new collection.
+
+    Two encoding styles:
+    - use_instructor_encoding=False (default): plain text encoding via EmbeddingService,
+      with optional string prefix prepended to queries and documents.
+    - use_instructor_encoding=True: INSTRUCTOR-style encoding where query_prefix and
+      document_prefix are passed as instructions alongside the text, not concatenated.
+      Requires InstructorEmbedding to be installed.
     """
 
     def __init__(
@@ -140,17 +159,78 @@ class EmbeddingVariant:
 
         self._base_config = load_config()
         self.embedding_service: EmbeddingService | None = None
+        self._instructor_model: Any = None  # set when use_instructor_encoding=True
         self.vector_store: Any = None
 
+    # ------------------------------------------------------------------
+    # Encoding helpers — abstract over plain-prefix vs INSTRUCTOR styles
+    # ------------------------------------------------------------------
+
+    def _embed_query(self, query: str) -> np.ndarray:
+        """Embed a query, applying the configured prefix or instruction."""
+        if self.config.use_instructor_encoding:
+            if self._instructor_model is None:
+                raise RuntimeError("INSTRUCTOR model not loaded")
+            result: np.ndarray = self._instructor_model.encode(
+                [[self.config.query_prefix, query]]
+            )[0]
+            return result
+        if self.config.query_prefix:
+            query = self.config.query_prefix + query
+        if self.embedding_service is None:
+            raise RuntimeError("Embedding service not loaded")
+        return self.embedding_service.embed_query(query)
+
+    def _embed_documents(self, documents: list[str]) -> np.ndarray:
+        """Embed a batch of documents, applying the configured prefix or instruction.
+
+        Always operates on raw document text; prefixes/instructions are applied
+        internally and are not reflected in the returned embeddings' source texts.
+        """
+        if self.config.use_instructor_encoding:
+            if self._instructor_model is None:
+                raise RuntimeError("INSTRUCTOR model not loaded")
+            pairs = [[self.config.document_prefix, d] for d in documents]
+            result2: np.ndarray = self._instructor_model.encode(pairs)
+            return result2
+        if self.config.document_prefix:
+            documents = [self.config.document_prefix + d for d in documents]
+        if self.embedding_service is None:
+            raise RuntimeError("Embedding service not loaded")
+        return self.embedding_service.embed_batch(documents)
+
+    def _load_instructor_model(self, local_files_only: bool = False) -> Any:
+        """Load an INSTRUCTOR model."""
+        try:
+            from InstructorEmbedding import INSTRUCTOR  # type: ignore[reportMissingModuleSource]
+        except ImportError as exc:
+            raise ImportError(
+                "InstructorEmbedding is required for use_instructor_encoding=True. "
+                "Install it with: uv add InstructorEmbedding"
+            ) from exc
+
+        cache_dir = self._base_config.embedding.cache_dir
+        logger.info(
+            f"Variant '{self.config.name}': loading INSTRUCTOR model "
+            f"'{self.config.embedding_model}'"
+        )
+        return INSTRUCTOR(
+            self.config.embedding_model,
+            cache_folder=str(cache_dir) if cache_dir else None,
+            device=self._base_config.embedding.device,
+        )
+
+    # ------------------------------------------------------------------
+    # Initialization
+    # ------------------------------------------------------------------
+
     def initialize(self) -> None:
-        """Initialize embedding service and vector store.
+        """Initialize embedding model and vector store.
 
         For use_existing_index variants: connects to the existing collection.
         For re-index variants: pulls documents from the source collection,
         re-embeds with this model, and writes a new collection.
         """
-        from src.vectorstore.chroma_store import ChromaVectorStore
-
         if self.config.use_existing_index:
             self._initialize_existing()
         else:
@@ -172,14 +252,17 @@ class EmbeddingVariant:
             f"'{self.config.existing_persist_directory}'"
         )
 
-        # Baseline model is already cached; respect local_files_only from config
-        self.embedding_service = EmbeddingService(
-            model_name=self.config.embedding_model,
-            device=self._base_config.embedding.device,
-            cache_dir=self._base_config.embedding.cache_dir,
-            batch_size=self._base_config.embedding.batch_size,
-            local_files_only=self._base_config.embedding.local_files_only,
-        )
+        if self.config.use_instructor_encoding:
+            self._instructor_model = self._load_instructor_model()
+        else:
+            self.embedding_service = EmbeddingService(
+                model_name=self.config.embedding_model,
+                device=self._base_config.embedding.device,
+                cache_dir=self._base_config.embedding.cache_dir,
+                batch_size=self._base_config.embedding.batch_size,
+                local_files_only=self._base_config.embedding.local_files_only,
+            )
+
         self.vector_store = ChromaVectorStore(
             persist_directory=self.config.existing_persist_directory,
             collection_name=self.config.existing_collection_name,
@@ -205,13 +288,16 @@ class EmbeddingVariant:
             f"({'cached' if cached else 'downloading'})"
         )
 
-        self.embedding_service = EmbeddingService(
-            model_name=self.config.embedding_model,
-            device=self._base_config.embedding.device,
-            cache_dir=self._base_config.embedding.cache_dir,
-            batch_size=self._base_config.embedding.batch_size,
-            local_files_only=cached,
-        )
+        if self.config.use_instructor_encoding:
+            self._instructor_model = self._load_instructor_model(local_files_only=cached)
+        else:
+            self.embedding_service = EmbeddingService(
+                model_name=self.config.embedding_model,
+                device=self._base_config.embedding.device,
+                cache_dir=self._base_config.embedding.cache_dir,
+                batch_size=self._base_config.embedding.batch_size,
+                local_files_only=cached,
+            )
 
         # Open destination collection
         self.vector_store = ChromaVectorStore(
@@ -251,13 +337,16 @@ class EmbeddingVariant:
             f"Variant '{self.config.name}': re-embedding {len(ids)} documents "
             f"with '{self.config.embedding_model}'"
         )
-        if self.config.document_prefix:
-            documents = [self.config.document_prefix + d for d in documents]
-        embeddings = self.embedding_service.embed_batch(documents)
+        # _embed_documents handles prefixes/instructions internally; store raw documents
+        embeddings = self._embed_documents(documents)
         embeddings_list = embeddings.tolist()
 
         self.vector_store.add_raw(ids, embeddings_list, documents, metadatas)
         logger.info(f"Variant '{self.config.name}': indexing complete")
+
+    # ------------------------------------------------------------------
+    # Search
+    # ------------------------------------------------------------------
 
     def search(
         self,
@@ -273,12 +362,12 @@ class EmbeddingVariant:
         Returns:
             List of retrieved artifact IDs
         """
-        if not self.embedding_service or not self.vector_store:
+        if not self.vector_store or (
+            self.embedding_service is None and self._instructor_model is None
+        ):
             raise RuntimeError("Variant not initialized. Call initialize() first.")
 
-        if self.config.query_prefix:
-            query = self.config.query_prefix + query
-        query_embedding = self.embedding_service.embed_query(query)
+        query_embedding = self._embed_query(query)
 
         ids, _metadatas, distances = self.vector_store.search(
             query_embedding=query_embedding,

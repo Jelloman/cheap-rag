@@ -41,6 +41,7 @@ ENV/
 data/vector_db/
 data/metadata/
 data/ab_testing/vector_stores/
+data/ab_testing/results/archive/
 models/
 *.db
 *.sqlite

@@ -2,12 +2,12 @@
 
 Comparison of embedding models for metadata retrieval quality
 
-**Generated:** 2026-04-09 12:30:40
+**Generated:** 2026-04-09 14:11:15
 
 ## Metadata
 
 - **experiment_name:** embedding_model_comparison_2026
-- **num_variants:** 4
+- **num_variants:** 5
 
 ## Metrics
 
@@ -82,6 +82,31 @@ Comparison of embedding models for metadata retrieval quality
 - **mrr:** 0.6130
 - **map:** 0.3454
 - **ndcg:** 0.4454
+##### Metadata
+
+- **num_queries:** 32
+- **aggregation:** mean
+
+
+#### Instructor Xl
+
+##### Precision At K
+
+- **1:** 0.5000
+- **10:** 0.1219
+- **3:** 0.3021
+- **5:** 0.2437
+
+##### Recall At K
+
+- **1:** 0.1615
+- **10:** 0.3531
+- **3:** 0.2682
+- **5:** 0.3531
+
+- **mrr:** 0.5167
+- **map:** 0.3064
+- **ndcg:** 0.3721
 ##### Metadata
 
 - **num_queries:** 32

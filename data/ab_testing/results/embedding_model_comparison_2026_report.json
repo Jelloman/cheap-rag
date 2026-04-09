@@ -1,7 +1,7 @@
 {
   "title": "A/B Test Results: embedding_model_comparison_2026",
   "description": "Comparison of embedding models for metadata retrieval quality",
-  "timestamp": "2026-04-09T12:30:40.094934",
+  "timestamp": "2026-04-09T14:11:15.891115",
   "metrics": {
     "variants": {
       "bge_large": {
@@ -67,6 +67,27 @@
           "aggregation": "mean"
         }
       },
+      "instructor_xl": {
+        "precision_at_k": {
+          "1": 0.5,
+          "10": 0.121875,
+          "3": 0.3020833333333333,
+          "5": 0.24375
+        },
+        "recall_at_k": {
+          "1": 0.16145833333333334,
+          "10": 0.353125,
+          "3": 0.2682291666666667,
+          "5": 0.353125
+        },
+        "mrr": 0.5166666666666667,
+        "map": 0.30635416666666665,
+        "ndcg": 0.3721109002507288,
+        "metadata": {
+          "num_queries": 32,
+          "aggregation": "mean"
+        }
+      },
       "baseline_mpnet": {
         "precision_at_k": {
           "1": 0.65625,
@@ -92,6 +113,6 @@
   },
   "metadata": {
     "experiment_name": "embedding_model_comparison_2026",
-    "num_variants": 4
+    "num_variants": 5
   }
 }

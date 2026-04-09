@@ -1,0 +1,12 @@
+name: instructor_xl
+description: "INSTRUCTOR-XL (hkunlp/instructor-xl) — instruction-tuned, 768-dim"
+embedding_model: hkunlp/instructor-xl
+embedding_dimension: 768
+top_k: 5
+use_instructor_encoding: true
+query_prefix: "Represent the query for retrieving relevant metadata:"
+document_prefix: "Represent the metadata artifact for retrieval:"
+source_persist_directory: ./data/vector_db
+source_collection_name: cheap_metadata_v1
+metadata:
+  description: INSTRUCTOR-XL with domain-specific instructions

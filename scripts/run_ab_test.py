@@ -16,6 +16,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import zipfile
+from datetime import datetime
 from pathlib import Path
 
 # Add parent directory to path for imports
@@ -34,14 +36,14 @@ init_tracing(enable_console=False)
 DEFAULT_VARIANTS_DIR = Path(__file__).parent.parent / "config" / "ab_variants"
 
 
-def load_variant_configs(paths: list[str]) -> list[VariantConfig]:
+def load_variant_configs(paths: list[str]) -> tuple[list[VariantConfig], list[Path]]:
     """Load VariantConfig objects from a list of file/directory paths.
 
     Args:
         paths: List of YAML file paths or directories containing YAML files
 
     Returns:
-        List of VariantConfig objects
+        Tuple of (configs, yaml_paths)
     """
     yaml_paths: list[Path] = []
     for raw in paths:
@@ -61,7 +63,49 @@ def load_variant_configs(paths: list[str]) -> list[VariantConfig]:
     for path in yaml_paths:
         print(f"  Loading variant: {path.name}")
         configs.append(VariantConfig.from_yaml(path))
-    return configs
+    return configs, yaml_paths
+
+
+def _archive_results(
+    variant_yaml_paths: list[Path],
+    variants: list[VariantConfig],
+    output_dir: Path,
+    experiment_name: str,
+) -> Path:
+    """Zip the result files and variant configs into a timestamped archive.
+
+    Args:
+        variant_yaml_paths: YAML config files that were used in the run
+        variants: Loaded variant configs (for naming)
+        output_dir: Directory containing the result files
+        experiment_name: Experiment name used as the base for result filenames
+
+    Returns:
+        Path to the created zip file
+    """
+    archive_dir = output_dir / "archive"
+    archive_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    variant_names = "_".join(v.name for v in variants)
+    zip_name = f"{variant_names}_{timestamp}.zip"
+    zip_path = archive_dir / zip_name
+
+    result_files = [
+        output_dir / f"{experiment_name}_results.json",
+        output_dir / f"{experiment_name}_report.json",
+        output_dir / f"{experiment_name}_report.md",
+    ]
+
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for result_file in result_files:
+            if result_file.exists():
+                zf.write(result_file, result_file.name)
+
+        for yaml_path in variant_yaml_paths:
+            zf.write(yaml_path, f"configs/{yaml_path.name}")
+
+    return zip_path
 
 
 def main() -> None:
@@ -85,7 +129,7 @@ def main() -> None:
     variant_paths = args.variants if args.variants else [str(DEFAULT_VARIANTS_DIR)]
 
     print("Loading variant configs...")
-    variants = load_variant_configs(variant_paths)
+    variants, yaml_paths = load_variant_configs(variant_paths)
     print(f"Loaded {len(variants)} variant(s): {[v.name for v in variants]}")
     print()
 
@@ -151,8 +195,11 @@ def main() -> None:
         format="both",
     )
 
+    # Archive results + configs
+    zip_path = _archive_results(yaml_paths, variants, output_dir, config.name)
     print(f"Results saved to: {results_path}")
     print(f"Report generated in: {output_dir}")
+    print(f"Archived to: {zip_path}")
 
     # Cleanup variant collections (skips existing/baseline indexes)
     print()

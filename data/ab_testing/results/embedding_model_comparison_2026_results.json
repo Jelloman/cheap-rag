@@ -12,6 +12,7 @@
         "use_existing_index": false,
         "query_prefix": "Represent this sentence for searching relevant passages: ",
         "document_prefix": "",
+        "use_instructor_encoding": false,
         "metadata": {
           "description": "BGE Large - higher quality embeddings"
         }
@@ -25,6 +26,7 @@
         "use_existing_index": false,
         "query_prefix": "Represent this sentence for searching relevant passages: ",
         "document_prefix": "",
+        "use_instructor_encoding": false,
         "metadata": {
           "description": "BGE Small - faster, lower quality"
         }
@@ -38,8 +40,23 @@
         "use_existing_index": false,
         "query_prefix": "query: ",
         "document_prefix": "passage: ",
+        "use_instructor_encoding": false,
         "metadata": {
           "description": "E5 Large - alternative high quality model"
+        }
+      },
+      {
+        "name": "instructor_xl",
+        "embedding_model": "hkunlp/instructor-xl",
+        "embedding_dimension": 768,
+        "top_k": 5,
+        "similarity_threshold": 0.0,
+        "use_existing_index": false,
+        "query_prefix": "Represent the query for retrieving relevant metadata:",
+        "document_prefix": "Represent the metadata artifact for retrieval:",
+        "use_instructor_encoding": true,
+        "metadata": {
+          "description": "INSTRUCTOR-XL with domain-specific instructions"
         }
       },
       {
@@ -51,6 +68,7 @@
         "use_existing_index": true,
         "query_prefix": "",
         "document_prefix": "",
+        "use_instructor_encoding": false,
         "metadata": {
           "description": "Current baseline model"
         }
@@ -92,7 +110,7 @@
         {
           "query_id": "entity_001",
           "query": "What is the film table?",
-          "latency_ms": 26.911600027233362,
+          "latency_ms": 26.152200007345527,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -120,7 +138,7 @@
         {
           "query_id": "entity_002",
           "query": "Tell me about the customer table",
-          "latency_ms": 12.540599971543998,
+          "latency_ms": 12.604299990925938,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -148,7 +166,7 @@
         {
           "query_id": "constraint_001",
           "query": "What columns are in the film table?",
-          "latency_ms": 15.865999972447753,
+          "latency_ms": 14.28110001143068,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -176,7 +194,7 @@
         {
           "query_id": "constraint_002",
           "query": "What is the data type of the rental_rate column in film?",
-          "latency_ms": 12.66619999660179,
+          "latency_ms": 12.756100040860474,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -204,7 +222,7 @@
         {
           "query_id": "constraint_003",
           "query": "Which columns in the rental table are required (not nullable)?",
-          "latency_ms": 12.623100017663091,
+          "latency_ms": 12.687599984928966,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -232,7 +250,7 @@
         {
           "query_id": "relationship_001",
           "query": "What is the relationship between rental and customer?",
-          "latency_ms": 12.760500016156584,
+          "latency_ms": 13.379799958784133,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -260,7 +278,7 @@
         {
           "query_id": "relationship_002",
           "query": "What tables have foreign keys to film?",
-          "latency_ms": 12.704299995675683,
+          "latency_ms": 13.334699964616448,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -288,7 +306,7 @@
         {
           "query_id": "relationship_003",
           "query": "How are films linked to languages?",
-          "latency_ms": 12.72860000608489,
+          "latency_ms": 15.731299994513392,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -316,7 +334,7 @@
         {
           "query_id": "cross_001",
           "query": "What information is stored about films and actors?",
-          "latency_ms": 12.554700020700693,
+          "latency_ms": 13.351999979931861,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -344,7 +362,7 @@
         {
           "query_id": "cross_002",
           "query": "What indexes exist on the rental table?",
-          "latency_ms": 14.049000048544258,
+          "latency_ms": 13.195500010624528,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -372,7 +390,7 @@
         {
           "query_id": "schema_001",
           "query": "What tables are in the public schema?",
-          "latency_ms": 12.604899995494634,
+          "latency_ms": 13.409199949819595,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -400,7 +418,7 @@
         {
           "query_id": "schema_002",
           "query": "What are the main entities in the Pagila database?",
-          "latency_ms": 12.823100027162582,
+          "latency_ms": 13.446700002532452,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -428,7 +446,7 @@
         {
           "query_id": "schema_003",
           "query": "Tell me about the inventory-related tables",
-          "latency_ms": 12.57750001968816,
+          "latency_ms": 12.767600012011826,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -456,7 +474,7 @@
         {
           "query_id": "java_001",
           "query": "What is the Catalog interface in CHEAP?",
-          "latency_ms": 12.8709000418894,
+          "latency_ms": 11.825499997939914,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -484,7 +502,7 @@
         {
           "query_id": "java_002",
           "query": "What fields does the Entity class have?",
-          "latency_ms": 13.105700025334954,
+          "latency_ms": 12.01130001572892,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -512,7 +530,7 @@
         {
           "query_id": "java_003",
           "query": "What is the AspectDef interface in CHEAP?",
-          "latency_ms": 12.865099997725338,
+          "latency_ms": 11.987000005319715,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -540,7 +558,7 @@
         {
           "query_id": "java_004",
           "query": "What hierarchy types exist in CHEAP and what are they used for?",
-          "latency_ms": 12.830399966333061,
+          "latency_ms": 12.931099976412952,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -568,7 +586,7 @@
         {
           "query_id": "java_005",
           "query": "What property types are supported in CHEAP?",
-          "latency_ms": 12.800299969967455,
+          "latency_ms": 11.760300025343895,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -596,7 +614,7 @@
         {
           "query_id": "java_006",
           "query": "What is CatalogSpecies and what values does it have?",
-          "latency_ms": 10.705199965741485,
+          "latency_ms": 11.941000004298985,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -624,7 +642,7 @@
         {
           "query_id": "java_007",
           "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
-          "latency_ms": 10.439999983645976,
+          "latency_ms": 11.82309997966513,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -652,7 +670,7 @@
         {
           "query_id": "java_008",
           "query": "What is a TagDefinition and what fields does it have?",
-          "latency_ms": 10.727200016845018,
+          "latency_ms": 12.48109998414293,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -680,7 +698,7 @@
         {
           "query_id": "java_009",
           "query": "What standard tags are built into CHEAP?",
-          "latency_ms": 10.589899960905313,
+          "latency_ms": 11.551800009328872,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -708,7 +726,7 @@
         {
           "query_id": "java_010",
           "query": "What element types can tags be applied to in CHEAP?",
-          "latency_ms": 10.532299987971783,
+          "latency_ms": 11.73269998980686,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -736,7 +754,7 @@
         {
           "query_id": "java_011",
           "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
-          "latency_ms": 10.678099992219359,
+          "latency_ms": 11.841599945910275,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -764,7 +782,7 @@
         {
           "query_id": "java_012",
           "query": "What does CheapFactory provide and how is it used to create catalogs?",
-          "latency_ms": 11.510699987411499,
+          "latency_ms": 11.451900005340576,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -792,7 +810,7 @@
         {
           "query_id": "constraint_004",
           "query": "What are the primary keys in the database?",
-          "latency_ms": 10.4379000258632,
+          "latency_ms": 11.936799972318113,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -820,7 +838,7 @@
         {
           "query_id": "relationship_004",
           "query": "Show me all foreign key relationships",
-          "latency_ms": 9.055899980012327,
+          "latency_ms": 10.166499996557832,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -848,7 +866,7 @@
         {
           "query_id": "entity_003",
           "query": "What is the actor table used for?",
-          "latency_ms": 10.488599946256727,
+          "latency_ms": 11.810500000137836,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -876,7 +894,7 @@
         {
           "query_id": "constraint_005",
           "query": "What columns in the customer table store email addresses?",
-          "latency_ms": 10.539899987634271,
+          "latency_ms": 10.143199993763119,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -904,7 +922,7 @@
         {
           "query_id": "schema_004",
           "query": "What are the most important tables for tracking rentals?",
-          "latency_ms": 10.502700053621083,
+          "latency_ms": 10.52529999287799,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -932,7 +950,7 @@
         {
           "query_id": "cross_003",
           "query": "How is payment information stored in the database?",
-          "latency_ms": 10.372899996582419,
+          "latency_ms": 9.742399968672544,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -960,7 +978,7 @@
         {
           "query_id": "relationship_005",
           "query": "How is the geographic hierarchy structured?",
-          "latency_ms": 10.475399962160736,
+          "latency_ms": 10.399699967820197,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -987,13 +1005,13 @@
         }
       ],
       "latency_stats": {
-        "mean_ms": 12.341849998847465,
-        "median_ms": 12.57750001968816,
-        "p95_ms": 15.865999972447753,
-        "min_ms": 9.055899980012327,
-        "max_ms": 26.911600027233362
+        "mean_ms": 12.661278116866015,
+        "median_ms": 12.01130001572892,
+        "p95_ms": 15.731299994513392,
+        "min_ms": 9.742399968672544,
+        "max_ms": 26.152200007345527
       },
-      "timestamp": "2026-04-09T12:30:39.368355",
+      "timestamp": "2026-04-09T14:11:14.717521",
       "metadata": {
         "num_queries": 32,
         "variant_config": {
@@ -1005,6 +1023,7 @@
           "use_existing_index": false,
           "query_prefix": "Represent this sentence for searching relevant passages: ",
           "document_prefix": "",
+          "use_instructor_encoding": false,
           "metadata": {
             "description": "BGE Large - higher quality embeddings"
           }
@@ -1039,7 +1058,7 @@
         {
           "query_id": "entity_001",
           "query": "What is the film table?",
-          "latency_ms": 20.707199990283698,
+          "latency_ms": 19.796399981714785,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1067,7 +1086,7 @@
         {
           "query_id": "entity_002",
           "query": "Tell me about the customer table",
-          "latency_ms": 6.0900000389665365,
+          "latency_ms": 6.299900007434189,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1095,7 +1114,7 @@
         {
           "query_id": "constraint_001",
           "query": "What columns are in the film table?",
-          "latency_ms": 6.029099982697517,
+          "latency_ms": 5.772200005594641,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1123,7 +1142,7 @@
         {
           "query_id": "constraint_002",
           "query": "What is the data type of the rental_rate column in film?",
-          "latency_ms": 6.626099988352507,
+          "latency_ms": 5.545100022573024,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1151,7 +1170,7 @@
         {
           "query_id": "constraint_003",
           "query": "Which columns in the rental table are required (not nullable)?",
-          "latency_ms": 5.592000030446798,
+          "latency_ms": 5.704100010916591,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1179,7 +1198,7 @@
         {
           "query_id": "relationship_001",
           "query": "What is the relationship between rental and customer?",
-          "latency_ms": 5.818600009661168,
+          "latency_ms": 5.731199984438717,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1207,7 +1226,7 @@
         {
           "query_id": "relationship_002",
           "query": "What tables have foreign keys to film?",
-          "latency_ms": 5.553300026804209,
+          "latency_ms": 5.5188999976962805,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1235,7 +1254,7 @@
         {
           "query_id": "relationship_003",
           "query": "How are films linked to languages?",
-          "latency_ms": 5.633900000248104,
+          "latency_ms": 5.487500049639493,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1263,7 +1282,7 @@
         {
           "query_id": "cross_001",
           "query": "What information is stored about films and actors?",
-          "latency_ms": 5.478699982631952,
+          "latency_ms": 5.277699965517968,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1291,7 +1310,7 @@
         {
           "query_id": "cross_002",
           "query": "What indexes exist on the rental table?",
-          "latency_ms": 5.910600011702627,
+          "latency_ms": 5.3477000328712165,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1319,7 +1338,7 @@
         {
           "query_id": "schema_001",
           "query": "What tables are in the public schema?",
-          "latency_ms": 5.801199993584305,
+          "latency_ms": 5.351300002075732,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1347,7 +1366,7 @@
         {
           "query_id": "schema_002",
           "query": "What are the main entities in the Pagila database?",
-          "latency_ms": 5.8524000342004,
+          "latency_ms": 5.641299998387694,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1375,7 +1394,7 @@
         {
           "query_id": "schema_003",
           "query": "Tell me about the inventory-related tables",
-          "latency_ms": 5.567300016991794,
+          "latency_ms": 5.445800023153424,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1403,7 +1422,7 @@
         {
           "query_id": "java_001",
           "query": "What is the Catalog interface in CHEAP?",
-          "latency_ms": 5.648899998050183,
+          "latency_ms": 5.46409998787567,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1431,7 +1450,7 @@
         {
           "query_id": "java_002",
           "query": "What fields does the Entity class have?",
-          "latency_ms": 5.552499962504953,
+          "latency_ms": 5.6226999731734395,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1459,7 +1478,7 @@
         {
           "query_id": "java_003",
           "query": "What is the AspectDef interface in CHEAP?",
-          "latency_ms": 5.5389999761246145,
+          "latency_ms": 5.460900021716952,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1487,7 +1506,7 @@
         {
           "query_id": "java_004",
           "query": "What hierarchy types exist in CHEAP and what are they used for?",
-          "latency_ms": 5.686699994839728,
+          "latency_ms": 5.430599965620786,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1515,7 +1534,7 @@
         {
           "query_id": "java_005",
           "query": "What property types are supported in CHEAP?",
-          "latency_ms": 6.109600013587624,
+          "latency_ms": 5.599500029347837,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1543,7 +1562,7 @@
         {
           "query_id": "java_006",
           "query": "What is CatalogSpecies and what values does it have?",
-          "latency_ms": 6.202800024766475,
+          "latency_ms": 5.422900023404509,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1571,7 +1590,7 @@
         {
           "query_id": "java_007",
           "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
-          "latency_ms": 6.1230999999679625,
+          "latency_ms": 5.660300026647747,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1599,7 +1618,7 @@
         {
           "query_id": "java_008",
           "query": "What is a TagDefinition and what fields does it have?",
-          "latency_ms": 5.867299973033369,
+          "latency_ms": 6.169600004795939,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1627,7 +1646,7 @@
         {
           "query_id": "java_009",
           "query": "What standard tags are built into CHEAP?",
-          "latency_ms": 5.869499989785254,
+          "latency_ms": 5.577299976721406,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1655,7 +1674,7 @@
         {
           "query_id": "java_010",
           "query": "What element types can tags be applied to in CHEAP?",
-          "latency_ms": 6.131400004960597,
+          "latency_ms": 5.846200045198202,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1683,7 +1702,7 @@
         {
           "query_id": "java_011",
           "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
-          "latency_ms": 6.078600010368973,
+          "latency_ms": 5.451800010632724,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1711,7 +1730,7 @@
         {
           "query_id": "java_012",
           "query": "What does CheapFactory provide and how is it used to create catalogs?",
-          "latency_ms": 5.952700041234493,
+          "latency_ms": 5.416400032117963,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1739,7 +1758,7 @@
         {
           "query_id": "constraint_004",
           "query": "What are the primary keys in the database?",
-          "latency_ms": 5.475199955981225,
+          "latency_ms": 5.5881000007502735,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1767,7 +1786,7 @@
         {
           "query_id": "relationship_004",
           "query": "Show me all foreign key relationships",
-          "latency_ms": 5.403099989052862,
+          "latency_ms": 6.286300020292401,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1795,7 +1814,7 @@
         {
           "query_id": "entity_003",
           "query": "What is the actor table used for?",
-          "latency_ms": 5.299799959175289,
+          "latency_ms": 5.377200024668127,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1823,7 +1842,7 @@
         {
           "query_id": "constraint_005",
           "query": "What columns in the customer table store email addresses?",
-          "latency_ms": 5.284499959088862,
+          "latency_ms": 5.665100004989654,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1851,7 +1870,7 @@
         {
           "query_id": "schema_004",
           "query": "What are the most important tables for tracking rentals?",
-          "latency_ms": 5.353599961381406,
+          "latency_ms": 5.288799991831183,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1879,7 +1898,7 @@
         {
           "query_id": "cross_003",
           "query": "How is payment information stored in the database?",
-          "latency_ms": 5.218999984208494,
+          "latency_ms": 5.209800030570477,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -1907,7 +1926,7 @@
         {
           "query_id": "relationship_005",
           "query": "How is the geographic hierarchy structured?",
-          "latency_ms": 5.2606999524869025,
+          "latency_ms": 5.650000006426126,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -1934,13 +1953,13 @@
         }
       ],
       "latency_stats": {
-        "mean_ms": 6.20994999553659,
-        "median_ms": 5.801199993584305,
-        "p95_ms": 6.626099988352507,
-        "min_ms": 5.218999984208494,
-        "max_ms": 20.707199990283698
+        "mean_ms": 6.034584383087349,
+        "median_ms": 5.577299976721406,
+        "p95_ms": 6.299900007434189,
+        "min_ms": 5.209800030570477,
+        "max_ms": 19.796399981714785
       },
-      "timestamp": "2026-04-09T12:30:39.568299",
+      "timestamp": "2026-04-09T14:11:14.911720",
       "metadata": {
         "num_queries": 32,
         "variant_config": {
@@ -1952,6 +1971,7 @@
           "use_existing_index": false,
           "query_prefix": "Represent this sentence for searching relevant passages: ",
           "document_prefix": "",
+          "use_instructor_encoding": false,
           "metadata": {
             "description": "BGE Small - faster, lower quality"
           }
@@ -1986,7 +2006,7 @@
         {
           "query_id": "entity_001",
           "query": "What is the film table?",
-          "latency_ms": 23.088500020094216,
+          "latency_ms": 22.24019996356219,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2014,7 +2034,7 @@
         {
           "query_id": "entity_002",
           "query": "Tell me about the customer table",
-          "latency_ms": 9.712500032037497,
+          "latency_ms": 9.840300015639514,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2042,7 +2062,7 @@
         {
           "query_id": "constraint_001",
           "query": "What columns are in the film table?",
-          "latency_ms": 9.024300030432642,
+          "latency_ms": 9.03469999320805,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2070,7 +2090,7 @@
         {
           "query_id": "constraint_002",
           "query": "What is the data type of the rental_rate column in film?",
-          "latency_ms": 9.963499964214861,
+          "latency_ms": 10.714499978348613,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2098,7 +2118,7 @@
         {
           "query_id": "constraint_003",
           "query": "Which columns in the rental table are required (not nullable)?",
-          "latency_ms": 9.66299994615838,
+          "latency_ms": 9.882600046694279,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2126,7 +2146,7 @@
         {
           "query_id": "relationship_001",
           "query": "What is the relationship between rental and customer?",
-          "latency_ms": 8.741899975575507,
+          "latency_ms": 9.514599980320781,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2154,7 +2174,7 @@
         {
           "query_id": "relationship_002",
           "query": "What tables have foreign keys to film?",
-          "latency_ms": 8.745700004510581,
+          "latency_ms": 8.64219997311011,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2182,7 +2202,7 @@
         {
           "query_id": "relationship_003",
           "query": "How are films linked to languages?",
-          "latency_ms": 8.693200012203306,
+          "latency_ms": 8.916899969335645,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2210,7 +2230,7 @@
         {
           "query_id": "cross_001",
           "query": "What information is stored about films and actors?",
-          "latency_ms": 8.622100052889436,
+          "latency_ms": 8.721900056116283,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2238,7 +2258,7 @@
         {
           "query_id": "cross_002",
           "query": "What indexes exist on the rental table?",
-          "latency_ms": 8.642000029794872,
+          "latency_ms": 8.803299977444112,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2266,7 +2286,7 @@
         {
           "query_id": "schema_001",
           "query": "What tables are in the public schema?",
-          "latency_ms": 8.55770002817735,
+          "latency_ms": 8.795100031420588,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2294,7 +2314,7 @@
         {
           "query_id": "schema_002",
           "query": "What are the main entities in the Pagila database?",
-          "latency_ms": 8.746399951633066,
+          "latency_ms": 8.964399981778115,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2322,7 +2342,7 @@
         {
           "query_id": "schema_003",
           "query": "Tell me about the inventory-related tables",
-          "latency_ms": 8.528999984264374,
+          "latency_ms": 9.222499968018383,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2350,7 +2370,7 @@
         {
           "query_id": "java_001",
           "query": "What is the Catalog interface in CHEAP?",
-          "latency_ms": 8.77559999935329,
+          "latency_ms": 10.142899991478771,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2378,7 +2398,7 @@
         {
           "query_id": "java_002",
           "query": "What fields does the Entity class have?",
-          "latency_ms": 9.078100032638758,
+          "latency_ms": 10.027999989688396,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2406,7 +2426,7 @@
         {
           "query_id": "java_003",
           "query": "What is the AspectDef interface in CHEAP?",
-          "latency_ms": 8.905399998184294,
+          "latency_ms": 9.217600047122687,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2434,7 +2454,7 @@
         {
           "query_id": "java_004",
           "query": "What hierarchy types exist in CHEAP and what are they used for?",
-          "latency_ms": 10.191100009251386,
+          "latency_ms": 9.92819998646155,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2462,7 +2482,7 @@
         {
           "query_id": "java_005",
           "query": "What property types are supported in CHEAP?",
-          "latency_ms": 8.88360000681132,
+          "latency_ms": 8.723900013137609,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2490,7 +2510,7 @@
         {
           "query_id": "java_006",
           "query": "What is CatalogSpecies and what values does it have?",
-          "latency_ms": 9.826299967244267,
+          "latency_ms": 10.101200023200363,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2518,7 +2538,7 @@
         {
           "query_id": "java_007",
           "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
-          "latency_ms": 9.79939999524504,
+          "latency_ms": 9.725900017656386,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2546,7 +2566,7 @@
         {
           "query_id": "java_008",
           "query": "What is a TagDefinition and what fields does it have?",
-          "latency_ms": 9.833100019022822,
+          "latency_ms": 9.695300017483532,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2574,7 +2594,7 @@
         {
           "query_id": "java_009",
           "query": "What standard tags are built into CHEAP?",
-          "latency_ms": 8.565500029362738,
+          "latency_ms": 9.117300040088594,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2602,7 +2622,7 @@
         {
           "query_id": "java_010",
           "query": "What element types can tags be applied to in CHEAP?",
-          "latency_ms": 8.777200011536479,
+          "latency_ms": 8.805799996480346,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2630,7 +2650,7 @@
         {
           "query_id": "java_011",
           "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
-          "latency_ms": 10.283100011292845,
+          "latency_ms": 10.044499998912215,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2658,7 +2678,7 @@
         {
           "query_id": "java_012",
           "query": "What does CheapFactory provide and how is it used to create catalogs?",
-          "latency_ms": 9.805899986531585,
+          "latency_ms": 9.747700009029359,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2686,7 +2706,7 @@
         {
           "query_id": "constraint_004",
           "query": "What are the primary keys in the database?",
-          "latency_ms": 8.69260000763461,
+          "latency_ms": 8.671200019307435,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2714,7 +2734,7 @@
         {
           "query_id": "relationship_004",
           "query": "Show me all foreign key relationships",
-          "latency_ms": 8.422300044912845,
+          "latency_ms": 9.101999981794506,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2742,7 +2762,7 @@
         {
           "query_id": "entity_003",
           "query": "What is the actor table used for?",
-          "latency_ms": 8.389700029511005,
+          "latency_ms": 8.700500009581447,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2770,7 +2790,7 @@
         {
           "query_id": "constraint_005",
           "query": "What columns in the customer table store email addresses?",
-          "latency_ms": 8.445599989499897,
+          "latency_ms": 8.674099983181804,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2798,7 +2818,7 @@
         {
           "query_id": "schema_004",
           "query": "What are the most important tables for tracking rentals?",
-          "latency_ms": 8.245500037446618,
+          "latency_ms": 8.488899969961494,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2826,7 +2846,7 @@
         {
           "query_id": "cross_003",
           "query": "How is payment information stored in the database?",
-          "latency_ms": 8.575799991376698,
+          "latency_ms": 9.239399980287999,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2854,7 +2874,7 @@
         {
           "query_id": "relationship_005",
           "query": "How is the geographic hierarchy structured?",
-          "latency_ms": 8.628199982922524,
+          "latency_ms": 8.473799971397966,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -2881,13 +2901,13 @@
         }
       ],
       "latency_stats": {
-        "mean_ms": 9.46418125568016,
-        "median_ms": 8.77559999935329,
-        "p95_ms": 10.283100011292845,
-        "min_ms": 8.245500037446618,
-        "max_ms": 23.088500020094216
+        "mean_ms": 9.685043749414035,
+        "median_ms": 9.217600047122687,
+        "p95_ms": 10.714499978348613,
+        "min_ms": 8.473799971397966,
+        "max_ms": 22.24019996356219
       },
-      "timestamp": "2026-04-09T12:30:39.872177",
+      "timestamp": "2026-04-09T14:11:15.222574",
       "metadata": {
         "num_queries": 32,
         "variant_config": {
@@ -2899,8 +2919,957 @@
           "use_existing_index": false,
           "query_prefix": "query: ",
           "document_prefix": "passage: ",
+          "use_instructor_encoding": false,
           "metadata": {
             "description": "E5 Large - alternative high quality model"
+          }
+        }
+      }
+    },
+    "instructor_xl": {
+      "experiment_name": "embedding_model_comparison_2026",
+      "variant_name": "instructor_xl",
+      "metrics": {
+        "precision_at_k": {
+          "1": 0.5,
+          "10": 0.121875,
+          "3": 0.3020833333333333,
+          "5": 0.24375
+        },
+        "recall_at_k": {
+          "1": 0.16145833333333334,
+          "10": 0.353125,
+          "3": 0.2682291666666667,
+          "5": 0.353125
+        },
+        "mrr": 0.5166666666666667,
+        "map": 0.30635416666666665,
+        "ndcg": 0.3721109002507288,
+        "metadata": {
+          "num_queries": 32,
+          "aggregation": "mean"
+        }
+      },
+      "per_query_metrics": [
+        {
+          "query_id": "entity_001",
+          "query": "What is the film table?",
+          "latency_ms": 33.34949997952208,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 0.3333333333333333,
+              "3": 0.3333333333333333,
+              "5": 0.3333333333333333,
+              "10": 0.3333333333333333
+            },
+            "mrr": 1.0,
+            "map": 0.3333333333333333,
+            "ndcg": 0.46927872602275644,
+            "metadata": {
+              "query_id": "entity_001",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "entity_002",
+          "query": "Tell me about the customer table",
+          "latency_ms": 20.291100023314357,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.16666666666666666,
+              "3": 0.3333333333333333,
+              "5": 0.5,
+              "10": 0.5
+            },
+            "mrr": 1.0,
+            "map": 0.37777777777777777,
+            "ndcg": 0.639945385422766,
+            "metadata": {
+              "query_id": "entity_002",
+              "num_relevant": 6,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "constraint_001",
+          "query": "What columns are in the film table?",
+          "latency_ms": 14.1672000172548,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.2,
+              "3": 0.4,
+              "5": 0.6,
+              "10": 0.6
+            },
+            "mrr": 1.0,
+            "map": 0.52,
+            "ndcg": 0.6843515475204855,
+            "metadata": {
+              "query_id": "constraint_001",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "constraint_002",
+          "query": "What is the data type of the rental_rate column in film?",
+          "latency_ms": 13.172200007829815,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 0.3333333333333333,
+              "3": 0.3333333333333333,
+              "5": 0.3333333333333333,
+              "10": 0.3333333333333333
+            },
+            "mrr": 1.0,
+            "map": 0.3333333333333333,
+            "ndcg": 0.46927872602275644,
+            "metadata": {
+              "query_id": "constraint_002",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "constraint_003",
+          "query": "Which columns in the rental table are required (not nullable)?",
+          "latency_ms": 13.3788000093773,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.4,
+              "10": 0.2
+            },
+            "recall_at_k": {
+              "1": 0.5,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "mrr": 1.0,
+            "map": 1.0,
+            "ndcg": 1.0,
+            "metadata": {
+              "query_id": "constraint_003",
+              "num_relevant": 2,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "relationship_001",
+          "query": "What is the relationship between rental and customer?",
+          "latency_ms": 13.049800007138401,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.2,
+              "3": 0.4,
+              "5": 0.6,
+              "10": 0.6
+            },
+            "mrr": 1.0,
+            "map": 0.55,
+            "ndcg": 0.6992148198508501,
+            "metadata": {
+              "query_id": "relationship_001",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "relationship_002",
+          "query": "What tables have foreign keys to film?",
+          "latency_ms": 12.391199998091906,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "relationship_002",
+              "num_relevant": 4,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "relationship_003",
+          "query": "How are films linked to languages?",
+          "latency_ms": 13.90919997356832,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.2,
+              "3": 0.6,
+              "5": 0.6,
+              "10": 0.6
+            },
+            "mrr": 1.0,
+            "map": 0.6,
+            "ndcg": 0.7227265726449519,
+            "metadata": {
+              "query_id": "relationship_003",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "cross_001",
+          "query": "What information is stored about films and actors?",
+          "latency_ms": 13.38620000751689,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.3333333333333333,
+              "3": 0.6666666666666666,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "mrr": 1.0,
+            "map": 0.9166666666666666,
+            "ndcg": 0.9674679834891693,
+            "metadata": {
+              "query_id": "cross_001",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "cross_002",
+          "query": "What indexes exist on the rental table?",
+          "latency_ms": 12.981700012460351,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 0.8,
+              "10": 0.4
+            },
+            "recall_at_k": {
+              "1": 0.25,
+              "3": 0.75,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "mrr": 1.0,
+            "map": 1.0,
+            "ndcg": 1.0,
+            "metadata": {
+              "query_id": "cross_002",
+              "num_relevant": 4,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "schema_001",
+          "query": "What tables are in the public schema?",
+          "latency_ms": 12.603700044564903,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.4,
+              "10": 0.2
+            },
+            "recall_at_k": {
+              "1": 0.2,
+              "3": 0.2,
+              "5": 0.4,
+              "10": 0.4
+            },
+            "mrr": 1.0,
+            "map": 0.27999999999999997,
+            "ndcg": 0.4703652827859579,
+            "metadata": {
+              "query_id": "schema_001",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "schema_002",
+          "query": "What are the main entities in the Pagila database?",
+          "latency_ms": 12.445700005628169,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.5,
+              "10": 0.5
+            },
+            "mrr": 0.2,
+            "map": 0.1,
+            "ndcg": 0.23719771276929622,
+            "metadata": {
+              "query_id": "schema_002",
+              "num_relevant": 2,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "schema_003",
+          "query": "Tell me about the inventory-related tables",
+          "latency_ms": 12.709799979347736,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.3333333333333333,
+              "3": 0.6666666666666666,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "mrr": 1.0,
+            "map": 0.9166666666666666,
+            "ndcg": 0.9674679834891693,
+            "metadata": {
+              "query_id": "schema_003",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_001",
+          "query": "What is the Catalog interface in CHEAP?",
+          "latency_ms": 13.191600039135665,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_001",
+              "num_relevant": 6,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_002",
+          "query": "What fields does the Entity class have?",
+          "latency_ms": 12.765899999067187,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_002",
+              "num_relevant": 2,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_003",
+          "query": "What is the AspectDef interface in CHEAP?",
+          "latency_ms": 12.40110001526773,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_003",
+              "num_relevant": 1,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_004",
+          "query": "What hierarchy types exist in CHEAP and what are they used for?",
+          "latency_ms": 13.655700022354722,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.2,
+              "3": 0.4,
+              "5": 0.6,
+              "10": 0.6
+            },
+            "mrr": 1.0,
+            "map": 0.4533333333333333,
+            "ndcg": 0.639945385422766,
+            "metadata": {
+              "query_id": "java_004",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_005",
+          "query": "What property types are supported in CHEAP?",
+          "latency_ms": 19.708999956492335,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.25,
+              "5": 0.25,
+              "10": 0.25
+            },
+            "mrr": 0.3333333333333333,
+            "map": 0.08333333333333333,
+            "ndcg": 0.19519002499605084,
+            "metadata": {
+              "query_id": "java_005",
+              "num_relevant": 4,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_006",
+          "query": "What is CatalogSpecies and what values does it have?",
+          "latency_ms": 12.964800000190735,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_006",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_007",
+          "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
+          "latency_ms": 13.397100032307208,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_007",
+              "num_relevant": 4,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_008",
+          "query": "What is a TagDefinition and what fields does it have?",
+          "latency_ms": 12.380000029224902,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_008",
+              "num_relevant": 1,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_009",
+          "query": "What standard tags are built into CHEAP?",
+          "latency_ms": 12.018100009299815,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_009",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_010",
+          "query": "What element types can tags be applied to in CHEAP?",
+          "latency_ms": 12.327899981755763,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_010",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_011",
+          "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
+          "latency_ms": 12.997600017115474,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_011",
+              "num_relevant": 0,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "java_012",
+          "query": "What does CheapFactory provide and how is it used to create catalogs?",
+          "latency_ms": 12.934900005348027,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "java_012",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "constraint_004",
+          "query": "What are the primary keys in the database?",
+          "latency_ms": 13.024000043515116,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "constraint_004",
+              "num_relevant": 0,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "relationship_004",
+          "query": "Show me all foreign key relationships",
+          "latency_ms": 12.945299968123436,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "relationship_004",
+              "num_relevant": 5,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "entity_003",
+          "query": "What is the actor table used for?",
+          "latency_ms": 13.210300006903708,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.6,
+              "10": 0.3
+            },
+            "recall_at_k": {
+              "1": 0.3333333333333333,
+              "3": 0.6666666666666666,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "mrr": 1.0,
+            "map": 0.7555555555555555,
+            "ndcg": 0.8854598815714874,
+            "metadata": {
+              "query_id": "entity_003",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "constraint_005",
+          "query": "What columns in the customer table store email addresses?",
+          "latency_ms": 14.022399962414056,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "mrr": 1.0,
+            "map": 1.0,
+            "ndcg": 1.0,
+            "metadata": {
+              "query_id": "constraint_005",
+              "num_relevant": 1,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "schema_004",
+          "query": "What are the most important tables for tracking rentals?",
+          "latency_ms": 13.416700006928295,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 0.3333333333333333,
+              "3": 0.3333333333333333,
+              "5": 0.3333333333333333,
+              "10": 0.3333333333333333
+            },
+            "mrr": 1.0,
+            "map": 0.3333333333333333,
+            "ndcg": 0.46927872602275644,
+            "metadata": {
+              "query_id": "schema_004",
+              "num_relevant": 3,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "cross_003",
+          "query": "How is payment information stored in the database?",
+          "latency_ms": 14.449800015427172,
+          "metrics": {
+            "precision_at_k": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "recall_at_k": {
+              "1": 0.25,
+              "3": 0.25,
+              "5": 0.25,
+              "10": 0.25
+            },
+            "mrr": 1.0,
+            "map": 0.25,
+            "ndcg": 0.3903800499921017,
+            "metadata": {
+              "query_id": "cross_003",
+              "num_relevant": 4,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        },
+        {
+          "query_id": "relationship_005",
+          "query": "How is the geographic hierarchy structured?",
+          "latency_ms": 12.600699963513762,
+          "metrics": {
+            "precision_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "map": 0.0,
+            "ndcg": 0.0,
+            "metadata": {
+              "query_id": "relationship_005",
+              "num_relevant": 4,
+              "num_retrieved": 5
+            }
+          },
+          "num_results": 5
+        }
+      ],
+      "latency_stats": {
+        "mean_ms": 14.132781254375004,
+        "median_ms": 13.049800007138401,
+        "p95_ms": 20.291100023314357,
+        "min_ms": 12.018100009299815,
+        "max_ms": 33.34949997952208
+      },
+      "timestamp": "2026-04-09T14:11:15.675918",
+      "metadata": {
+        "num_queries": 32,
+        "variant_config": {
+          "name": "instructor_xl",
+          "embedding_model": "hkunlp/instructor-xl",
+          "embedding_dimension": 768,
+          "top_k": 5,
+          "similarity_threshold": 0.0,
+          "use_existing_index": false,
+          "query_prefix": "Represent the query for retrieving relevant metadata:",
+          "document_prefix": "Represent the metadata artifact for retrieval:",
+          "use_instructor_encoding": true,
+          "metadata": {
+            "description": "INSTRUCTOR-XL with domain-specific instructions"
           }
         }
       }
@@ -2933,7 +3902,7 @@
         {
           "query_id": "entity_001",
           "query": "What is the film table?",
-          "latency_ms": 33.070099947508425,
+          "latency_ms": 27.32980001019314,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2961,7 +3930,7 @@
         {
           "query_id": "entity_002",
           "query": "Tell me about the customer table",
-          "latency_ms": 8.691299997735769,
+          "latency_ms": 6.936600024346262,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -2989,7 +3958,7 @@
         {
           "query_id": "constraint_001",
           "query": "What columns are in the film table?",
-          "latency_ms": 6.688800000119954,
+          "latency_ms": 6.40800001565367,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3017,7 +3986,7 @@
         {
           "query_id": "constraint_002",
           "query": "What is the data type of the rental_rate column in film?",
-          "latency_ms": 6.204399978742003,
+          "latency_ms": 6.0606999904848635,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3045,7 +4014,7 @@
         {
           "query_id": "constraint_003",
           "query": "Which columns in the rental table are required (not nullable)?",
-          "latency_ms": 5.885599995963275,
+          "latency_ms": 5.9358999715186656,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3073,7 +4042,7 @@
         {
           "query_id": "relationship_001",
           "query": "What is the relationship between rental and customer?",
-          "latency_ms": 6.00789999589324,
+          "latency_ms": 5.918999959249049,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3101,7 +4070,7 @@
         {
           "query_id": "relationship_002",
           "query": "What tables have foreign keys to film?",
-          "latency_ms": 5.865399958565831,
+          "latency_ms": 5.7045999565161765,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3129,7 +4098,7 @@
         {
           "query_id": "relationship_003",
           "query": "How are films linked to languages?",
-          "latency_ms": 5.891199980396777,
+          "latency_ms": 6.15009997272864,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3157,7 +4126,7 @@
         {
           "query_id": "cross_001",
           "query": "What information is stored about films and actors?",
-          "latency_ms": 5.779900006018579,
+          "latency_ms": 5.925500008743256,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3185,7 +4154,7 @@
         {
           "query_id": "cross_002",
           "query": "What indexes exist on the rental table?",
-          "latency_ms": 6.1024000169709325,
+          "latency_ms": 5.6733000092208385,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3213,7 +4182,7 @@
         {
           "query_id": "schema_001",
           "query": "What tables are in the public schema?",
-          "latency_ms": 6.051400036085397,
+          "latency_ms": 5.8137999731116,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3241,7 +4210,7 @@
         {
           "query_id": "schema_002",
           "query": "What are the main entities in the Pagila database?",
-          "latency_ms": 5.967999983113259,
+          "latency_ms": 6.23320002341643,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3269,7 +4238,7 @@
         {
           "query_id": "schema_003",
           "query": "Tell me about the inventory-related tables",
-          "latency_ms": 5.965799966361374,
+          "latency_ms": 5.712400015909225,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3297,7 +4266,7 @@
         {
           "query_id": "java_001",
           "query": "What is the Catalog interface in CHEAP?",
-          "latency_ms": 5.7474999921396375,
+          "latency_ms": 5.977199994958937,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3325,7 +4294,7 @@
         {
           "query_id": "java_002",
           "query": "What fields does the Entity class have?",
-          "latency_ms": 6.222500000149012,
+          "latency_ms": 6.028699979651719,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3353,7 +4322,7 @@
         {
           "query_id": "java_003",
           "query": "What is the AspectDef interface in CHEAP?",
-          "latency_ms": 5.895899957977235,
+          "latency_ms": 6.50280003901571,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3381,7 +4350,7 @@
         {
           "query_id": "java_004",
           "query": "What hierarchy types exist in CHEAP and what are they used for?",
-          "latency_ms": 5.853399983607233,
+          "latency_ms": 6.261700007598847,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3409,7 +4378,7 @@
         {
           "query_id": "java_005",
           "query": "What property types are supported in CHEAP?",
-          "latency_ms": 6.265000032726675,
+          "latency_ms": 5.789099959656596,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3437,7 +4406,7 @@
         {
           "query_id": "java_006",
           "query": "What is CatalogSpecies and what values does it have?",
-          "latency_ms": 5.8868000051006675,
+          "latency_ms": 5.824299994856119,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3465,7 +4434,7 @@
         {
           "query_id": "java_007",
           "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
-          "latency_ms": 5.674099957104772,
+          "latency_ms": 5.721900030039251,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3493,7 +4462,7 @@
         {
           "query_id": "java_008",
           "query": "What is a TagDefinition and what fields does it have?",
-          "latency_ms": 5.687700002454221,
+          "latency_ms": 5.843400023877621,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3521,7 +4490,7 @@
         {
           "query_id": "java_009",
           "query": "What standard tags are built into CHEAP?",
-          "latency_ms": 5.659500020556152,
+          "latency_ms": 5.854400049429387,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3549,7 +4518,7 @@
         {
           "query_id": "java_010",
           "query": "What element types can tags be applied to in CHEAP?",
-          "latency_ms": 6.284700008109212,
+          "latency_ms": 5.820800026413053,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3577,7 +4546,7 @@
         {
           "query_id": "java_011",
           "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
-          "latency_ms": 5.731699988245964,
+          "latency_ms": 5.829300032928586,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3605,7 +4574,7 @@
         {
           "query_id": "java_012",
           "query": "What does CheapFactory provide and how is it used to create catalogs?",
-          "latency_ms": 5.968500045128167,
+          "latency_ms": 5.976199987344444,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3633,7 +4602,7 @@
         {
           "query_id": "constraint_004",
           "query": "What are the primary keys in the database?",
-          "latency_ms": 5.729499971494079,
+          "latency_ms": 5.712100013624877,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3661,7 +4630,7 @@
         {
           "query_id": "relationship_004",
           "query": "Show me all foreign key relationships",
-          "latency_ms": 5.6220999686047435,
+          "latency_ms": 5.772600008640438,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3689,7 +4658,7 @@
         {
           "query_id": "entity_003",
           "query": "What is the actor table used for?",
-          "latency_ms": 6.006699986755848,
+          "latency_ms": 6.3186000334098935,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3717,7 +4686,7 @@
         {
           "query_id": "constraint_005",
           "query": "What columns in the customer table store email addresses?",
-          "latency_ms": 5.780800012871623,
+          "latency_ms": 5.939599999692291,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3745,7 +4714,7 @@
         {
           "query_id": "schema_004",
           "query": "What are the most important tables for tracking rentals?",
-          "latency_ms": 5.61980000929907,
+          "latency_ms": 5.693599989172071,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3773,7 +4742,7 @@
         {
           "query_id": "cross_003",
           "query": "How is payment information stored in the database?",
-          "latency_ms": 6.002299953252077,
+          "latency_ms": 6.310100026894361,
           "metrics": {
             "precision_at_k": {
               "1": 1.0,
@@ -3801,7 +4770,7 @@
         {
           "query_id": "relationship_005",
           "query": "How is the geographic hierarchy structured?",
-          "latency_ms": 6.597100000362843,
+          "latency_ms": 5.825400003232062,
           "metrics": {
             "precision_at_k": {
               "1": 0.0,
@@ -3828,13 +4797,13 @@
         }
       ],
       "latency_stats": {
-        "mean_ms": 6.887743742481689,
-        "median_ms": 5.965799966361374,
-        "p95_ms": 8.691299997735769,
-        "min_ms": 5.61980000929907,
-        "max_ms": 33.070099947508425
+        "mean_ms": 6.6501468791102525,
+        "median_ms": 5.925500008743256,
+        "p95_ms": 6.936600024346262,
+        "min_ms": 5.6733000092208385,
+        "max_ms": 27.32980001019314
       },
-      "timestamp": "2026-04-09T12:30:40.093522",
+      "timestamp": "2026-04-09T14:11:15.889667",
       "metadata": {
         "num_queries": 32,
         "variant_config": {
@@ -3846,6 +4815,7 @@
           "use_existing_index": true,
           "query_prefix": "",
           "document_prefix": "",
+          "use_instructor_encoding": false,
           "metadata": {
             "description": "Current baseline model"
           }
@@ -3853,5 +4823,5 @@
       }
     }
   },
-  "timestamp": "2026-04-09T12:30:40.094934"
+  "timestamp": "2026-04-09T14:11:15.891115"
 }
