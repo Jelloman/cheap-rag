@@ -160,7 +160,7 @@ ruff check src/
 ruff format src/
 
 # Testing
-pytest tests/ -v --cov=src
+uv run pytest tests/ -v --cov=src
 ```
 
 ### Testing
@@ -173,7 +173,7 @@ pytest tests/ -v --cov=src
   - Integration tests: Full RAG pipeline
   - Mock external services (LLM APIs, file I/O)
 - **Test file naming:** `test_*.py`
-- **Run tests:** `nox -s tests` or `pytest tests/`
+- **Run tests:** `nox -s tests` or `uv run pytest tests/`
 
 ### Type Safety Requirements
 
@@ -419,13 +419,13 @@ Optimization is Phase 2 work; focus on correctness in Phase 1.
 ### Running the Full Pipeline
 ```bash
 # 1. Index metadata
-python scripts/index_metadata.py
+uv run python scripts/index_metadata.py
 
 # 2. Query
-python scripts/query_example.py
+uv run python scripts/query_example.py
 
 # 3. Or via API
-uvicorn src.api.routes:app --reload
+uv run uvicorn src.api.routes:app --reload
 ```
 
 ## Error Handling

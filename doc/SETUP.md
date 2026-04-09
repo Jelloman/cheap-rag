@@ -4,39 +4,26 @@ Quick start guide for setting up the CHEAP RAG development environment.
 
 ## Prerequisites
 
-- **Python 3.14** installed
+- **Python 3.13** installed (ChromaDB is incompatible with 3.14)
+- **UV** package manager installed (`pip install uv` or see [uv docs](https://docs.astral.sh/uv/))
 - **CUDA-capable GPU** with 8GB+ VRAM (recommended: RTX 4090 24GB)
 - **Git** for version control
 - **Ollama** for local LLM inference (optional but recommended)
 
 ## Setup Steps
 
-### 1. Create Virtual Environment
+### 1. Install Dependencies
 
 ```bash
 cd cheap-rag
 
-# Create virtual environment
-python -m venv venv
-
-# Activate (Windows)
-venv\Scripts\activate
-
-# Activate (Linux/Mac)
-source venv/bin/activate
+# Install all dependencies (including dev extras)
+uv sync --extra dev
 ```
 
-### 2. Install Dependencies
+This installs Python 3.13 automatically if needed, creates a virtual environment, and installs all dependencies including CUDA-enabled PyTorch.
 
-```bash
-# Install all dependencies
-pip install -r requirements.txt
-
-# Or with development dependencies
-pip install -e ".[dev]"
-```
-
-### 3. Configure Environment
+### 2. Configure Environment
 
 ```bash
 # Copy environment template
@@ -47,11 +34,11 @@ cp .env.example .env
 # - ANTHROPIC_API_KEY=your_key_here (if using Claude mode)
 ```
 
-### 4. Download Embedding Model
+### 3. Download Embedding Model
 
 ```bash
 # This will download sentence-transformers/all-mpnet-base-v2
-python scripts/download_models.py
+uv run python scripts/download_models.py
 ```
 
 Expected output:
@@ -62,7 +49,7 @@ Embedding dimension: 768
 ✓ Embedding model ready
 ```
 
-### 5. Install Ollama (for local LLM)
+### 4. Install Ollama (for local LLM)
 
 **Skip this step if using Claude API only.**
 
@@ -90,16 +77,16 @@ ollama list
 # Should show qwen2.5-coder:7b-instruct-q4_K_M
 ```
 
-### 6. Verify Installation
+### 5. Verify Installation
 
 ```bash
 # Test configuration loading
-python -c "from src.config import load_config; print(load_config())"
+uv run python -c "from src.config import load_config; print(load_config())"
 
 # Should print configuration without errors
 ```
 
-### 7. Create Log Directory
+### 6. Create Log Directory
 
 ```bash
 mkdir -p logs
@@ -189,19 +176,19 @@ print(message.content)
 
 After setup is complete:
 
-1. **Index Metadata** (not yet implemented)
+1. **Index Metadata**
    ```bash
-   python scripts/index_metadata.py --source ../cheap-core/src/main/java
+   uv run python scripts/index_metadata.py --source ../cheap-core/src/main/java
    ```
 
-2. **Run Test Queries** (not yet implemented)
+2. **Run Test Queries**
    ```bash
-   python scripts/query_example.py
+   uv run python scripts/query_example.py
    ```
 
-3. **Start API Server** (not yet implemented)
+3. **Start API Server**
    ```bash
-   uvicorn src.api.routes:app --reload
+   uv run uvicorn src.api.routes:app --reload
    ```
 
 ## Troubleshooting
@@ -210,7 +197,7 @@ After setup is complete:
 
 If you see "CUDA not available":
 - Verify GPU drivers installed
-- Check PyTorch CUDA version: `python -c "import torch; print(torch.cuda.is_available())"`
+- Check PyTorch CUDA version: `uv run python -c "import torch; print(torch.cuda.is_available())"`
 - Reinstall PyTorch with CUDA: Visit https://pytorch.org/get-started/locally/
 
 ### Ollama Connection Failed
@@ -230,18 +217,16 @@ If ChromaDB fails to initialize:
 ### Import Errors
 
 If module imports fail:
-- Ensure virtual environment is activated
-- Verify all dependencies installed: `pip list`
-- Try reinstalling: `pip install -r requirements.txt --force-reinstall`
+- Verify all dependencies installed: `uv sync --extra dev`
+- Try reinstalling: `uv sync --extra dev --reinstall`
 
 ## Development Workflow
 
-1. Activate virtual environment
-2. Set CONFIG_PROFILE in .env
-3. Run tests: `pytest`
-4. Make changes
-5. Run tests again
-6. Commit changes
+1. Set CONFIG_PROFILE in .env
+2. Run tests: `nox -s tests`
+3. Make changes
+4. Run tests again: `nox -s tests`
+5. Commit changes
 
 ## Hardware Requirements
 
@@ -282,23 +267,29 @@ If module imports fail:
 ## Useful Commands
 
 ```bash
-# Run tests
-pytest
+# Run all checks (tests + typecheck + lint)
+nox
 
 # Run tests with coverage
-pytest --cov=src --cov-report=html
+nox -s tests
 
 # Format code
-black src/ tests/
+nox -s format
 
 # Lint code
-ruff check src/ tests/
+nox -s lint
 
 # Type check
-mypy src/
+nox -s typecheck
 
 # Start development server
-uvicorn src.api.routes:app --reload --port 8000
+uv run uvicorn src.api.routes:app --reload --port 8000
+
+# Index metadata
+uv run python scripts/index_metadata.py
+
+# Query via CLI
+uv run python scripts/query_example.py
 
 # Check Ollama models
 ollama list
@@ -312,19 +303,26 @@ tail -f logs/cheap-rag.log
 
 ## Project Status
 
-**Phase 1 - Setup Complete ✓**
-- [x] Technology decisions finalized
-- [x] Project structure created
-- [x] Configuration system implemented
-- [x] Base classes defined
+**Phase 1 — Core RAG ✅ Complete**
+- [x] Metadata extractors (Java, Python, TypeScript, PostgreSQL, SQLite)
+- [x] Embedding service (sentence-transformers, GPU-accelerated)
+- [x] Vector store (ChromaDB)
+- [x] Semantic search with metadata filtering
+- [x] LLM answer generation with citations (Ollama + Claude)
+- [x] API endpoints
 
-**Phase 1 - Implementation In Progress**
-- [ ] Metadata extractors (Java, TypeScript, Python)
-- [ ] Embedding service
-- [ ] Vector store integration
-- [ ] Semantic search
-- [ ] Answer generation
-- [ ] API endpoints
-- [ ] Testing and evaluation
+**Phase 2 — Evaluation + Observability ✅ Complete**
+- [x] Retrieval metrics (Precision@K, Recall@K, MRR, MAP, NDCG)
+- [x] Gold dataset system
+- [x] OpenTelemetry tracing infrastructure
+- [x] Structured logging, error tracking, performance profiling
+- [x] A/B testing framework
 
-See [README.md](README.md) for full project overview.
+**Phase 2.5 — Observability Integration ✅ Complete**
+- [x] Tracing wired throughout pipeline
+- [x] Per-request correlation IDs
+- [x] 324 tests passing
+
+**Phase 3 — Runtime Observability & Metrics ⏳ In Progress**
+
+See [README.md](../README.md) for full project overview.
