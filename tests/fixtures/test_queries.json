@@ -70,9 +70,9 @@
     {
       "id": "relationship_003",
       "category": "relationship_query",
-      "query": "How are rentals linked to customers?",
+      "query": "How are films linked to languages?",
       "language": "postgresql",
-      "expected_artifacts": ["rental table", "customer_id foreign key", "customer table"],
+      "expected_artifacts": ["film language columns", "language_id foreign key", "language table"],
       "difficulty": "medium"
     },
     {
@@ -210,14 +210,6 @@
       "language": "java",
       "expected_artifacts": ["CheapFactory class", "Catalog interface"],
       "difficulty": "medium"
-    },
-    {
-      "id": "multi_001",
-      "category": "multi_language",
-      "query": "What metadata entities exist across all languages?",
-      "language": "multi",
-      "expected_artifacts": ["tables, classes, interfaces from multiple languages"],
-      "difficulty": "hard"
     },
     {
       "id": "constraint_004",

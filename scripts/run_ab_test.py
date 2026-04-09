@@ -52,7 +52,7 @@ def main() -> None:
         name="embedding_model_comparison_2026",
         description="Comparison of sentence-transformers vs BGE models for metadata retrieval",
         variants=variants,
-        gold_dataset_path="tests/fixtures/gold_dataset.json",
+        gold_dataset_path="tests/fixtures/gold_dataset_review.json",
         vector_store_path="data/ab_testing/vector_stores",
         metadata={
             "objective": "Determine if BGE models improve retrieval quality over current baseline",
