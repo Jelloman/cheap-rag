@@ -21,7 +21,7 @@ from src.evaluation import (
     evaluate_retrieval,
 )
 from src.embeddings.service import EmbeddingService
-from src.vectorstore.chroma_store import ChromaStore
+from src.vectorstore.chroma_store import ChromaVectorStore as ChromaStore
 
 
 def main() -> None:
@@ -30,8 +30,18 @@ def main() -> None:
     config = load_config()
 
     # Initialize services
-    embedding_service = EmbeddingService(config)
-    vector_store = ChromaStore(config)
+    embedding_service = EmbeddingService(
+        model_name=config.embedding.model_name,
+        device=config.embedding.device,
+        cache_dir=config.embedding.cache_dir,
+        batch_size=config.embedding.batch_size,
+        local_files_only=config.embedding.local_files_only,
+    )
+    vector_store = ChromaStore(
+        persist_directory=config.vectorstore.persist_directory,
+        collection_name=config.vectorstore.collection_name,
+        distance_metric=config.vectorstore.distance_metric,
+    )
 
     # Load gold dataset
     gold_dataset_path = Path(__file__).parent.parent / "tests" / "fixtures" / "gold_dataset_review.json"
@@ -90,14 +100,11 @@ def main() -> None:
         if gold_query.language != "multi":
             filters["language"] = gold_query.language
 
-        results = vector_store.search(
+        retrieved_ids, _, _ = vector_store.search(
             query_embedding=query_embedding,
             top_k=10,
             filters=filters,
         )
-
-        # Extract retrieved IDs
-        retrieved_ids = [r["artifact"].id for r in results]
 
         # Evaluate
         metrics = evaluate_retrieval(gold_query, retrieved_ids)
@@ -137,7 +144,7 @@ def main() -> None:
         description=f"Evaluation on {len(gold_dataset)} gold queries",
         metadata={
             "num_queries": len(gold_dataset),
-            "embedding_model": config.get("embeddings", {}).get("model_name", "unknown"),
+            "embedding_model": config.embedding.model_name,
             "vector_store": "ChromaDB",
         },
     )
