@@ -34,7 +34,7 @@ def main() -> None:
     vector_store = ChromaStore(config)
 
     # Load gold dataset
-    gold_dataset_path = Path(__file__).parent.parent / "tests" / "fixtures" / "gold_dataset.json"
+    gold_dataset_path = Path(__file__).parent.parent / "tests" / "fixtures" / "gold_dataset_review.json"
 
     if not gold_dataset_path.exists():
         print(f"Error: Gold dataset not found at {gold_dataset_path}")

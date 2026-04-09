@@ -1,0 +1,1813 @@
+{
+  "description": "Gold dataset for CHEAP RAG evaluation (Pagila database, auto-generated, needs review)",
+  "version": "2.0",
+  "metadata": {
+    "generated_from": "D:\\src\\claude\\cheap-rag\\tests\\fixtures\\test_queries.json",
+    "top_k": 10,
+    "requires_manual_review": false,
+    "database": "pagila"
+  },
+  "queries": [
+    {
+      "id": "entity_001",
+      "category": "entity_lookup",
+      "query": "What is the film table?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          }
+        ],
+        "index": [
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5"
+          }
+        ],
+        "view": [
+          {
+            "name": "film_list"
+          },
+          {
+            "name": "nicer_but_slower_film_list",
+            "component": "nicer_but_slower_film_list",
+            "artifact_id": "pg_view_5828ba0dd2c9aebe"
+          }
+        ],
+        "column": [
+          {
+            "name": "film_id",
+            "component": "film"
+          },
+          {
+            "name": "title",
+            "component": "film"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film table"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "entity_002",
+      "category": "entity_lookup",
+      "query": "Tell me about the customer table",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a"
+          }
+        ],
+        "column": [
+          {
+            "name": "customer_id",
+            "component": "customer",
+            "artifact_id": "pg_column_0497b7182f24789d"
+          },
+          {
+            "name": "activebool",
+            "component": "customer",
+            "artifact_id": "pg_column_c1dd05051c0f7c37"
+          }
+        ],
+        "view": [
+          {
+            "name": "customer_list",
+            "component": "customer_list",
+            "artifact_id": "pg_view_65bb6af695537047"
+          }
+        ],
+        "sequence": [
+          {
+            "name": "customer_customer_id_seq",
+            "artifact_id": "pg_sequence_9a921eb13f72bb68"
+          }
+        ],
+        "index": [
+          {
+            "name": "customer_pkey",
+            "component": "customer",
+            "artifact_id": "pg_index_543d0d08175bcfde"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "customer table"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "constraint_001",
+      "category": "constraint_query",
+      "query": "What columns are in the film table?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          }
+        ],
+        "column": [
+          {
+            "name": "film_id",
+            "component": "film"
+          },
+          {
+            "name": "title",
+            "component": "film"
+          },
+          {
+            "name": "release_year",
+            "component": "film"
+          },
+          {
+            "name": "language_id",
+            "component": "film"
+          },
+          {
+            "name": "original_language_id",
+            "component": "film"
+          },
+          {
+            "name": "rental_duration",
+            "component": "film"
+          },
+          {
+            "name": "rental_rate",
+            "component": "film"
+          },
+          {
+            "name": "special_features",
+            "component": "film"
+          },
+          {
+            "name": "replacement_cost",
+            "component": "film"
+          },
+          {
+            "name": "fulltext",
+            "component": "film"
+          },
+          {
+            "name": "length",
+            "component": "film",
+            "artifact_id": "pg_column_bc27f24fe2fd21d7"
+          },
+          {
+            "name": "description",
+            "component": "film",
+            "artifact_id": "pg_column_5c9884461ff957e9"
+          },
+          {
+            "name": "rating",
+            "component": "film",
+            "artifact_id": "pg_column_9cc287d6fc271df8"
+          }
+        ],
+        "index": [
+          {
+            "name": "film_pkey",
+            "component": "film",
+            "artifact_id": "pg_index_4c4366f410597eb5"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film columns"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "constraint_002",
+      "category": "constraint_query",
+      "query": "What is the data type of the rental_rate column in film?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "column": [
+          {
+            "name": "rental_rate",
+            "component": "film",
+            "artifact_id": "pg_column_b619d28e78887a12"
+          }
+        ],
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film.rental_rate column"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "constraint_003",
+      "category": "constraint_query",
+      "query": "Which columns in the rental table are required (not nullable)?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "column": [
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          },
+          {
+            "name": "rental_date",
+            "component": "rental",
+            "artifact_id": "pg_column_008a013e0fed40d2"
+          },
+          {
+            "name": "inventory_id",
+            "component": "rental"
+          },
+          {
+            "name": "customer_id",
+            "component": "rental"
+          },
+          {
+            "name": "staff_id",
+            "component": "rental"
+          },
+          {
+            "name": "last_update",
+            "component": "rental"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental columns with nullable=False"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "relationship_001",
+      "category": "relationship_query",
+      "query": "What is the relationship between rental and customer?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental",
+            "artifact_id": "pg_relationship_c890660670ed10f1"
+          }
+        ],
+        "column": [
+          {
+            "name": "customer_id",
+            "component": "rental",
+            "artifact_id": "pg_column_8a6311f2de5dd34d"
+          },
+          {
+            "name": "customer_id",
+            "component": "customer"
+          },
+          {
+            "name": "customer_id",
+            "component": "payment"
+          },
+          {
+            "name": "rental_id",
+            "component": "payment"
+          },
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          }
+        ],
+        "table": [
+          {
+            "name": "payment"
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental.customer_id foreign key",
+          "customer table"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "relationship_002",
+      "category": "relationship_query",
+      "query": "What tables have foreign keys to film?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film_actor"
+          },
+          {
+            "name": "film_category"
+          },
+          {
+            "name": "inventory"
+          }
+        ],
+        "index": [
+          {
+            "name": "idx_fk_film_id",
+            "artifact_id": "pg_index_3a6447ba3ff156c6"
+          },
+          {
+            "name": "idx_store_id_film_id",
+            "artifact_id": "pg_index_c484197446857311"
+          }
+        ],
+        "column": [
+          {
+            "name": "film_id",
+            "component": "film_actor",
+            "artifact_id": "pg_column_f14a06d8682a606d"
+          },
+          {
+            "name": "film_id",
+            "component": "film_category",
+            "artifact_id": "pg_column_f6ad91f725ccbaa9"
+          },
+          {
+            "name": "film_id",
+            "component": "inventory"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "film_actor_film_id_fkey"
+          },
+          {
+            "name": "film_category_film_id_fkey"
+          },
+          {
+            "name": "inventory_film_id_fkey"
+          }
+        ]
+      },
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "relationships to film"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "relationship_003",
+      "category": "relationship_query",
+      "query": "How are films linked to languages?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film"
+          },
+          {
+            "name": "language"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41"
+          },
+          {
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3"
+          }
+        ],
+        "column": [
+          {
+            "name": "original_language_id",
+            "component": "film",
+            "artifact_id": "pg_column_ebd6a2a998a1694c"
+          },
+          {
+            "name": "language_id",
+            "component": "film",
+            "artifact_id": "pg_column_8df6409a098a0526"
+          }
+        ],
+        "index": [
+          {
+            "name": "idx_fk_language_id",
+            "component": "film",
+            "artifact_id": "pg_index_12e729ace3770c30"
+          },
+          {
+            "name": "idx_fk_original_language_id"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film language columns", "language_id foreign key", "language table"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "cross_001",
+      "category": "cross_entity",
+      "query": "What information is stored about films and actors?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62"
+          },
+          {
+            "name": "film_actor",
+            "component": "film_actor",
+            "artifact_id": "pg_table_27a130f53257a313"
+          },
+          {
+            "name": "actor"
+          }
+        ],
+        "view": [
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd"
+          },
+          {
+            "name": "nicer_but_slower_film_list"
+          },
+          {
+            "name": "film_list"
+          }
+        ],
+        "column": [
+          {
+            "name": "title",
+            "component": "film"
+          },
+          {
+            "name": "description",
+            "component": "film"
+          },
+          {
+            "name": "first_name",
+            "component": "actor"
+          },
+          {
+            "name": "last_name",
+            "component": "actor"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "film table",
+          "actor table",
+          "film_actor table"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "cross_002",
+      "category": "cross_entity",
+      "query": "What indexes exist on the rental table?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "index": [
+          {
+            "name": "rental_pkey",
+            "component": "rental",
+            "artifact_id": "pg_index_6e2386078d0e2d69"
+          },
+          {
+            "name": "idx_unq_rental_rental_date_inventory_id_customer_id",
+            "component": "rental",
+            "artifact_id": "pg_index_406b8ab206c4cfd1"
+          },
+          {
+            "name": "idx_fk_inventory_id",
+            "component": "rental",
+            "artifact_id": "pg_index_24cf894771093a5d"
+          }
+        ],
+        "table": [
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental indexes"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "schema_001",
+      "category": "schema_exploration",
+      "query": "What tables are in the public schema?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "address",
+            "component": "address",
+            "artifact_id": "pg_table_69ef272f10ed5c5f"
+          },
+          {
+            "name": "actor"
+          },
+          {
+            "name": "country"
+          },
+          {
+            "name": "film"
+          },
+          {
+            "name": "film_actor"
+          },
+          {
+            "name": "film_category"
+          },
+          {
+            "name": "inventory"
+          },
+          {
+            "name": "payment"
+          },
+          {
+            "name": "rental"
+          },
+          {
+            "name": "staff"
+          },
+          {
+            "name": "category",
+            "component": "category",
+            "artifact_id": "pg_table_f195d08ca1229d82"
+          },
+          {
+            "name": "customer",
+            "component": "customer",
+            "artifact_id": "pg_table_13d9004cb041690a"
+          },
+          {
+            "name": "store",
+            "component": "store",
+            "artifact_id": "pg_table_ab969cd77dd2e0a4"
+          },
+          {
+            "name": "language",
+            "component": "language",
+            "artifact_id": "pg_table_d5710663729b3430"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "public schema tables"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "schema_002",
+      "category": "schema_exploration",
+      "query": "What are the main entities in the Pagila database?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "store"
+          },
+          {
+            "name": "rental"
+          },
+          {
+            "name": "customer"
+          },
+          {
+            "name": "inventory"
+          },
+          {
+            "name": "store"
+          },
+          {
+            "name": "film"
+          },
+          {
+            "name": "staff",
+            "component": "staff",
+            "artifact_id": "pg_table_a44bc3185418eae9"
+          },
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "tables: film, customer, rental, actor, etc."
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "schema_003",
+      "category": "schema_exploration",
+      "query": "Tell me about the inventory-related tables",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "rental"
+          },
+          {
+            "name": "store"
+          },
+          {
+            "name": "inventory",
+            "component": "inventory",
+            "artifact_id": "pg_table_0dd32e57eff261c4"
+          }
+        ],
+        "index": [
+          {
+            "name": "idx_store_id_film_id"
+          },
+          {
+            "name": "inventory_pkey",
+            "component": "inventory",
+            "artifact_id": "pg_index_3bdbb8d72aba99ad"
+          }
+        ],
+        "column": [
+          {
+            "name": "inventory_id",
+            "component": "rental"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "inventory_store_id_fkey",
+            "component": "inventory",
+            "artifact_id": "pg_relationship_233f9aeeb2c3a696"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "inventory, store, film tables"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_001",
+      "category": "entity_lookup",
+      "query": "What is the Catalog interface in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "Entity"
+          },
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09"
+          },
+          {
+            "name": "CatalogDef",
+            "component": "CatalogDef",
+            "artifact_id": "java_interface_4cdc18267c875ff1"
+          }
+        ],
+        "class": [
+          {
+            "name": "CatalogService",
+            "component": "CatalogService",
+            "artifact_id": "java_class_4f5f0567b2077639"
+          },
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f"
+          }
+        ],
+        "enum": [
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8"
+          }
+        ],
+        "method": [
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_62b554b2a7a4fdd9"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "Catalog interface"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_002",
+      "category": "constraint_query",
+      "query": "What fields does the Entity class have?",
+      "language": "java",
+      "relevant_artifacts": {
+        "field": [
+          {
+            "name": "globalId",
+            "component": "EntityImpl"
+          }
+        ],
+        "interface": [
+          {
+            "name": "Entity",
+            "component": "Entity",
+            "artifact_id": "java_interface_d4f3c4004c3b17d3"
+          }
+        ],
+        "method": [
+          {
+            "name": "globalId",
+            "component": "Entity",
+            "artifact_id": "java_method_7814b48100ecb32f"
+          },
+          {
+            "name": "globalId",
+            "component": "EntityImpl"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "Entity class fields"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_003",
+      "category": "entity_lookup",
+      "query": "What is the AspectDef interface in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "AspectDef"
+          },
+          {
+            "name": "Entity"
+          }
+        ],
+        "class": [
+          {
+            "name": "AspectDefBase"
+          },
+          {
+            "name": "ImmutableAspectDefImpl"
+          }
+        ],
+        "method": [
+          {
+            "name": "registerAspectDef",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_b8f3e589b8c02541"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "AspectDef interface"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_004",
+      "category": "entity_lookup",
+      "query": "What hierarchy types exist in CHEAP and what are they used for?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "HierarchyType",
+            "component": "HierarchyType",
+            "artifact_id": "java_enum_519cfd61e31266a5"
+          }
+        ],
+        "interface": [
+          {
+            "name": "AspectMapHierarchy"
+          },
+          {
+            "name": "EntityDirectoryHierarchy"
+          },
+          {
+            "name": "EntityListHierarchy"
+          },
+          {
+            "name": "EntitySetHierarchy"
+          },
+          {
+            "name": "EntityTreeHierarchy"
+          },
+          {
+            "name": "HierarchyDef",
+            "component": "HierarchyDef",
+            "artifact_id": "java_interface_186a7958674807cf"
+          },
+          {
+            "name": "Hierarchy",
+            "component": "Hierarchy",
+            "artifact_id": "java_interface_0ce8cfadfcb738d8"
+          }
+        ],
+        "method": [
+          {
+            "name": "type",
+            "component": "Hierarchy",
+            "artifact_id": "java_method_5bdcaad01a361f54"
+          },
+          {
+            "name": "type",
+            "component": "HierarchyDef",
+            "artifact_id": "java_method_51a746f6b84a5932"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "HierarchyType enum",
+          "Hierarchy interface"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_005",
+      "category": "constraint_query",
+      "query": "What property types are supported in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "PropertyType",
+            "component": "PropertyType",
+            "artifact_id": "java_enum_846686c4f1989705"
+          }
+        ],
+        "class": [
+          {
+            "name": "PropertyValueAdapter",
+            "component": "PropertyValueAdapter",
+            "artifact_id": "java_class_8dc19de715363153"
+          }
+        ],
+        "interface": [
+          {
+            "name": "Property"
+          },
+          {
+            "name": "PropertyDef",
+            "component": "PropertyDef",
+            "artifact_id": "java_interface_8963bb39753bc97b"
+          }
+        ],
+        "method": [
+          {
+            "name": "type",
+            "component": "PropertyDef",
+            "artifact_id": "java_method_ba39061906d68ebf"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "PropertyType enum"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_006",
+      "category": "entity_lookup",
+      "query": "What is CatalogSpecies and what values does it have?",
+      "language": "java",
+      "relevant_artifacts": {
+        "field": [
+          {
+            "name": "species",
+            "component": "CatalogImpl"
+          }
+        ],
+        "interface": [
+          {
+            "name": "Catalog"
+          }
+        ],
+        "enum": [
+          {
+            "name": "CatalogSpecies",
+            "component": "CatalogSpecies",
+            "artifact_id": "java_enum_a2120d8304280cf8"
+          }
+        ],
+        "class": [
+          {
+            "name": "CatalogImpl",
+            "component": "CatalogImpl",
+            "artifact_id": "java_class_4fbb115d6e444c0f"
+          }
+        ],
+        "method": [
+          {
+            "name": "species",
+            "component": "Catalog"
+          },
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_ac505910d1830ff1"
+          }
+
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "CatalogSpecies enum"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_007",
+      "category": "relationship_query",
+      "query": "How are Aspects related to AspectDefs and Entities in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "Aspect"
+          },
+          {
+            "name": "Entity"
+          },
+          {
+            "name": "AspectDef",
+            "component": "AspectDef",
+            "artifact_id": "java_interface_591522556672e73d"
+          }
+        ],
+        "method": [
+          {
+            "name": "def",
+            "component": "Aspect",
+            "artifact_id": "java_method_fd1777ecaddf9601"
+          },
+          {
+            "name": "entity",
+            "component": "Aspect"
+          }
+        ],
+        "field": [
+          {
+            "name": "def",
+            "component": "AspectBaseImpl",
+            "artifact_id": "java_field_92a64ab148612a82"
+          },
+          {
+            "name": "entity",
+            "component": "AspectBaseImpl",
+            "artifact_id": "java_field_8960ca01763689ba"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "Aspect interface",
+          "AspectDef interface",
+          "Entity interface"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_008",
+      "category": "entity_lookup",
+      "query": "What is a TagDefinition and what fields does it have?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd"
+          }
+        ],
+        "field": [
+          {
+            "name": "namespace",
+            "component": "TagDefinition"
+          },
+          {
+            "name": "name",
+            "component": "TagDefinition"
+          },
+          {
+            "name": "description",
+            "component": "TagDefinition"
+          },
+          {
+            "name": "appliesTo",
+            "component": "TagDefinition"
+          },
+          {
+            "name": "scope",
+            "component": "TagDefinition"
+          },
+          {
+            "name": "aliases",
+            "component": "TagDefinition"
+          },
+          {
+            "name": "parentTagIds",
+            "component": "TagDefinition"
+          }
+        ],
+        "class": [
+          {
+            "name": "TagDefinition"
+          },
+          {
+            "name": "TagDefinitionAspect"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "TagDefinition class"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_009",
+      "category": "entity_lookup",
+      "query": "What standard tags are built into CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "enum": [
+          {
+            "name": "TagScope",
+            "component": "TagScope",
+            "artifact_id": "java_enum_87b4a565d5cc63cd"
+          }
+        ],
+        "method": [
+          {
+            "name": "getStandardTags",
+            "component": "TagRegistry",
+            "artifact_id": "java_method_705b594fb8c828e9"
+          },
+          {
+            "name": "allStandardTags",
+            "component": "StandardTags",
+            "artifact_id": "java_method_9827644c8c332117"
+          }
+        ],
+        "class": [
+          {
+            "name": "StandardTags"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "StandardTags class"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_010",
+      "category": "constraint_query",
+      "query": "What element types can tags be applied to in CHEAP?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "Catalog"
+          },
+          {
+            "name": "Hierarchy"
+          },
+          {
+            "name": "Aspect"
+          },
+          {
+            "name": "Entity"
+          },
+          {
+            "name": "Property"
+          }
+        ],
+        "enum": [
+          {
+            "name": "ElementType"
+          }
+        ],
+        "method": [
+          {
+            "name": "isApplicableTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_method_e4c14e23facb34f7"
+          },
+          {
+            "name": "getAppliesTo",
+            "component": "TagDefinition",
+            "artifact_id": "java_method_8916090dd8d7f923"
+          }
+        ],
+        "class": [
+          {
+            "name": "TagDefinition",
+            "component": "TagDefinition",
+            "artifact_id": "java_class_471d8e8c7eea8433"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "ElementType enum"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_011",
+      "category": "cross_entity",
+      "query": "How does CHEAP support mapping Java POJOs and records to Aspects?",
+      "language": "java",
+      "relevant_artifacts": {
+        "interface": [
+          {
+            "name": "Aspect"
+          }
+        ],
+        "class": [
+          {
+            "name": "ImmutablePojoAspectBuilder"
+          },
+          {
+            "name": "ImmutablePojoAspect"
+          },
+          {
+            "name": "MutablePojoAspect"
+          },
+          {
+            "name": "MutablePojoAspectBuilder"
+          },
+          {
+            "name": "RecordAspectBuilder"
+          },
+          {
+            "name": "RecordAspect"
+          }
+        ]
+      },
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "ImmutablePojoAspect",
+          "MutablePojoAspect",
+          "RecordAspect"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "java_012",
+      "category": "relationship_query",
+      "query": "What does CheapFactory provide and how is it used to create catalogs?",
+      "language": "java",
+      "relevant_artifacts": {
+        "class": [
+          {
+            "name": "CheapFactory"
+          }
+        ],
+        "interface": [
+          {
+            "name": "Catalog",
+            "component": "Catalog",
+            "artifact_id": "java_interface_de142a0ee5d26f09"
+          }
+        ],
+        "method": [
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_62b554b2a7a4fdd9"
+          },
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_ac505910d1830ff1"
+          },
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_72862f62c7c63d88"
+          },
+          {
+            "name": "createCatalog",
+            "component": "CheapFactory",
+            "artifact_id": "java_method_99a0ac935a9c34fb"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "CheapFactory class",
+          "Catalog interface"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "constraint_004",
+      "category": "constraint_query",
+      "query": "What are the primary keys in the database?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "column": [
+          {
+            "name": "actor_id",
+            "component": "actor"
+          },
+          {
+            "name": "address_id",
+            "component": "address"
+          },
+          {
+            "name": "category_id",
+            "component": "category"
+          },
+          {
+            "name": "city_id",
+            "component": "city"
+          },
+          {
+            "name": "country_id",
+            "component": "country"
+          },
+          {
+            "name": "customer_id",
+            "component": "customer"
+          },
+          {
+            "name": "film_id",
+            "component": "film"
+          },
+          {
+            "name": "inventory_id",
+            "component": "inventory"
+          },
+          {
+            "name": "language_id",
+            "component": "language"
+          },
+          {
+            "name": "payment_id",
+            "component": "payment"
+          },
+          {
+            "name": "rental_id",
+            "component": "rental"
+          },
+          {
+            "name": "staff_id",
+            "component": "staff"
+          },
+          {
+            "name": "store_id",
+            "component": "store"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "columns with primary_key=True"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "relationship_004",
+      "category": "relationship_query",
+      "query": "Show me all foreign key relationships",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "address_city_id_fkey",
+            "component": "address"
+          },
+          {
+            "name": "city_country_id_fkey",
+            "component": "city"
+          },
+          {
+            "name": "customer_address_id_fkey",
+            "component": "customer"
+          },
+          {
+            "name": "customer_store_id_fkey",
+            "component": "customer"
+          },
+          {
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41"
+          },
+          {
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3"
+          },
+          {
+            "name": "film_actor_film_id_fkey",
+            "component": "film_actor",
+            "artifact_id": "pg_relationship_a06e2c24cf1da308"
+          },
+          {
+            "name": "film_actor_actor_id_fkey",
+            "component": "film_actor",
+            "artifact_id": "pg_relationship_d39277b7a16d53f1"
+          },
+          {
+            "name": "film_category_category_id_fkey",
+            "component": "film_category"
+          },
+          {
+            "name": "film_category_film_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_b88c868c78cfff19"
+          },
+          {
+            "name": "inventory_film_id_fkey",
+            "component": "inventory"
+          },
+          {
+            "name": "inventory_store_id_fkey",
+            "component": "inventory"
+          },
+          {
+            "name": "rental_customer_id_fkey",
+            "component": "rental"
+          },
+          {
+            "name": "rental_inventory_id_fkey",
+            "component": "rental"
+          },
+          {
+            "name": "rental_staff_id_fkey",
+            "component": "rental"
+          },
+          {
+            "name": "staff_address_id_fkey",
+            "component": "staff"
+          },
+          {
+            "name": "staff_store_id_fkey",
+            "component": "staff"
+          },
+          {
+            "name": "store_address_id_fkey",
+            "component": "store"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "relationship artifacts"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "entity_003",
+      "category": "entity_lookup",
+      "query": "What is the actor table used for?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "actor",
+            "component": "actor",
+            "artifact_id": "pg_table_7b5a5ca66500bd78"
+          },
+          {
+            "name": "film_actor"
+          }
+        ],
+        "view": [
+          {
+            "name": "actor_info",
+            "component": "actor_info",
+            "artifact_id": "pg_view_3351a3087dc409bd"
+          },
+          {
+            "name": "film_list"
+          },
+          {
+            "name": "nicer_but_slower_film_list"
+          }
+        ],
+        "column": [
+          {
+            "name": "first_name",
+            "component": "actor"
+          },
+          {
+            "name": "last_name",
+            "component": "actor"
+          },
+          {
+            "name": "actor_id",
+            "component": "actor",
+            "artifact_id": "pg_column_5ea8efcadc044579"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "actor table"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "constraint_005",
+      "category": "constraint_query",
+      "query": "What columns in the customer table store email addresses?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "column": [
+          {
+            "name": "email",
+            "component": "customer",
+            "artifact_id": "pg_column_4cdea9dcf357c1f9"
+          }
+        ],
+        "table": [
+          {
+            "name": "customer"
+          }
+        ],
+        "view": [
+          {
+            "name": "customer_list"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "customer.email column"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "schema_004",
+      "category": "schema_exploration",
+      "query": "What are the most important tables for tracking rentals?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "customer"
+          },
+          {
+            "name": "payment"
+          },
+          {
+            "name": "inventory"
+          },
+          {
+            "name": "rental",
+            "component": "rental",
+            "artifact_id": "pg_table_a2de30f831562c03"
+          }
+        ],
+        "column": [
+          {
+            "name": "rental_id",
+            "component": "rental",
+            "artifact_id": "pg_column_716484d3d6e50ee7"
+          },
+          {
+            "name": "rental_date",
+            "component": "rental"
+          },
+          {
+            "name": "return_date",
+            "component": "rental",
+            "artifact_id": "pg_column_f5cfc64af20223a1"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "rental, customer, inventory, payment"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "cross_003",
+      "category": "cross_entity",
+      "query": "How is payment information stored in the database?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "table": [
+          {
+            "name": "rental"
+          },
+          {
+            "name": "payment",
+            "component": "payment",
+            "artifact_id": "pg_table_7c76cbb31743ce50"
+          }
+        ],
+        "column": [
+          {
+            "name": "payment_id",
+            "component": "payment",
+            "artifact_id": "pg_column_256ebdd4c3ad9aa9"
+          },
+          {
+            "name": "payment_date",
+            "component": "payment",
+            "artifact_id": "pg_column_5ee81dab020338eb"
+          },
+          {
+            "name": "customer_id",
+            "component": "payment",
+            "artifact_id": "pg_column_56510315972d27f3"
+          },
+          {
+            "name": "rental_id",
+            "component": "payment"
+          },
+          {
+            "name": "amount",
+            "component": "payment"
+          }
+        ]
+      },
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "payment.amount, rental reference"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    },
+    {
+      "id": "relationship_005",
+      "category": "relationship_query",
+      "query": "How is the geographic hierarchy structured?",
+      "language": "postgresql",
+      "relevant_artifacts": {
+        "relationship": [
+          {
+            "name": "city_country_id_fkey",
+            "component": "city",
+            "artifact_id": "pg_relationship_881d1d07707c9cee"
+          },
+          {
+            "name": "address_city_id_fkey",
+            "component": "address",
+            "artifact_id": "pg_relationship_772e38f6cc4cf68c"
+          }
+        ],
+        "table": [
+          {
+            "name": "address"
+          },
+          {
+            "name": "country",
+            "component": "country",
+            "artifact_id": "pg_table_a0c6a0dc1f573fb8"
+          },
+          {
+            "name": "city",
+            "component": "city",
+            "artifact_id": "pg_table_efa617532130eb82"
+          }
+        ],
+        "column": [
+          {
+            "name": "city_id",
+            "component": "address"
+          },
+          {
+            "name": "country_id",
+            "component": "city"
+          }
+        ]
+      },
+      "difficulty": "hard",
+      "notes": "Auto-generated from top candidates. Requires manual review.",
+      "metadata": {
+        "original_expected": [
+          "address, city, country tables and their foreign keys"
+        ],
+        "all_candidates": [
+        ],
+        "requires_manual_review": false
+      }
+    }
+  ]
+}

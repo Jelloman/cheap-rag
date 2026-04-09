@@ -931,40 +931,38 @@
     {
       "id": "relationship_003",
       "category": "relationship_query",
-      "query": "How are rentals linked to customers?",
+      "query": "How are films linked to languages?",
       "language": "postgresql",
       "relevant_artifacts": {
         "relationship": [
           {
-            "name": "rental_customer_id_fkey",
-            "component": "rental",
-            "artifact_id": "pg_relationship_c890660670ed10f1"
-          }
-        ],
-        "table": [
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41"
+          },
           {
-            "name": "rental",
-            "component": "rental",
-            "artifact_id": "pg_table_a2de30f831562c03"
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3"
           }
         ],
         "column": [
           {
-            "name": "customer_id",
-            "component": "rental",
-            "artifact_id": "pg_column_8a6311f2de5dd34d"
+            "name": "original_language_id",
+            "component": "film",
+            "artifact_id": "pg_column_ebd6a2a998a1694c"
           },
           {
-            "name": "rental_id",
-            "component": "rental",
-            "artifact_id": "pg_column_716484d3d6e50ee7"
+            "name": "language_id",
+            "component": "film",
+            "artifact_id": "pg_column_8df6409a098a0526"
           }
         ],
         "index": [
           {
-            "name": "rental_pkey",
-            "component": "rental",
-            "artifact_id": "pg_index_6e2386078d0e2d69"
+            "name": "idx_fk_language_id",
+            "component": "film",
+            "artifact_id": "pg_index_12e729ace3770c30"
           }
         ]
       },
@@ -978,87 +976,87 @@
         ],
         "all_candidates": [
           {
-            "name": "rental_customer_id_fkey",
-            "component": "rental",
-            "artifact_id": "pg_relationship_c890660670ed10f1",
+            "name": "film_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_381bc048794daf41",
             "type": "relationship",
-            "similarity": 0.7459754049777985
+            "similarity": 0.7474919557571411
           },
           {
-            "name": "rental",
-            "component": "rental",
-            "artifact_id": "pg_table_a2de30f831562c03",
-            "type": "table",
-            "similarity": 0.7445284724235535
+            "name": "film_original_language_id_fkey",
+            "component": "film",
+            "artifact_id": "pg_relationship_6dc5b16b2001eaf3",
+            "type": "relationship",
+            "similarity": 0.7472494542598724
           },
           {
-            "name": "customer_id",
-            "component": "rental",
-            "artifact_id": "pg_column_8a6311f2de5dd34d",
+            "name": "original_language_id",
+            "component": "film",
+            "artifact_id": "pg_column_ebd6a2a998a1694c",
             "type": "column",
-            "similarity": 0.7270805239677429
+            "similarity": 0.735142707824707
           },
           {
-            "name": "rental_id",
-            "component": "rental",
-            "artifact_id": "pg_column_716484d3d6e50ee7",
+            "name": "language_id",
+            "component": "film",
+            "artifact_id": "pg_column_8df6409a098a0526",
             "type": "column",
-            "similarity": 0.7039705514907837
+            "similarity": 0.7334672510623932
           },
           {
-            "name": "rental_pkey",
-            "component": "rental",
-            "artifact_id": "pg_index_6e2386078d0e2d69",
+            "name": "idx_fk_language_id",
+            "component": "film",
+            "artifact_id": "pg_index_12e729ace3770c30",
             "type": "index",
-            "similarity": 0.689691960811615
+            "similarity": 0.6946901679039001
           },
           {
-            "name": "rental_by_category",
-            "component": "rental_by_category",
-            "artifact_id": "pg_materialized_view_a2a8e230ecb5f454",
-            "type": "materialized_view",
-            "similarity": 0.6864206194877625
+            "name": "film_category_film_id_fkey",
+            "component": "film_category",
+            "artifact_id": "pg_relationship_b88c868c78cfff19",
+            "type": "relationship",
+            "similarity": 0.6916593909263611
           },
           {
-            "name": "customer",
-            "component": "customer",
-            "artifact_id": "pg_table_13d9004cb041690a",
+            "name": "film",
+            "component": "film",
+            "artifact_id": "pg_table_e5f19fb863d1fa62",
             "type": "table",
-            "similarity": 0.6858324408531189
+            "similarity": 0.6840472519397736
           },
           {
-            "name": "rental_staff_id_fkey",
-            "component": "rental",
-            "artifact_id": "pg_relationship_6e9629f015a69ade",
-            "type": "relationship",
-            "similarity": 0.6803874671459198
+            "name": "idx_fk_original_language_id",
+            "component": "film",
+            "artifact_id": "pg_index_b581a362076bb425",
+            "type": "index",
+            "similarity": 0.6838353276252747
           },
           {
-            "name": "rental_id",
-            "component": "payment",
-            "artifact_id": "pg_column_4fa672e7041c4053",
+            "name": "film_id",
+            "component": "film_category",
+            "artifact_id": "pg_column_f6ad91f725ccbaa9",
             "type": "column",
-            "similarity": 0.6739049851894379
+            "similarity": 0.6829127669334412
           },
           {
-            "name": "rental_inventory_id_fkey",
-            "component": "rental",
-            "artifact_id": "pg_relationship_1e7ee1468c84919e",
-            "type": "relationship",
-            "similarity": 0.6670154333114624
+            "name": "language_language_id_seq",
+            "component": "language_language_id_seq",
+            "artifact_id": "pg_sequence_4c2be0041978e7e1",
+            "type": "sequence",
+            "similarity": 0.6793741583824158
           }
         ],
         "candidate_scores": [
-          0.7459754049777985,
-          0.7445284724235535,
-          0.7270805239677429,
-          0.7039705514907837,
-          0.689691960811615,
-          0.6864206194877625,
-          0.6858324408531189,
-          0.6803874671459198,
-          0.6739049851894379,
-          0.6670154333114624
+          0.7474919557571411,
+          0.7472494542598724,
+          0.735142707824707,
+          0.7334672510623932,
+          0.6946901679039001,
+          0.6916593909263611,
+          0.6840472519397736,
+          0.6838353276252747,
+          0.6829127669334412,
+          0.6793741583824158
         ],
         "requires_manual_review": true
       }
@@ -3296,135 +3294,6 @@
           0.7961336970329285,
           0.7960256040096283,
           0.7946644127368927
-        ],
-        "requires_manual_review": true
-      }
-    },
-    {
-      "id": "multi_001",
-      "category": "multi_language",
-      "query": "What metadata entities exist across all languages?",
-      "language": "multi",
-      "relevant_artifacts": {
-        "enum": [
-          {
-            "name": "ElementType",
-            "component": "ElementType",
-            "artifact_id": "java_enum_b4129d37013dbf4f"
-          },
-          {
-            "name": "TagSource",
-            "component": "TagSource",
-            "artifact_id": "java_enum_6ef30dc7525793bc"
-          },
-          {
-            "name": "ArtifactType",
-            "component": "ArtifactType",
-            "artifact_id": "java_enum_47ca953b700453f3"
-          }
-        ],
-        "method": [
-          {
-            "name": "getMetadata",
-            "component": "TagApplicationAspect",
-            "artifact_id": "java_method_8c4fa914e3fd049a"
-          },
-          {
-            "name": "getMetadata",
-            "component": "TagApplication",
-            "artifact_id": "java_method_3130fd7717b6e6d3"
-          }
-        ]
-      },
-      "difficulty": "hard",
-      "notes": "Auto-generated from top candidates. Requires manual review.",
-      "metadata": {
-        "original_expected": [
-          "tables, classes, interfaces from multiple languages"
-        ],
-        "all_candidates": [
-          {
-            "name": "ElementType",
-            "component": "ElementType",
-            "artifact_id": "java_enum_b4129d37013dbf4f",
-            "type": "enum",
-            "similarity": 0.7373859882354736
-          },
-          {
-            "name": "getMetadata",
-            "component": "TagApplicationAspect",
-            "artifact_id": "java_method_8c4fa914e3fd049a",
-            "type": "method",
-            "similarity": 0.7302803993225098
-          },
-          {
-            "name": "getMetadata",
-            "component": "TagApplication",
-            "artifact_id": "java_method_3130fd7717b6e6d3",
-            "type": "method",
-            "similarity": 0.7233434915542603
-          },
-          {
-            "name": "TagSource",
-            "component": "TagSource",
-            "artifact_id": "java_enum_6ef30dc7525793bc",
-            "type": "enum",
-            "similarity": 0.7126613259315491
-          },
-          {
-            "name": "ArtifactType",
-            "component": "ArtifactType",
-            "artifact_id": "java_enum_47ca953b700453f3",
-            "type": "enum",
-            "similarity": 0.7112308740615845
-          },
-          {
-            "name": "MetadataArtifact",
-            "component": "MetadataArtifact",
-            "artifact_id": "java_class_f4470e7b5ab9c117",
-            "type": "class",
-            "similarity": 0.7085312902927399
-          },
-          {
-            "name": "StandardTags",
-            "component": "StandardTags",
-            "artifact_id": "java_class_a7cf0f9d997a81f1",
-            "type": "class",
-            "similarity": 0.7084940671920776
-          },
-          {
-            "name": "TagScope",
-            "component": "TagScope",
-            "artifact_id": "java_enum_87b4a565d5cc63cd",
-            "type": "enum",
-            "similarity": 0.706013947725296
-          },
-          {
-            "name": "LocalEntityType",
-            "component": "LocalEntityType",
-            "artifact_id": "java_enum_55a26eeb4c2ac72b",
-            "type": "enum",
-            "similarity": 0.7042313814163208
-          },
-          {
-            "name": "LocalEntity",
-            "component": "LocalEntity",
-            "artifact_id": "java_interface_40f2b382c6009cc5",
-            "type": "interface",
-            "similarity": 0.6998508870601654
-          }
-        ],
-        "candidate_scores": [
-          0.7373859882354736,
-          0.7302803993225098,
-          0.7233434915542603,
-          0.7126613259315491,
-          0.7112308740615845,
-          0.7085312902927399,
-          0.7084940671920776,
-          0.706013947725296,
-          0.7042313814163208,
-          0.6998508870601654
         ],
         "requires_manual_review": true
       }

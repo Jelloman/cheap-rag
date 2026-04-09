@@ -192,7 +192,8 @@ SQLite-specific characteristics handled by this class:
 <p>
 Usage example:
 </p>
-<pre>{@code"
+<pre>{@code
+"
 java_class_031f08c62d8c99bc,SqliteCatalogTest,SqliteCatalogTest,class,java,net.netbeing.cheap.db.sqlite,D:\src\claude\cheap\cheap-db-sqlite\src\test\java\net\netbeing\cheap\db\sqlite\SqliteCatalogTest.java,36,,,,,,,,,,net.netbeing.cheap.db.sqlite.SqliteCatalogTest
 java_class_7b5a629c8651d94f,SqliteCheapSchema,SqliteCheapSchema,class,java,net.netbeing.cheap.db.sqlite,D:\src\claude\cheap\cheap-db-sqlite\src\main\java\net\netbeing\cheap\db\sqlite\SqliteCheapSchema.java,47,,,,,,,,,,"Utility class for executing SQLite DDL scripts to manage the Cheap database schema.
 Provides methods to create, audit, drop, and truncate the Cheap schema in SQLite databases.
@@ -682,7 +683,8 @@ public class Person {
     public int getAge() { return age; }
     public void setAge(int age) { this.age = age; }
 }
-"
+
+"
 java_class_657a861fe9218454,MutablePojoAspectBuilderTest,MutablePojoAspectBuilderTest,class,java,net.netbeing.cheap.impl.reflect,D:\src\claude\cheap\cheap-core\src\test\java\net\netbeing\cheap\impl\reflect\MutablePojoAspectBuilderTest.java,20,,,,,,,,,,net.netbeing.cheap.impl.reflect.MutablePojoAspectBuilderTest
 java_class_aa5f95fc55175300,MutablePojoAspectDef,MutablePojoAspectDef,class,java,net.netbeing.cheap.impl.reflect,D:\src\claude\cheap\cheap-core\src\main\java\net\netbeing\cheap\impl\reflect\MutablePojoAspectDef.java,100,,,,,,,,,,"An {@link net.netbeing.cheap.model.AspectDef} implementation for mutable Plain Old Java Objects (POJOs)
 that provides full read-write access to properties through JavaBean-style getter and setter methods.
