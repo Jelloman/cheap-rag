@@ -34,6 +34,7 @@ class EmbeddingService:
         cache_dir: str | None = None,
         batch_size: int = 32,
         local_files_only: bool = False,
+        trust_remote_code: bool = False,
     ):
         """Initialize the embedding service.
 
@@ -45,6 +46,8 @@ class EmbeddingService:
             local_files_only: If True, skip network requests and use only locally
                 cached model files. Set this after the model has been downloaded
                 once to avoid HuggingFace Hub version-check requests on startup.
+            trust_remote_code: If True, allow executing custom model code from the
+                HuggingFace Hub. Required for some models (e.g. Alibaba-NLP/gte-large-en-v1.5).
         """
         self.model_name = model_name
         self.device = device
@@ -62,13 +65,30 @@ class EmbeddingService:
         if self.cache_dir:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
 
-        # Load the model
-        self.model = SentenceTransformer(
-            model_name,
-            device=device,
-            cache_folder=str(self.cache_dir) if self.cache_dir else None,
-            local_files_only=local_files_only,
-        )
+        # Load the model — if local_files_only was requested but the cache is
+        # incomplete (e.g. a prior interrupted download), fall back to downloading.
+        try:
+            self.model = SentenceTransformer(
+                model_name,
+                device=device,
+                cache_folder=str(self.cache_dir) if self.cache_dir else None,
+                local_files_only=local_files_only,
+                trust_remote_code=trust_remote_code,
+            )
+        except Exception:
+            if not local_files_only:
+                raise
+            logger.warning(
+                "local_files_only load failed, retrying with download enabled",
+                model=model_name,
+            )
+            self.model = SentenceTransformer(
+                model_name,
+                device=device,
+                cache_folder=str(self.cache_dir) if self.cache_dir else None,
+                local_files_only=False,
+                trust_remote_code=trust_remote_code,
+            )
 
         dimension = self.model.get_sentence_embedding_dimension()
         if dimension is None:

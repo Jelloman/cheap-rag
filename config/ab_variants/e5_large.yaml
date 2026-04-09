@@ -1,0 +1,11 @@
+name: e5_large
+description: "E5 Large (intfloat/e5-large-v2) — alternative high-quality model, 1024-dim"
+embedding_model: intfloat/e5-large-v2
+embedding_dimension: 1024
+top_k: 5
+query_prefix: "query: "
+document_prefix: "passage: "
+source_persist_directory: ./data/vector_db
+source_collection_name: cheap_metadata_v1
+metadata:
+  description: E5 Large - alternative high quality model

@@ -1,0 +1,11 @@
+name: baseline_mpnet
+description: "Current baseline model (all-mpnet-base-v2) — reuses existing production index"
+embedding_model: sentence-transformers/all-mpnet-base-v2
+embedding_dimension: 768
+top_k: 5
+# Reuse the already-indexed production collection rather than re-indexing
+use_existing_index: true
+existing_persist_directory: ./data/vector_db
+existing_collection_name: cheap_metadata_v1
+metadata:
+  description: Current baseline model

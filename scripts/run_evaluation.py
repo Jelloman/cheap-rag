@@ -21,7 +21,10 @@ from src.evaluation import (
     evaluate_retrieval,
 )
 from src.embeddings.service import EmbeddingService
+from src.observability.tracing import init_tracing
 from src.vectorstore.chroma_store import ChromaVectorStore as ChromaStore
+
+init_tracing(enable_console=False)
 
 
 def main() -> None:

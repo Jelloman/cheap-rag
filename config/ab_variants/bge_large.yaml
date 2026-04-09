@@ -1,0 +1,11 @@
+name: bge_large
+description: "BGE Large (BAAI/bge-large-en-v1.5) — higher quality embeddings, 1024-dim"
+embedding_model: BAAI/bge-large-en-v1.5
+embedding_dimension: 1024
+top_k: 5
+query_prefix: "Represent this sentence for searching relevant passages: "
+# BGE document embeddings do not require a prefix
+source_persist_directory: ./data/vector_db
+source_collection_name: cheap_metadata_v1
+metadata:
+  description: BGE Large - higher quality embeddings
