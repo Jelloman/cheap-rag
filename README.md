@@ -52,35 +52,35 @@ export CONFIG_PROFILE=local  # or claude, hybrid
 
 ```bash
 # Index from database
-python scripts/index_metadata.py --source "postgresql://user:pass@localhost/dbname"
+uv run python scripts/index_metadata.py --source "postgresql://user:pass@localhost/dbname"
 
 # Index from code
-python scripts/index_metadata.py --source "/path/to/java/project"
+uv run python scripts/index_metadata.py --source "/path/to/java/project"
 
 # Reset and reindex
-python scripts/index_metadata.py --reset
+uv run python scripts/index_metadata.py --reset
 ```
 
 ### 4. Query
 
 **CLI:**
 ```bash
-python scripts/query_example.py "What is the sale_order table?"
+uv run python scripts/query_example.py "What is the sale_order table?"
 
 # With filters
-python scripts/query_example.py "What columns exist?" --language postgresql --type column
+uv run python scripts/query_example.py "What columns exist?" --language postgresql --type column
 
 # Markdown output
-python scripts/query_example.py "How are sales linked to customers?" --markdown
+uv run python scripts/query_example.py "How are sales linked to customers?" --markdown
 ```
 
 **API Server:**
 ```bash
 # Start server
-uvicorn src.api.routes:app --reload
+uv run uvicorn src.api.routes:app --reload
 
 # Or
-python src/api/routes.py
+uv run python src/api/routes.py
 ```
 
 **API Endpoints:**
@@ -290,7 +290,7 @@ pytest tests/test_file.py::test_function -v
 uv sync --extra dev
 
 # Verify installation
-python -c "import src; print(src.__file__)"
+uv run python -c "import src; print(src.__file__)"
 ```
 
 **Nox issues:**
@@ -360,9 +360,9 @@ nox -s typecheck                 # Type check
 nox -s lint                      # Lint code
 
 # Running
-python scripts/index_metadata.py # Index metadata
-python scripts/query_example.py  # Query via CLI
-uvicorn src.api.routes:app       # Start API server
+uv run python scripts/index_metadata.py # Index metadata
+uv run python scripts/query_example.py  # Query via CLI
+uv run uvicorn src.api.routes:app       # Start API server
 
 # Debugging
 pytest -vv --pdb                 # Debug tests
