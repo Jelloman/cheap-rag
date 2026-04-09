@@ -232,7 +232,7 @@ class ChromaVectorStore:
             end_idx = min(i + batch_size, len(ids))
             self.collection.upsert(
                 ids=ids[i:end_idx],
-                embeddings=embeddings[i:end_idx],
+                embeddings=embeddings[i:end_idx],  # type: ignore[reportArgumentType]  # chromadb
                 documents=documents[i:end_idx],
                 metadatas=metadatas[i:end_idx],  # type: ignore[reportArgumentType]  # chromadb
             )

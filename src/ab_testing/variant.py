@@ -36,6 +36,7 @@ def _is_model_cached(model_name: str, cache_dir: str | Path | None) -> bool:
     except Exception:
         return False
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -172,9 +173,9 @@ class EmbeddingVariant:
         if self.config.use_instructor_encoding:
             if self._instructor_model is None:
                 raise RuntimeError("INSTRUCTOR model not loaded")
-            result: np.ndarray = self._instructor_model.encode(
-                [[self.config.query_prefix, query]]
-            )[0]
+            result: np.ndarray = self._instructor_model.encode([[self.config.query_prefix, query]])[
+                0
+            ]
             return result
         if self.config.query_prefix:
             query = self.config.query_prefix + query
@@ -200,7 +201,7 @@ class EmbeddingVariant:
             raise RuntimeError("Embedding service not loaded")
         return self.embedding_service.embed_batch(documents)
 
-    def _load_instructor_model(self, local_files_only: bool = False) -> Any:
+    def _load_instructor_model(self) -> Any:
         """Load an INSTRUCTOR model."""
         try:
             from InstructorEmbedding import INSTRUCTOR  # type: ignore[reportMissingModuleSource]
@@ -291,7 +292,7 @@ class EmbeddingVariant:
         )
 
         if self.config.use_instructor_encoding:
-            self._instructor_model = self._load_instructor_model(local_files_only=cached)
+            self._instructor_model = self._load_instructor_model()
         else:
             self.embedding_service = EmbeddingService(
                 model_name=self.config.embedding_model,
@@ -382,7 +383,7 @@ class EmbeddingVariant:
         if self.config.similarity_threshold > 0:
             ids = [
                 artifact_id
-                for artifact_id, dist in zip(ids, distances)
+                for artifact_id, dist in zip(ids, distances, strict=False)
                 if (1.0 - dist) >= self.config.similarity_threshold
             ]
 
@@ -396,3 +397,49 @@ class EmbeddingVariant:
         """
         if self.vector_store and not self.config.use_existing_index:
             self.vector_store.delete_all()
+
+
+# ---------------------------------------------------------------------------
+# Pre-defined variant configurations
+# ---------------------------------------------------------------------------
+
+BASELINE_VARIANT = VariantConfig(
+    name="baseline",
+    embedding_model="sentence-transformers/all-mpnet-base-v2",
+    embedding_dimension=768,
+    top_k=5,
+    similarity_threshold=0.0,
+    use_existing_index=True,
+    metadata={"description": "Baseline mpnet model (existing production index)"},
+)
+
+BGE_LARGE_VARIANT = VariantConfig(
+    name="bge-large",
+    embedding_model="BAAI/bge-large-en-v1.5",
+    embedding_dimension=1024,
+    top_k=5,
+    similarity_threshold=0.0,
+    query_prefix="Represent this sentence for searching relevant passages: ",
+    metadata={"description": "BGE large English model"},
+)
+
+BGE_SMALL_VARIANT = VariantConfig(
+    name="bge-small",
+    embedding_model="BAAI/bge-small-en-v1.5",
+    embedding_dimension=384,
+    top_k=5,
+    similarity_threshold=0.0,
+    query_prefix="Represent this sentence for searching relevant passages: ",
+    metadata={"description": "BGE small English model"},
+)
+
+E5_LARGE_VARIANT = VariantConfig(
+    name="e5-large",
+    embedding_model="intfloat/e5-large-v2",
+    embedding_dimension=1024,
+    top_k=5,
+    similarity_threshold=0.0,
+    query_prefix="query: ",
+    document_prefix="passage: ",
+    metadata={"description": "E5 large model"},
+)

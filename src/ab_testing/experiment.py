@@ -136,20 +136,6 @@ class ABExperiment:
 
         self.logger.info("Experiment setup complete")
 
-    def index_data(self, artifacts: list[Any]) -> None:
-        """Index data in all variant vector stores.
-
-        Args:
-            artifacts: List of MetadataArtifact objects
-        """
-        self.logger.info(f"Indexing {len(artifacts)} artifacts in all variants")
-
-        for variant_name, variant in self._variants.items():
-            self.logger.info(f"Indexing variant: {variant_name}")
-            variant.index_artifacts(artifacts)
-
-        self.logger.info("Indexing complete")
-
     def run(self) -> dict[str, ExperimentResult]:
         """Run the experiment and collect results.
 
@@ -272,7 +258,6 @@ def run_embedding_comparison(
     baseline_model: str = "sentence-transformers/all-mpnet-base-v2",
     comparison_models: list[str] | None = None,
     gold_dataset_path: str | Path = "tests/fixtures/gold_dataset.json",
-    artifacts: list[Any] | None = None,
     output_dir: str | Path = "data/ab_testing/results",
 ) -> dict[str, ExperimentResult]:
     """Run embedding model comparison experiment.
@@ -281,7 +266,6 @@ def run_embedding_comparison(
         baseline_model: Baseline embedding model
         comparison_models: List of models to compare against baseline
         gold_dataset_path: Path to gold dataset
-        artifacts: Optional list of artifacts to index (loads from index if None)
         output_dir: Directory to save results
 
     Returns:
@@ -324,9 +308,6 @@ def run_embedding_comparison(
     # Run experiment
     experiment = ABExperiment(config)
     experiment.setup()
-
-    if artifacts:
-        experiment.index_data(artifacts)
 
     results = experiment.run()
 
